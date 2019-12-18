@@ -1,0 +1,565 @@
+<html>
+ <head>
+ <title>REPRESENTANTES</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1"/>
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+ <script type="text/javascript" src="media/moment.min.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+ <SCRIPT TYPE="text/javascript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ var nuevaOperacion = "";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('IdRepresentante'),"Id Representante","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('TipoDocumento'),"Tipo Documento","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('NDocumento'),"N Documento","DEC",2,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Expedicion'),"Expedición","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Nombre1'),"Nombre 1","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Nombre2'),"Nombre 2","ALFA",0,"NO","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Apellido1'),"Apellido 1","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Apellido2'),"Apellido 2","ALFA",0,"NO","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Direccion'),"Dirección","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Telefono'),"Teléfono","DEC",2,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('departamento'),"Departamento","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('municipio'),"Municipio","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Cargo'),"Cargo","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('TituloProfecion'),"Titulo Profeción","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('ActaNombramiento'),"Acta Nombramiento","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('NActa'),"N Acta","DEC",2,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('FechaActa'),"Fecha Acta","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('PeriodoInicial'),"Periodo Inicial","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('PeriodoFinal'),"Periodo Final","FEC",0,"NO","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   var fechaActa = moment($('FechaActa').value,'YYYY-MM-DD');
+   var fechaInicio = moment($('PeriodoInicial').value,'YYYY-MM-DD');
+   var fechaFin = moment($('PeriodoFinal').value,'YYYY-MM-DD');
+   var now = moment();
+   var hoy = moment(now.format('YYYY-MM-DD'),'YYYY-MM-DD');
+   
+   
+	if (fechaActa.diff(hoy,'days')>0){
+		alert("La fecha del Acta debe ser igual o anterior a la fecha de hoy");
+		Mostrar();
+		return false;
+	}
+	
+	if(document.getElementById("PeriodoFinal").value != ""){
+			if (fechaInicio.diff(fechaFin,'days')>0){
+			alert("La fecha del Periodo Inicial debe ser igual o anterior a la fecha del periodo final");
+			Mostrar();
+			return false;
+		}
+	}   
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   if($('_operacion').value != "E"){
+	nuevaOperacion = $('_operacion').value;
+   }
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+    if($('_operacion').value=="E"){
+		$('_operacion').value = nuevaOperacion;
+   }
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="X";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+ function Volver(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="V";
+   document.ff.action="SisEntidad.po";
+   return true;
+ }
+ 
+ function cargarMunicipios(departamento, municipio){
+	var url='ConsultasAjaxOld.po?_operacion=buscarMunicipiosPorDepartamento&codigoDepto='+departamento
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+        llenarComboBlanco(document.getElementById(municipio), transport.responseXML.getElementsByTagName('municipio'),'codigo','nombre');
+		},     
+        onFailure: function() {
+        alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    } );  
+ }
+ 
+ 
+ 
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" class="tabw" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<div class="container">
+ <FORM name="ff" ACTION="SisRepresentante.po" METHOD="post" onsubmit="return Salvar()">
+  <input type="hidden" name="_operacion" id="_operacion" value="X">
+  <input type="hidden" name="nitEntidad" id="nitEntidadHidden" value="">
+  <table   class="tabf" summary="" border="0">
+   <tr>
+ 	  <td class="dat">REPRESENTANTES<span id="representantesEntidad">&nbsp;</span></td>
+    <td class="datc">
+     <label id="labelNombre" name="labelNombre" align="center"></label>
+    </td>
+ 	  <td class="dat2">
+	   <input type="submit" class="BOB"  value= "Volver" id="btnVolver"  onClick="Volver();">
+       <input type="submit" class="BOB"  value= "Consultar" id="btnConsultar"  onClick="PreparaConsulta();">
+       <input type="submit" class="BOB"  value= "Nuevo" id="btnCrear" onClick="Nuevo();">
+       <input type="Button" class="BOB"  value= "Ayuda" id="btnAyuda" onClick="show_help('SisRepresentante');">
+    </td>
+   </tr>
+  </table>
+  <div id="divConsulta">
+  <br>
+   <table class="tabf" summary="" border="0">
+    <tr>
+      <td colspan="4" class="ca">CONSULTA</td>
+    </tr>
+        <tr>
+         <td class="tit">Numero Documento Representante</td>
+         <td class="dat"><INPUT TYPE="Text" class="INP" NAME="numeroDocRepresentante" id="numeroDocRepresentante" maxlength="12" size="20" onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+        </tr>
+		<tr>
+		 <td class="tit">Nombre Representante</td>
+         <td class="dat"><INPUT  type="text" NAME="nombreRepresentanteConsulta" class="INP" id="nombreRepresentanteConsulta" maxlength="40" size="40"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>	 
+		</tr>
+
+      <tr>
+       <td class="dat2" colspan="4">
+        <input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+       </td>
+      </tr>
+      </table>
+     </div>
+  <div id="divResultados">
+   <br>
+   <table summary=""  class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2">Id Representante</th>
+        <th class="cf1">N Documento</th>
+      <!--  <th class="cf1">Expedici&oacute;n</th>-->
+        <th class="cf2">Nombres</th>
+        <th class="cf1">Cargo</th>
+        <!--<th class="cf2">Titulo Profesi&oacute;n</th>-->
+        <th class="cf2">Acta Nombramiento</th>
+        <th class="cf1">N Acta</th>
+        <th class="cf2">Fecha Acta</th>
+        <th class="cf1">Periodo Inicial</th>
+        <th class="cf2">Periodo Final</th>
+     </tr>
+    </thead>
+   <tbody id="detalle">
+   </tbody>
+   <tfoot>
+    <tr>
+     <td  class="PIE" colspan="17">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+    </tr>
+   </tfoot>
+  </table>
+ </div>
+ <div id="divCreacionRegistro">
+  <br>
+  <table  class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td colspan="4" class="ca">Creaci&oacute;n / Modificaci&oacute;n</td>
+   </tr>
+   <tr>
+    <td class="tit">Id Representante</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="IdRepresentante" id="IdRepresentante" maxlength="4" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Tipo Documento</td>
+    <td class="dat"> <SELECT TYPE="Text" class="INP" NAME="TipoDocumento" id="TipoDocumento" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   </tr>
+
+   <tr>
+    <td class="tit">N Documento</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="NDocumento" id="NDocumento" maxlength="15" size="20"  title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)"></td>
+    <td class="tit">Expedida en</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="Expedicion" id="Expedicion" maxlength="45" size="45"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Nombre 1</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="Nombre1" id="Nombre1" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Nombre 2</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="Nombre2" id="Nombre2" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Apellido 1</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="Apellido1" id="Apellido1" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Apellido 2</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="Apellido2" id="Apellido2" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Direcci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="Direccion" id="Direccion" maxlength="45" size="45"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Tel&eacute;fono</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="Telefono" id="Telefono" maxlength="15" size="20"  title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)"></td>
+   </tr>
+   
+   <tr>
+    <td class="tit">Departamento</td>
+    <td class="dat"> <SELECT NAME="departamento" class="INP" id="departamento" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cargarMunicipios(this.value, 'municipio')"></SELECT></td>
+    <td class="tit">Municipio</td>
+    <td class="dat"> <SELECT NAME="municipio" class="INP" id="municipio" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Cargo</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="Cargo" id="Cargo" maxlength="45" size="45"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Titulo Profesi&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="TituloProfecion" id="TituloProfecion" maxlength="45" size="45"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Acta Nombramiento</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="ActaNombramiento" id="ActaNombramiento" maxlength="45" size="45"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">N Acta</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="NActa" id="NActa" maxlength="20" size="20"  title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Acta</td>
+    <td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="FechaActa" id="FechaActa" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="button" id="bFechaActa" value="...">
+    </td>
+   
+   </tr>
+
+   <tr>
+    <td class="tit">Periodo Inicial</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="PeriodoInicial" id="PeriodoInicial" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="button" id="bPeriodoInicial" value="...">
+    </td>
+    <td class="tit">Periodo Final</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="PeriodoFinal" id="PeriodoFinal" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="button" id="bPeriodoFinal" value="...">
+    </td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="fechaInsercion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+	<td class="tit">Usuario Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="fechaModificacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+	 
+	 <tr>
+      <td class="dat2" colspan="4">
+      <input type="submit" class="BOT" value="Grabar"   id="btnGrabar" onclick="Grabar();">
+      <input type="submit" class="BOT" value="Eliminar" id="btnEliminar" onclick="Eliminar();">
+      <input type="submit" class="BOT" value="Salir"   id="btnSalir" onclick="Salir();">
+     </td>
+    </tr>
+   </table>
+  </div>
+  <div id="divEdicion">
+  <br>
+    <table class="tabf" summary="">
+     <tr>
+      <td colspan="4" class="ca">Edici&oacute;n</td>
+     </tr>
+     <tr>
+      <td class="tit">Id Representante</td>
+      <td class="dat"><span id="IdRepresentanteEd">&nbsp;</span></td>
+      <td class="tit">Tipo Documento</td>
+      <td class="dat"><span id="TipoDocumentoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">N Documento</td>
+      <td class="dat"><span id="NDocumentoEd">&nbsp;</span></td>
+      <td class="tit">Expedida en</td>
+      <td class="dat"><span id="ExpedicionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Nombre 1</td>
+      <td class="dat"><span id="Nombre1Ed">&nbsp;</span></td>
+      <td class="tit">Nombre 2</td>
+      <td class="dat"><span id="Nombre2Ed">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Apellido 1</td>
+      <td class="dat"><span id="Apellido1Ed">&nbsp;</span></td>
+      <td class="tit">Apellido 2</td>
+      <td class="dat"><span id="Apellido2Ed">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Direcci&oacute;n</td>
+      <td class="dat"><span id="DireccionEd">&nbsp;</span></td>
+      <td class="tit">Tel&eacute;fono</td>
+      <td class="dat"><span id="TelefonoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Cargo</td>
+      <td class="dat"><span id="CargoEd">&nbsp;</span></td>
+      <td class="tit">Titulo Profesi&oacute;n</td>
+      <td class="dat"><span id="TituloProfecionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Acta Nombramiento</td>
+      <td class="dat"><span id="ActaNombramientoEd">&nbsp;</span></td>
+      <td class="tit">N Acta</td>
+      <td class="dat"><span id="NActaEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Acta</td>
+      <td class="dat"><span id="FechaActaEd">&nbsp;</span></td>
+      <td class="tit">Periodo Inicial</td>
+      <td class="dat"><span id="PeriodoInicialEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Periodo Final</td>
+      <td class="dat"><span id="PeriodoFinalEd">&nbsp;</span></td>
+      <td class="tit">Usuario Inserci&oacute;n</td>
+      <td class="dat"><span id="usuarioInsercionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Inserci&oacute;n</td>
+      <td class="dat"><span id="fechaInsercionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Modificaci&oacute;n</td>
+      <td class="dat"><span id="usuarioModificacionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Modificaci&oacute;n</td>
+      <td class="dat"><span id="fechaModificacionEd">&nbsp;</span></td>
+      <tr>
+       <td class="dat2" colspan="4">
+ 	        <input type="hidden" name="IdRepresentante" id="IdRepresentanteKey">
+       <input type="submit" class="BOT" value="Editar"   id="btnModificar" onClick="Modificar();">
+    </td>
+   </tr>
+  </table>
+ </div>
+  </FORM>
+ </DIV>
+<script type="text/javascript">
+     Calendar.setup({
+       inputField :  'FechaActa',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bFechaActa'
+      });
+     Calendar.setup({
+       inputField :  'PeriodoInicial',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bPeriodoInicial'
+      });
+     Calendar.setup({
+       inputField :  'PeriodoFinal',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bPeriodoFinal'
+      });
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

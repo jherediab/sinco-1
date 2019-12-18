@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>Sistema de Solicitud de Servicios</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+
+   var seleccionados=0;
+   $$("input[type='checkbox']").each(
+     function(elem){
+     
+      if (elem.checked==true){
+        seleccionados+=1;      
+      }
+    }
+    );
+
+   if (seleccionados==0){
+      alert("Debe seleccionar una o mas personas.");
+      Mostrar();
+      return false;
+   }
+   return true;
+}
+</SCRIPT>
+
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+  	new menu (MENU_ITEMS0, MENU_POS0);
+  </script>
+
+  <br>
+<div class="container">
+ 
+  <div class="ca">Seleccione la Persona Encargada de Proveer el Servicio</div>
+  <br>
+  <form action="SolicitudPendProveedor.po" method="post" onsubmit="return Salvar();">
+       <table summary="" align="center" width="100%">
+        <thead>
+         <tr> 
+          <th class="cf1">Funcionario</th>
+          <th class="cf2">Nombre Area</th>
+          <th class="cf1">Seleccionar</th>
+         </tr>
+        </thead>
+        <tbody  id="personas">
+        </tbody>
+       </table>
+      
+	  <div align="right">
+       <INPUT class="INP" TYPE="hidden" id="solPadre" name="solPadre" value="0">
+       <INPUT class="INP" TYPE="hidden" id="solicitud" name="solicitud" value="0">
+       <INPUT class="INP" TYPE="hidden" id="_operacion" name="_operacion" value="C">
+       <INPUT TYPE="Submit" class="BOT" value="Continuar">
+     </div>
+  </form>
+ </div>
+</body>
+</html>
+

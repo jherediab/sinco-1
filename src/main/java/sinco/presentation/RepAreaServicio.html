@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>index.htm</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+<br>
+ <div class="container">
+	<form action="ResRepAreaServicio.po" method="post">
+	  <div align="center">
+		<INPUT class="INP" TYPE="HIDDEN" name="AREA" id="IdArea">
+		<table summary="" width="80%" align="CENTER"  class="tabf">
+		  <tr>
+		   <td class ="ca" COLSPAN="2"><STRONG>Par&aacute;metros de B&uacute;squeda</STRONG></td>
+		  </tr> 
+		  <tr>
+			<td class="tit">Servicio:</td>
+			<td class="dat"><SELECT class="INP" NAME="SERVICIO" id="IdServicio"></select>
+			</td>
+		  </tr>
+		  <tr> 
+			<td class="tit"> A&ntilde;o:</td>
+			<td class="dat"> <SELECT class="INP" NAME="ANNO" id="IdAnno"></select></td>
+		  </tr>
+		  <tr> 
+			<td class="tit">Mes Inicial:
+			</td>
+			<td class="tit">  <SELECT class="INP" NAME="MES1" id="IdMes1"></select>
+			  </td>
+		  </tr>
+		  <tr> 
+			<td class="tit"> Mes Final:
+			</td>
+			<td class="tit">  <SELECT class="INP" NAME="MES2" id="IdMes2"></select></td>
+		  </tr>
+		  <tr> 
+			  <td class="dat2" colspan="2"> 
+			  <INPUT TYPE="Submit" class="BOT" value="Buscar">
+			</td> 
+		  </tr>
+		</table>
+	  </div>
+	</form>
+	</div>
+</body>
+</html>
+

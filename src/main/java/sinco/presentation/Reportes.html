@@ -1,0 +1,101 @@
+<html>
+<head>
+<title>index.htm</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<script TYPE="text/javascript"  language="JavaScript" src="media/jquery.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link rel="stylesheet" href="media/capas.css" type="text/css">
+
+<script type="text/javascript">		
+	$(document).ready(function(){ // Script del Navegador
+		$("ul.subnavegador").hide();				
+		$("a.desplegable").toggle(
+			function() { 
+				$(this).parent().find("ul.subnavegador").slideDown('fast'); 
+			},
+			function() { 
+				$(this).parent().find("ul.subnavegador").slideUp('fast'); 
+			}				
+		);	
+	});
+</script>			
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+ <div id="borde">
+   <div id="contenedor">
+   
+   <div class="cabecera">
+    <span class="nombre" id="nombre">Reportes</span>
+   </div>
+   <br>
+   
+            <ul  class="navegador">
+				<li href="#"  id="repIndiceSatisfaccion">
+				  <a href="#" class="desplegable"  title="Indices de satisfacci&oacute;n.">Indices de satisfacci&oacute;n.</a>
+				  <ul  class="subnavegador"  style="display: none">
+					  <li id="repIndicePersonal"><a href="EscogerSujetoIndiceSat.po?sujeto=1">Indice personal</a></li>
+					  <li id="repIndiceAreas"><a href="RepIndiceSatGeneral.po">Indice del &aacute;rea</a></li>
+					  <li id="repEstadistico"><a href="PreGerencial.po?accion=1">Reporte Estad&iacute;stico.</a></li>
+				   </ul>
+				</li>    	      
+              
+				<li id="repServicios">
+				   <a href=""  class="desplegable" title="Reportes de Servicios">Reportes de Servicios.</a>
+				   <ul  class="subnavegador"  style="display: none">
+					<li id="repServiciosPorArea"><a href="EscogerAreaTodas.po">Por Area.</a></li>
+					<li id="repServiciosPorPersona"> <a href="PedirNombrePersona.po">Por persona.</a> </li>
+				   </ul>
+				</li>
+	      
+				<li id="repSolicitudesAtendidas"><a class="desplegable" href="#">Solicitudes Atendidas.</a>
+				   <ul  class="subnavegador" style="display: none">
+					 <li> <a href="PedirFechas.po?pagina=SolicitudesAtendidas.po">Que usted ya atendi&oacute;.</a></li>
+					 <li> <a href="PedirFechas.po?pagina=SolicitudesResueltas.po">Que le fueron atendidas.</a></li>
+					 <li>  <a href="PedirFechas.po?pagina=SolicitudesAnuladas.po">Solicitudes Anuladas.</a> </li>
+				   </ul>
+				</li>
+            
+				<li id="repAdministrador"><a class="desplegable" href="#">Consultas Administrador.</a>
+				  <ul  class="subnavegador" style="display: none">
+					 <li>  <a href="PreGerencial.po?accion=2">Por Periodos(Reporte Estad&iacute;stico administrativo).</a> </li>
+				  </ul>
+				</li>
+
+            <li id="repReportesArea"><a class="desplegable" href="#">Reportes del Area.</a>
+               <ul  class="subnavegador" style="display: none">
+                 <li id="repEspecifico">  <a href="PreRepAcciones.po?accion=2&pagina=RepAccionesPedirServ.po">Reporte especifico</a> </li>
+                 <li id="repSolicitudesPorNumero">  <a href="DigiteNumero.po?tipo=solicitud">Ver Solicitud por N&uacute;mero.</a> </li>
+                 <li id="repEscalamientos">  <a href="PreGerencial.po?accion=3">Reporte de Servicios no Conformes</a> </li>
+               </ul>
+            </li>
+            
+            <li id="repPromedioServicios">  <a href="PrePromedioServicios.po">Tiempo promedio de servicios.</a></li>
+            <li id="repEstadisticasDigalo"> <a href="PlanDigaloEstadisticas.po">Estad&iacute;sticas plan d&iacute;galo.</a></li>
+            <li id="repConsultaPlanes"> <a href="PreConsultaDigalo.po">Consulta de planes existentes.</a></li>
+            <li id="repConsultaGenerica"> <a href="Reporte01F1.po">Consulta Solicitudes</a></li>
+            
+            <li id="repAuditorias"><a class="desplegable" href="#" >Reportes de auditoria.</a>
+            <ul  class="subnavegador" style="display: none">
+               <li id="repCalificacion">  <a href="AudVerCiclos.po?personal=1">Calificación obtenida.</a> </li>
+               <li id="repAreasAuditadas">  <a href="AudVerAreas.po">Ver Areas Auditadas.</a> </li>
+               <li id="repCiclosAuditoria">  <a href="AudVerCiclos.po?personal=0">Ver Ciclos Auditoria.</a> </li>
+               <li id="repAuditores">  <a href="AudVerAuditores.po?personal=0">Auditores.</a> </li>
+               <li id="repMeAuditaron"> <a href="AudMeAuditaron.po">Me Auditaron</a></li>
+            </ul>
+            </li>
+            
+        </ul>
+   </div>
+  </div>
+ </body>
+</html>
+

@@ -1,0 +1,133 @@
+<html>
+<head>
+<title> Ver solicitudes en curso </title>
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script type="text/javascript">
+
+    var tamanno=0;
+    
+    function compruebaExtension(archivo) {
+        extensiones_permitidas = new Array(".mp3", ".wav", ".wma", ".mid", ".mpg");
+       //recupero la extensión de este nombre de archivo
+        extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
+       //compruebo si la extensión está entre las permitidas
+       permitida = true;
+       for (var i = 0; i < extensiones_permitidas.length; i++) {
+         if (extensiones_permitidas[i] == extension) {
+           permitida = false;
+           break;
+          }
+        }
+        return permitida;
+     }     
+     
+    function setFileName() {
+       var theForm = document.myForm;
+       theForm.theFileName.value = theForm.upload.value;
+    }
+    
+    /*
+    function Calculo() {
+       alert("calculando");
+       tamanno=Math.round((document.getElementById('fotoFinal').fileSize / 1024)*Math.pow(10,2)) / Math.pow(10,2);
+    }
+    
+    function ValidarTamano() {
+       img = document.createElement("IMG");
+       img.src = document.getElementById("fichero").value;
+       img.id = "fotoFinal";
+       img.style.visibility = "hidden";
+       document.body.appendChild(img);
+       setTimeout("Calculo();",500);  
+    } 
+    */
+    
+     
+     function Salvar(){
+       Ocultar();
+     
+       var theForm = document.myForm;
+       if (compruebaExtension(theForm.theFileName.value)==false){
+         Mostrar();
+         alert("La extension del archivo que intensa subir no es permitida");
+         return false;
+       }
+
+      return true;
+     }
+</script>
+</head>
+
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" id="miBody">
+
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+ <div class="container">
+
+ <table summary="" class="tabf" border="0" cellspacing="0">
+   <tr>
+     <td height="20" class="cc">
+      <div align="center"> <img alt="" src="media/cuadro1.gif" width="10" height="10"> 
+          ANEXAR ARCHIVOS EN LA SOLICITUD &nbsp; #<span id= "numeroSolicitud">&nbsp;</span> 
+     </div>
+    </td>
+   </tr>
+  </table>
+		  
+	<div id="idmostrararchivos">
+		<table summary="" class="tabf" border="0" id="idArchivos" cellspacing="2" cellpadding="0">
+		  <tr>
+			<td class="cf1">Archivo </td>
+			<td class="cf2">Fecha de colocaci&oacute;n </td>
+		  </tr>
+		</table>
+	</div>      
+	<br>
+	<div>
+      <form enctype="multipart/form-data" name="myForm" action="ArchivosAnadir.po" method="post" onsubmit="return Salvar();">
+       <table summary="" border="0" cellspacing="0" cellpadding="0" class="tabf">
+        <tr>
+         <td class ="ca" COLSPAN="2"><STRONG>Anexar Archivo</STRONG></td>
+        </tr> 
+        <tr>
+          <td class="tit">
+            <INPUT class="INP" TYPE="hidden" name="solicitud" id="solicitud"> 
+            <INPUT class="INP" TYPE="hidden" name="pagina_siguiente" id="pagina_siguiente"> 
+            Si desea anexar un archivo a su solicitud, use la siguiente opci&oacute;n : 
+          </td>
+         <td  class="dat">
+            <INPUT class="INP" TYPE="hidden" name="theFileName"> Archivo:
+            <INPUT class="INP" id="fichero" TYPE="file" name="upload" size="80">
+         </td>   
+         </tr>
+         <tr>
+           <td  colspan="2" class="dat2">
+            <INPUT TYPE="Submit" class="BOT" name="miBoton" value="Subir archivo" onClick="setFileName();">
+         </td>   
+         </tr>
+        </table>
+     </form>
+ </div>
+
+
+  <div id="copiar">
+	  <form name="forma2" id="forma" action="CopiarSolicitud.po" method="GET">
+		<INPUT class="INP" TYPE="hidden" name="solicitud" id="solicitudV"> 
+		<INPUT TYPE="Submit" class="BOT" value="Volver a la solicitud"  name="miBoton" onClick="document.forma2.miBoton.style.display='none'">
+	  </form>
+  </div>
+
+</div>
+</body>
+</html>
+
+

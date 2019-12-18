@@ -1,0 +1,150 @@
+<html>
+<head>
+<title>Subir documento</title>
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<script type="text/javascript">
+function Salvar() {
+     Ocultar();
+     var theForm = document.miForma;
+     theForm.theFileName.value = theForm.upload.value;
+	 
+	 
+     if (theForm.theFileName.value.length==0){
+         alert("Por Favor Escoja El Archivo");
+         Mostrar();
+         return false;
+     }
+     var resp = confirm("Procesar Como : "+ theForm.tipoDocumento[theForm.tipoDocumento.selectedIndex].text+"?"); 
+     
+     if(!resp)  Mostrar(); 
+     return resp;
+}
+
+
+</script>
+</head>
+
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" id="miBody">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<br>
+
+ <div class="container">
+<FORM name="miForma2" ACTION="CalDocumentosAct.po" METHOD="post">
+ <table class="tabf" summary=""  border="0">
+  <tr>
+    <td class ="ca" COLSPAN="4"><STRONG>ASOCIACION DE DOCUMENTOS</STRONG></td>
+  </tr>       
+    <tr>
+     <td class="tit">Código</td>
+     <td class="dat"><span id="codigo">&nbsp;</span></td>
+     <td class="tit">Tipo Documento</td>
+     <td class="dat"><span id="tipoDocumento">&nbsp;</span></td>
+    </tr>
+
+    <tr>
+     <td class="tit">Proceso</td>
+     <td class="dat"><span id="proceso">&nbsp;</span></td>
+     <td class="tit">Subproceso</td>
+     <td class="dat"><span id="subproceso">&nbsp;</span></td>
+    </tr>
+
+    <tr>
+     <td class="tit">Descripción</td>
+     <td class="dat" colspan="3"><span id="descripcion">&nbsp;</span></td>
+    </tr>
+
+    <tr>
+     <td class="tit">Version</td>
+     <td class="dat"><span id="version">&nbsp;</span></td>
+     <td class="tit">Fecha Version</td>
+     <td class="dat"><span id="fechaVersion">&nbsp;</span></td>
+    </tr>
+
+    <tr>
+     <td class="tit">Estado</td>
+     <td class="dat"><span id="estado">&nbsp;</span></td>
+     <td class="tit">Nombre Archivo Word</td>
+     <td class="dat"><span id="nombreArchivoWord">&nbsp;</span></td>
+    </tr>
+
+    <tr>
+     <td class="tit">Nombre Archivo Pdf</td>
+     <td class="dat" colspan="3"><span id="nombreArchivoPdf">&nbsp;</span></td>
+    </tr>
+   
+    <tr>
+     <td class="dat2" colspan="4"><INPUT class="BOT"  TYPE="Submit" VALUE="Volver al Documento" accesskey="G">
+         <INPUT TYPE="hidden" id="codigoV" NAME="codigo" value="">
+         <INPUT TYPE="hidden" NAME="_operacion" id="operacion" value="P">
+		 <INPUT TYPE="hidden" NAME="Doc" id="Doc" value="">
+		  <INPUT TYPE="hidden" NAME="objetivoHidden" id="objetivoHidden" value="">
+     </td>
+    </tr>
+   </table> 
+ </FORM>
+
+	<br>
+	<div id="tblsubir">
+         <form enctype="multipart/form-data" name="miForma" action="CalDocumentosSubirArchivos.po" method="post" onsubmit="return Salvar();">
+          <table summary="" class="tabf" border="0" cellspacing="2" cellpadding="2">
+           <tr>
+            <td class ="ca" COLSPAN="2"><STRONG>Anexar Archivo</STRONG></td>
+           </tr> 
+           
+           <tr>
+            <td class ="tit">Tipo Documento A Catalogar</td>
+            <td class ="dat"><SELECT NAME="tipoDocumento">
+            <OPTION value="W">Documento Fuente</OPTION>
+            <OPTION value="P">Documento a Publicar</OPTION>
+            </SELECT>
+            
+            </td>
+           </tr>         
+           <tr>
+            <td  class="dat" colspan="2">
+				<INPUT TYPE="hidden" NAME="Doc2" id="Doc2" value="">
+				<INPUT TYPE="hidden" NAME="objetivoHidden" id="objetivoHidden2" value="">
+               <INPUT class="INP" TYPE="hidden" name="codigoDocumento" id="codigoDocumento"> 
+               <INPUT class="INP" TYPE="hidden" name="theFileName"> Archivo:
+               <INPUT class="INP" TYPE="file" name="upload" size="120">
+            </td>   
+            </tr>         
+            <tr>
+              <td colspan="2" class="dat2">
+               <INPUT class="BOT"  TYPE="Submit" value="Subir archivo">
+            </td>   
+            </tr>
+           </table>
+        </form>
+	</div>
+	<br>	
+	<div id="tblVersiones">
+       <table class="tabf" summary=""  border="0" id="detalle">
+        <tr>
+          <td class="cf2">Versi&oacute;n</td>
+          <td class="cf1">Fecha Versi&oacute;n</td>
+          <td class="cf2">Documento Fuente</td>
+          <td class="cf1">Documento Publicado</td>          
+        </tr> 
+       </table>
+    </div>
+  </div>
+</body>
+</html>

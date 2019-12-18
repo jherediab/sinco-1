@@ -1,0 +1,401 @@
+<html>
+ <head>
+ <title>Detalle del flujo</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+ <SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+ <script TYPE="text/javascript" language="JavaScript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <SCRIPT TYPE="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('secuencia'),"Secuencia","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('servicioInicio'),"Servicio Inicio","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoEstado'),"Código Estado","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+	  
+   }
+   
+      var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+   
+   if ($('accion').value =='1' ||$('accion').value =='3'||$('accion').value =='5'||$('accion').value =='7'){
+     rta=validar($('servicioDestino'),"Servicio Destino","ENT",0,"OBL","0","999999999999999");
+     if(!rta){
+        Mostrar();
+        return false;
+     }
+   }
+   
+   if ($('accion').value =='2' ||$('accion').value =='3'||$('accion').value =='6'||$('accion').value =='7'){
+    rta=validar($('nombreProcedimiento'),"Nombre Procedimiento","ALFA",0,"OBL","0","999999999999999");
+    if(!rta){
+       Mostrar();
+       return false;
+    }
+   }
+   
+   if ($('accion').value =='4' ||$('accion').value =='5'||$('accion').value =='6'||$('accion').value =='7'){
+     rta=validar($('correoDestino'),"Correo Destino","ALFA",0,"OBL","0","999999999999999");
+     if(!rta){
+        Mostrar();
+        return false;
+     }
+   }
+   
+   rta=validar($('estado'),"Estado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function PreparaVolver(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="V";
+   document.ff.action="Flujos.po";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    $('_operacion').value="L";
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+
+ 
+
+ function  CambioServicio(){
+ 
+        $('caracteristica').length=0;
+        if ($('servicioInicio').value.length==0){
+          return true;
+        }
+		
+        var url="ConsultasAjax.po?_operacion=caracteristicas&servicio="+$('servicioInicio').value;
+        new Ajax.Request(url,{
+            method:'get',  
+             onSuccess: function(transport) {
+             llenarBlancoAtr($('caracteristica'),transport.responseXML.getElementsByTagName('reg'),'codigo','nombre');
+             },     
+             onFailure: function() {
+              alert("Ups... Error obteniendo respuesta Ajax");
+             }    
+         }
+    );  
+ }
+ 
+ function  CambioCaracteristica(){
+ 
+        $('valorCaracteristica').length=0;
+        if ($('caracteristica').value.length==0){
+          return true;
+        }
+        var url="ConsultasAjax.po?_operacion=valorCaracteristica&caracteristica="+$('caracteristica').value;
+        new Ajax.Request(url,{
+            method:'get',  
+             onSuccess: function(transport) {
+             llenarBlancoAtr($('valorCaracteristica'),transport.responseXML.getElementsByTagName('reg'),'codigo','nombre');
+             },     
+             onFailure: function() {
+              alert("Ups... Error obteniendo respuesta Ajax");
+             }    
+         }
+    );  
+ }
+ 
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   <td align="left">
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+ <div class="container">
+ <FORM name="ff" ACTION="FlujoDetalle.po" METHOD="post" onsubmit="return Salvar()">
+ <INPUT TYPE="hidden" NAME="_operacion" ID="_operacion" value="X">
+
+ <INPUT TYPE="hidden" NAME="codigoFlujo" ID="codigoFlujoHidden">
+
+ <table   class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+     <td class="titp">Detalle del flujo <span id="nombreFlujo">&nbsp;</span></td>
+     <td class="dat2">
+     <input type="submit" class="BOB"  value= "Regresar" id="btnVolver"  onClick="PreparaVolver();">
+     <input type="submit" class="BOB"  value= "Nuevo" id="btnCrear" onClick="Nuevo();">
+     <input type="Button" class="BOB"  value= "Ayuda" id="btnAyuda" onClick="show_help('FlujoDetalle');";">
+   </td>
+  </tr>
+ </table>
+ <br>
+
+
+ <div id="trResultados">
+    <table  summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf2">Secuencia</th>
+        <th class="cf1">Servicio Inicio</th>
+        <th class="cf1">C&oacute;digo Estado</th>
+        <th class="cf2">Servicio Destino</th>
+        <th class="cf1">Nombre Procedimiento</th>
+        <th class="cf2">Correo Destino</th>
+        <th class="cf1">Caracteristica</th>
+        <th class="cf2">Valor</th>
+        <th class="cf2">Caracteristica Correo</th>
+        <th class="cf1">Estado</th>
+        <th class="cf1">selecci&oacute;n proveedor</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="11">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+
+  <div id="trCreacionRegistro">
+ <table class="tabf"  summary=""  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	  <td colspan="2" class="ca" width="98%">Creaci&oacute;n / Modificaci&oacute;n</td>
+  </tr>
+  <tr>
+   <td class="tit">Secuencia</td>
+   <td class="dat"><INPUT TYPE="Text" class="INP" NAME="secuencia" id="secuencia" maxlength="5" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Servicio Inicio</td>
+   <td class="dat"> <SELECT NAME="servicioInicio" class="INP" id="servicioInicio" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"  onchange="CambioServicio();"></SELECT></td>
+  </tr>
+
+  <tr>
+   <td class="tit">C&oacute;digo Estado</td>
+   <td class="dat"> <SELECT NAME="codigoEstado" class="INP" id="codigoEstado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Servicio Destino</td>
+   <td class="dat"> <SELECT NAME="servicioDestino" class="INP" id="servicioDestino" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Enviar servicio</td>
+   <td class="dat"> <INPUT TYPE="checkbox" class="INP" NAME="enviar" id="enviar" value="S"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Usar como Cliente el cliente de solicitud principal</td>
+   <td class="dat"><INPUT TYPE="checkbox" class="INP" NAME="mismoCliente" id="mismoCliente" value="S"></td>
+  </tr>
+  
+  <tr>
+   <td class="tit">Enviar a mismo Proveedor de solicitud principal</td>
+   <td class="dat"><INPUT TYPE="checkbox" class="INP" NAME="mismoProveedor" id="mismoProveedor" value="S"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Enviar correos a participantes al atender solicitud</td>
+   <td class="dat"><INPUT TYPE="checkbox" class="INP" NAME="indCorreoCliente" id="indCorreoCliente" value="S"></td>
+  </tr>
+  
+  <tr>
+   <td class="tit">Enviar Hermana no enviada</td>
+   <td class="dat"><INPUT TYPE="checkbox" class="INP" NAME="indHermana" id="indHermana" value="S"></td>
+  </tr>
+  
+  <tr>
+   <td class="tit">Enviar si ultima hermana cerrada</td>
+   <td class="dat"><INPUT TYPE="checkbox" class="INP" NAME="indHermanaCerrada" id="indHermanaCerrada" value="S"></td>
+  </tr>
+  
+  <tr>
+   <td class="tit">Enviar solicitud al funcionario que inicio el flujo</td>
+   <td class="dat"><INPUT TYPE="checkbox" class="INP" NAME="indfuncionario" id="indfuncionario" value="S"></td>
+  </tr>
+  
+  
+
+  
+  <tr>
+   <td class="tit">Caracteristica Decide Envio</td>
+   <td class="dat"> <SELECT NAME="caracteristica" class="INP" id="caracteristica" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"  onchange="CambioCaracteristica();"></SELECT></td>
+  </tr>
+  
+  
+
+  <tr>
+   <td class="tit">Valor Caracteristica Decide Envio</td>
+   <td class="dat"> <SELECT NAME="valorCaracteristica" class="INP" id="valorCaracteristica" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+  </tr>
+  
+  <tr>
+   <td class="tit">Nombre Procedimiento</td>
+   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="nombreProcedimiento" id="nombreProcedimiento" maxlength="61" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Correo Destino</td>
+   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="correoDestino" id="correoDestino" maxlength="61" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Metodo selecci&oacute;n proveedor</td>
+   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="metodoSeleccionProveedor" id="metodoSeleccionProveedor" maxlength="30" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+  
+  <tr>
+   <td class="tit">Caracteristica Enviar Correo</td>
+   <td class="dat"> <SELECT NAME="caracteristicaCorreo" class="INP" id="caracteristicaCorreo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"  onchange="CambioCaracteristica();"></SELECT></td>
+  </tr>
+  
+  <tr>
+   <td class="tit">Estado</td>
+   <td class="dat"> <SELECT NAME="estado" class="INP" id="estado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Usuario Inserci&oacute;n</td>
+   <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="usuarioInsercion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Fecha Inserci&oacute;n</td>
+   <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="fechaInsercion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Usuario Modificaci&oacute;n</td>
+   <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="usuarioModificacion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Fecha Modificaci&oacute;n</td>
+   <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="fechaModificacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+   <tr>
+	<td class="dat2" colspan="2">
+	  <INPUT TYPE="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G">
+	  <INPUT TYPE="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+	  <INPUT TYPE="Submit" class="BOT" VALUE="Salir"   id="btnSalir" onClick="Salir();" accesskey="S">
+	</td>
+   </tr>
+  </table>
+  </div>
+
+  </FORM>
+  
+  </div>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

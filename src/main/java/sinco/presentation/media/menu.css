@@ -1,0 +1,47 @@
+/* Style for a block - TABLE */
+.mtable {
+	border: none;
+	background: white;
+}
+/* Style for outer tag, mout (mouse out) state */
+.mouter {
+	background: white;
+}
+/* Style for inner tag, mover (mouse over) state */
+.minner {
+	background: white;
+}
+
+/* rollover effect for blue menu */
+.m1table2 {
+	border: 1px outset #84B2C6; 
+}
+.m1out2 {
+  background: #C0C0C0; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(#C0C0C0, white, #C0C0C0); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#C0C0C0, white, #C0C0C0); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#C0C0C0, white, #C0C0C0); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#C0C0C0, white, #C0C0C0); /* Standard syntax */
+}
+.m1over2 {
+	background: #FFFFFF;
+}
+
+/* rollover effect for gold menu */
+.m2table2 {
+	border: 1px outset #C6AA42;
+}
+.m2out2 {
+	background: #FFCB63;
+}
+.m2over2 {
+	background: #FFE77B;
+}
+
+/* item text */
+.minner2 {
+	font: bold 11px tahoma, arial, verdana;
+	color: #105D94;
+	padding: 4px;
+}
+

@@ -1,0 +1,619 @@
+<html>
+ <head>
+ <title>Procedimiento</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+ <link  type="text/css" rel="stylesheet" href="media/css/bootstrap.min.css"/>
+ <link  type="text/css" rel="stylesheet" href="media/css/bootstrap-theme.min.css"/>
+
+ <script type="text/javascript" src="media/jquery-1.11.3.min.js"></script>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/rutinas.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script type="text/javascript" src="media/menu.js"></script>
+ <script type="text/javascript" id="elMenu"></script>
+ <script type="text/javascript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/js/bootstrap.min.js"></script>
+ <script type="text/javascript" src="media/prcProcedimientojs.js"></script>
+ <script type="text/javascript" language="JavaScript" id="ScriptCarga"></script>
+ 
+</head>
+
+<!--<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">-->
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+	<table  summary="" class="tabw" border="0">
+		<tr>
+			<td>
+				<script TYPE="text/javascript">
+					new menu (MENU_ITEMS0, MENU_POS0);
+				</script>
+			</td> 
+		</tr>
+	</table>
+	
+	<div class="container">
+		<form name="ff" action="PrcProcedimiento.po" method="post" onsubmit="return Salvar()">
+			<input type="hidden" name="_operacion" id="_operacion" value="X">			
+			<div class="row" style="padding-top:14px;">
+				<div class="col-lg-2" style="font-size: 20px;">Procedimiento</div>
+				<div class="col-lg-10">
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10" style="text-align: right;">							
+							<input type="submit" class="btn btn-primary btn-sm"  value= "Consultar" id="btnConsultar"  onClick="PreparaConsulta();"> 
+							<input type="submit" class="btn btn-default btn-sm"  value= "Nuevo" id="btnCrear" onClick="Nuevo();">							
+							<input type="Button" class="btn btn-info btn-sm"  value= "Ayuda" id="btnAyuda" onClick="show_help('PrcProcedimiento');">								
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="row" id="divConsulta">
+				<div class="panel panel-primary" style="display:block">
+					<div class="panel-heading">Consulta</div>
+					<div class="panel-body">
+						<div class="form-group col-lg-7">
+							<label for="fservicioUnidadId"> Responsable </label>
+							<select name="codigoEmpleado" class="form-control" id="fcodigoEmpleado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></select>
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="fobjetivo"> Objetivo </label>
+							<textarea class="form-control" name="objetivo" id="fobjetivo" rows="2" maxlength="255" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></textarea>
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="falcance"> Alcance </label>
+							<textarea class="form-control" name="alcance" id="falcance" rows="2" maxlength="255" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></textarea>
+						</div>
+						<div class="form-group col-lg-12">
+							<input type="submit" class="btn btn-primary btn-sm"  value= "Consultar" onClick="Consultar();">
+						</div>
+						
+					</div>
+				</div>				
+			</div>
+			<div class="row" id="divResultados">
+				<br>
+				<table summary="" class="table table-bordered">  <!--class="tabf sortable resizable">-->
+					<thead>
+						<tr>
+							<th class="cf2">Procedimiento</th>
+							<th class="cf1">Objetivo</th>
+							<th class="cf2">Alcance</th>
+							<th class="cf1">Definici&oacute;nes</th>
+							<th class="cf2">Concepto</th>
+							<th class="cf1">Estado</th>
+						</tr>
+					</thead>
+					<tbody id="detalle">
+					</tbody>
+					<tfoot>
+						<tr>
+							<td  class="PIE" colspan="10">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			<br>
+			<div class="row" id="divCreacionRegistro">
+				<div class="panel panel-primary" style="display:block">
+					<div class="panel-heading">1. INFORMACI&Oacute;N GENERAL</div>
+					<div class="panel-body">
+						<div class="form-group col-lg-7">
+							<label for="idProcedimiento"> C&oacute;digo </label>
+							<input type="text" class="form-control" name="idProcedimiento" id="idProcedimiento" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="C&oacute;digo Procedimiento">
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="procesoId"> Proceso </label>
+							<INPUT type="text" class="form-control" name="procesoId" id="procesoId" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="C&oacute;digo Proceso">
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="subprocesoId"> Subproceso </label>
+							<input type="text" class="form-control" name="subprocesoId" id="subprocesoId" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="C&oacute;digo Subproceso">
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="servicioUnidadId"> Unidad Servicio </label>
+							<input type="text" class="form-control" name="servicioUnidadId" id="servicioUnidadId" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="C&oacute;digo Unidad Servicio">
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="codigoEmpleado"> Responsable </label>
+							<select name="codigoEmpleado" class="form-control" id="codigoEmpleado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></select>
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="objetivo"> Objetivo </label>
+							<textarea class="form-control" name="objetivo" id="objetivo" rows="2" maxlength="255" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></textarea>
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="alcance"> Alcance </label>
+							<textarea class="form-control" name="alcance" id="alcance" rows="2" maxlength="255" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></textarea>
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="estado"> Estado del registro </label>
+							<select name="estado" class="form-control" id="estado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select>
+						</div>
+					</div>
+					<div class="panel-heading">2. DEFINICIONES Y T&Eacute;RMINOS</div>
+					<div class="panel-body">
+						<div class="form-group col-lg-6">
+							<label for="alcance"> Definici&oacute;n </label>
+							<textarea class="form-control" name="definiciones" id="definiciones" rows="2" maxlength="255" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></textarea>
+						</div>
+						<div class="form-group col-lg-6">
+							<label for="alcance"> Concepto </label>
+							<textarea class="form-control" name="concepto" id="concepto" rows="2" maxlength="255" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></textarea>
+						</div>
+					</div>
+					<div class="panel-heading">3. POLITICAS DE OPERACI&Oacute;N</div>
+					<div class="panel-body">
+						<div class="form-group col-lg-offset-1 col-lg-8">
+							<textarea class="form-control" name="PoliticaText" id="PoliticaText" rows="4"
+								cols="100" onkeypress="validarTecla(event, 'ALSE');"
+								onkeydown="textCounter(PoliticaText,txtCont4,100000);"
+								onkeyup="textCounter(PoliticaText,txtCont4,100000);"></textarea>							
+						</div>
+						<div class="form-group col-lg-2" style="margin-top:30px">
+							<input type="hidden" name="txtCont4" value="0"/> 
+							<input type="button" class="btn btn-primary btn-sm" name="botonAgregarPolitica" id="BotonAgregarPolitica" value="Agregar"
+								onclick="agregarPolitica();" />
+						</div>
+						<table summary="" width="100%" border="0" cellspacing="0"
+							cellpadding="0" id="TablaPoliticaText">
+							<tbody>
+								<tr class="tit">
+									<td>Pol&iacute;tica</td>
+									<td>Eliminar</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="panel-heading">4. ENCADENAMIENTO</div>
+					<div class="panel-body">
+						<div class="panel panel-primary" style="display:block">
+							<div class="panel-body">
+								<div class="form-group col-lg-12">
+									<label for="falcance"> 4.1. Procedimientos Antecedentes </label>
+								</div>
+								<div class="form-group col-lg-offset-1 col-lg-8">
+									<select name="AnterioresText" class="form-control" id="AnterioresText" onkeydown="return f_salto2(event);" 
+											onkeyup="return f_salto(event);">
+									</select>
+								</div>
+								<div class="form-group col-lg-2">
+									<input type="hidden" name="txtCont4" value="0"/> 
+									<input 	type="button" class="btn btn-primary btn-sm" name="botonAgregarAnteriores" id="botonAgregarAnteriores" value="Agregar"
+											onclick="agregarProcAnteriores();" />
+								</div>
+								<div class="form-group col-lg-12">
+									<table summary="" width="100%" border="0" cellspacing="0"
+										cellpadding="0" id="TablaAnterioresText">
+										<tbody>
+											<tr class="tit">
+												<td>Procedimiento</td>
+												<td>Eliminar</td>
+											</tr>
+										</tbody>
+									</table>					
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-primary" style="display:block">
+							<div class="panel-body">
+								<div class="form-group col-lg-12">
+									<label> 4.2. Proveedores / Entradas  </label>
+								</div>
+								<div class="col-lg-12">
+									<div class=" col-lg-5">	
+										<label for="Proveedores"> Proveedores  </label>
+										<select name="Proveedores" class="form-control" id="Proveedores" onkeydown="return f_salto2(event);" 
+												onkeyup="return f_salto(event);">
+										</select>
+									</div>
+									<div class="col-lg-5">
+										<label for="Entradas"> Entradas  </label>
+										<select name="Entradas" class="form-control" id="Entradas" onkeydown="return f_salto2(event);" 
+												onkeyup="return f_salto(event);">
+										</select>
+									</div>
+									<div class="form-group col-lg-2" style="margin-top:30px">
+										<input type="hidden" name="txtCont8" value="0"/> 
+										<input 	type="button" class="btn btn-primary btn-sm" name="botonAgregarProveedores" id="botonAgregarProveedores" value="Agregar"
+												onclick="agregarProveedoresEntradas();" />
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<table summary="" width="100%" border="0" cellspacing="0"
+										cellpadding="0" id="TablaProveedorText">
+										<tbody>
+											<tr class="tit">
+												<td>Proveedor</td>
+												<td>Entrada</td>
+												<td>Eliminar</td>
+											</tr>
+										</tbody>
+									</table>					
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-primary" style="display:block">
+							<div class="panel-body">
+								<div class="form-group col-lg-12">
+									<label> 4.3. Clientes / Salidas  </label>
+								</div>
+								<div class="col-lg-12">
+									<div class=" col-lg-5">	
+										<label for="Clientes"> Clientes  </label>
+										<select name="Clientes" class="form-control" id="Clientes" onkeydown="return f_salto2(event);" 
+												onkeyup="return f_salto(event);">
+										</select>
+									</div>
+									<div class="col-lg-5">
+										<label for="Salidas"> Salidas  </label>
+										<select name="Salidas" class="form-control" id="Salidas" onkeydown="return f_salto2(event);" 
+												onkeyup="return f_salto(event);">
+										</select>
+									</div>
+									<div class="form-group col-lg-2" style="margin-top:30px">
+										<input type="hidden" name="txtCont8" value="0"/> 
+										<input 	type="button" class="btn btn-primary btn-sm" name="botonAgregarClientes" id="botonAgregarClientes" value="Agregar"
+												onclick="agregarClientesSalidas();" />
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<table summary="" width="100%" border="0" cellspacing="0"
+										cellpadding="0" id="TablaClientesText">
+										<tbody>
+											<tr class="tit">
+												<td>Clientes</td>
+												<td>Salidas</td>
+												<td>Eliminar</td>
+											</tr>
+										</tbody>
+									</table>					
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-heading">5. DETALLE PROCEDIMIENTO</div>
+					<div class="panel-body">
+						<div class="panel panel-primary" style="display:block">
+							<div class="panel-body">
+								<div class="form-group col-lg-12">
+									<label> 5.1. Planear </label>
+								</div>
+								<div class="col-lg-12">
+									<div class=" col-lg-5">	
+										<label for="DescripcionProcPlan"> Descripci&oacute;n </label>
+										<input type="text" class="form-control" name="DescripcionProcPlan" id="DescripcionProcPlan" maxlength="100" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="Descripci&oacute;n">
+									</div>
+									<div class="form-group col-lg-3">
+										<label for="codigoEmpleadoDescPlan"> Responsable </label>
+										<select name="codigoEmpleadoDescPlan" class="form-control" id="codigoEmpleadoDescPlan" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></select>
+									</div>
+									<div class="form-group col-lg-2">
+										<label for="RegistroPlan"> Registro  </label>
+										<input type="text" class="form-control" name="RegistroPlan" id="RegistroPlan" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="Registro">
+									</div>
+									<div class="form-group col-lg-2" style="margin-top:30px">
+										<input type="hidden" name="txtCont9" value="0"/> 
+										<input 	type="button" class="btn btn-primary btn-sm" name="botonAgregarDescPlan" id="botonAgregarDescPlan" value="Agregar"
+												onclick="agregarDescripcionPlanear();" />
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<table summary="" width="100%" border="0" cellspacing="0"
+										cellpadding="0" id="TablaPlanearText">
+										<tbody>
+											<tr class="tit">
+												<td>Descripci&oacute;n</td>
+												<td>Responsable</td>
+												<td>Registro</td>
+												<td>Eliminar</td>
+											</tr>
+										</tbody>
+									</table>					
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-primary" style="display:block">
+							<div class="panel-body">
+								<div class="form-group col-lg-12">
+									<label> 5.2. Hacer </label>
+								</div>
+								<div class="col-lg-12">
+									<div class=" col-lg-5">	
+										<label for="DescripcionProcHac"> Descripci&oacute;n </label>
+										<input type="text" class="form-control" name="DescripcionProcHac" id="DescripcionProcHac" maxlength="100" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="Descripci&oacute;n">
+									</div>
+									<div class="form-group col-lg-3">
+										<label for="codigoEmpleadoDescHac"> Responsable </label>
+										<select name="codigoEmpleadoDescHac" class="form-control" id="codigoEmpleadoDescHac" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></select>
+									</div>
+									<div class="form-group col-lg-2">
+										<label for="RegistroHac"> Registro  </label>
+										<input type="text" class="form-control" name="RegistroHac" id="RegistroHac" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="Registro">
+									</div>
+									<div class="form-group col-lg-2" style="margin-top:30px">
+										<input type="hidden" name="txtCont10" value="0"/> 
+										<input 	type="button" class="btn btn-primary btn-sm" name="botonAgregarDescHac" id="botonAgregarDescHac" value="Agregar"
+												onclick="agregarDescripcionHacer();" />
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<table summary="" width="100%" border="0" cellspacing="0"
+										cellpadding="0" id="TablaHacerText">
+										<tbody>
+											<tr class="tit">
+												<td>Descripci&oacute;n</td>
+												<td>Responsable</td>
+												<td>Registro</td>
+												<td>Eliminar</td>
+											</tr>
+										</tbody>
+									</table>					
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-primary" style="display:block">
+							<div class="panel-body">
+								<div class="form-group col-lg-12">
+									<label> 5.3. Verificar </label>
+								</div>
+								<div class="col-lg-12">
+									<div class=" col-lg-5">	
+										<label for="DescripcionProcVer"> Descripci&oacute;n </label>
+										<input type="text" class="form-control" name="DescripcionProcVer" id="DescripcionProcVer" maxlength="100" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="Descripci&oacute;n">
+									</div>
+									<div class="form-group col-lg-3">
+										<label for="codigoEmpleadoDescVer"> Responsable </label>
+										<select name="codigoEmpleadoDescVer" class="form-control" id="codigoEmpleadoDescVer" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></select>
+									</div>
+									<div class="form-group col-lg-2">
+										<label for="RegistroVer"> Registro  </label>
+										<input type="text" class="form-control" name="RegistroVer" id="RegistroVer" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="Registro">
+									</div>
+									<div class="form-group col-lg-2" style="margin-top:30px">
+										<input type="hidden" name="txtCont10" value="0"/> 
+										<input 	type="button" class="btn btn-primary btn-sm" name="botonAgregarDescVer" id="botonAgregarDescVer" value="Agregar"
+												onclick="agregarDescripcionVerificar();" />
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<table summary="" width="100%" border="0" cellspacing="0"
+										cellpadding="0" id="TablaVerificarText">
+										<tbody>
+											<tr class="tit">
+												<td>Descripci&oacute;n</td>
+												<td>Responsable</td>
+												<td>Registro</td>
+												<td>Eliminar</td>
+											</tr>
+										</tbody>
+									</table>					
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-primary" style="display:block">
+							<div class="panel-body">
+								<div class="form-group col-lg-12">
+									<label> 5.4. Actuar </label>
+								</div>
+								<div class="col-lg-12">
+									<div class=" col-lg-5">	
+										<label for="DescripcionProcAct"> Descripci&oacute;n </label>
+										<input type="text" class="form-control" name="DescripcionProcAct" id="DescripcionProcAct" maxlength="100" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="Descripci&oacute;n">
+									</div>
+									<div class="form-group col-lg-3">
+										<label for="codigoEmpleadoDescAct"> Responsable </label>
+										<select name="codigoEmpleadoDescAct" class="form-control" id="codigoEmpleadoDescAct" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></select>
+									</div>
+									<div class="form-group col-lg-2">
+										<label for="RegistroAct"> Registro  </label>
+										<input type="text" class="form-control" name="RegistroAct" id="RegistroAct" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="Registro">
+									</div>
+									<div class="form-group col-lg-2" style="margin-top:30px">
+										<input type="hidden" name="txtCont9" value="0"/> 
+										<input 	type="button" class="btn btn-primary btn-sm" name="botonAgregarDescAct" id="botonAgregarDescAct" value="Agregar"
+												onclick="agregarDescripcionActuar();" />
+									</div>
+								</div>
+								<div class="form-group col-lg-12">
+									<table summary="" width="100%" border="0" cellspacing="0"
+										cellpadding="0" id="TablaActualText">
+										<tbody>
+											<tr class="tit">
+												<td>Descripci&oacute;n</td>
+												<td>Responsable</td>
+												<td>Registro</td>
+												<td>Eliminar</td>
+											</tr>
+										</tbody>
+									</table>					
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-heading">6. RECURSOS</div>
+					<div class="panel-body">
+						<div class="form-group col-lg-5">
+							<label for="tipoRecurso"> Tipo Recurso </label>
+							<select name="tipoRecurso" class="form-control" id="tipoRecurso" onkeydown="return f_salto2(event);" 
+									onkeyup="return f_salto(event);">
+							</select>
+						</div>
+						<div class="form-group col-lg-5">
+							<label for="DescRecurso"> Descripci&oacute;n </label>
+							<input type="text" class="form-control" name="DescRecurso" id="DescRecurso" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" placeholder="Nombre del recurso">
+						</div>
+						<div class="form-group col-lg-2" style="margin-top:30px">
+							<input type="hidden" name="txtCont13" value="0"/> 
+							<input 	type="button" class="btn btn-primary btn-sm" name="botonAgregarRecurso" id="botonAgregarRecurso" value="Agregar"
+									onclick="agregarRecurso();" />
+						</div>
+						
+						<div class="form-group col-lg-12">
+							<table summary="" width="100%" border="0" cellspacing="0"
+								cellpadding="0" id="TablaRecursosText">
+								<tbody>
+									<tr class="tit">
+										<td>Tipo recurso</td>
+										<td>Descripci&oacute;n</td>
+										<td>Eliminar</td>
+									</tr>
+								</tbody>
+							</table>					
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="col-lg-12">
+							<div class="col-lg-2">
+								<label> Usuario Inserci&oacute;n </label>
+							</div>
+							<div class="col-lg-4">
+								<input type="Text" class="form-control" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+							</div>
+							<div class="col-lg-2">
+								<label> Fecha Inserci&oacute;n </label>
+							</div>
+							<div class="col-lg-4">
+								<input type="Text" class="form-control" name="fechaInsercion" id="fechaInsercion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+							</div>
+						</div>
+						<br>
+						<div class="col-lg-12">
+							<div class="col-lg-2">
+								<label> Usuario Modificaci&oacute;n </label>
+							</div>
+							<div class="col-lg-4">
+								<input type="Text" class="form-control" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+							</div>
+							<div class="col-lg-2">
+								<label> Fecha Modificaci&oacute;n </label>
+							</div>
+							<div class="col-lg-4">
+								<input type="Text" class="form-control" name="fechaModificacion" id="fechaModificacion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<input type="hidden" id="PoliticasCant" name="PoliticasCant" value="" /> 
+						<input type="hidden" id="AnterioresCant" name="AnterioresCant" value="" />
+						<input type="hidden" id="ProveedoresCant" name="ProveedoresCant" value="" />
+						<input type="hidden" id="EntradasCant" name="EntradasCant" value="" />
+						<input type="hidden" id="ClientesCant" name="ClientesCant" value="" />
+						<input type="hidden" id="SalidasCant" name="SalidasCant" value="" />
+						<input type="hidden" id="PlanearCant" name="PlanearCant" value="" />
+						<input type="hidden" id="RespPlanearCant" name="RespPlanearCant" value="" />
+						<input type="hidden" id="RegiPlanearCant" name="RegiPlanearCant" value="" />
+						<input type="hidden" id="RespHacerCant" name="RespHacerCant" value="" />
+						<input type="hidden" id="RegiHacerCant" name="RegiHacerCant" value="" />
+						<input type="hidden" id="HacerCant" name="HacerCant" value="" />
+						<input type="hidden" id="VerificarCant" name="VerificarCant" value="" />
+						<input type="hidden" id="RespVerificarCant" name="RespVerificarCant" value="" />
+						<input type="hidden" id="RegiVerificarCant" name="RegiVerificarCant" value="" />
+						<input type="hidden" id="ActuarCant" name="ActuarCant" value="" />
+						<input type="hidden" id="RespActuarCant" name="RespActuarCant" value="" />
+						<input type="hidden" id="RegiActuarCant" name="RegiActuarCant" value="" />
+						<input type="hidden" id="RecursoCant" name="RecursoCant" value="" />
+						<input type="hidden" id="DescRecursoCant" name="DescRecursoCant" value="" />						
+						
+						<input type="submit" class="btn btn-success" value="Grabar"   id="btnGrabar" onclick="Grabar();">
+						<input type="submit" class="btn btn-warning" value="Eliminar" id="btnEliminar" onclick="Eliminar();">
+						<input type="submit" class="btn btn-default" value="Salir"   id="btnSalir" onclick="Salir();">
+					</div>
+				</div>
+				<br>
+			</div>
+			<div id="divEdicion">
+			<br>
+    <table class="tabf" summary="">
+     <tr>
+      <td colspan="4" class="ca">Edici&oacute;n</td>
+     </tr>
+     <tr>
+      <td class="tit">Procedimiento</td>
+      <td class="dat"><span id="idProcedimientoEd">&nbsp;</span></td>
+      <td class="tit">Proceso</td>
+      <td class="dat"><span id="procesoIdEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Subproceso</td>
+      <td class="dat"><span id="subprocesoIdEd">&nbsp;</span></td>
+      <td class="tit">ServicioUnidad</td>
+      <td class="dat"><span id="servicioUnidadIdEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">C&oacute;digo Empleado</td>
+      <td class="dat"><span id="codigoEmpleadoEd">&nbsp;</span></td>
+      <td class="tit">Objetivo</td>
+      <td class="dat"><span id="objetivoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Alcance</td>
+      <td class="dat"><span id="alcanceEd">&nbsp;</span></td>
+      <td class="tit">Definici&oacute;nes</td>
+      <td class="dat"><span id="definicionesEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Concepto</td>
+      <td class="dat"><span id="conceptoEd">&nbsp;</span></td>
+      <td class="tit">Estado</td>
+      <td class="dat"><span id="estadoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Usuario Inserci&oacute;n</td>
+      <td class="dat"><span id="usuarioInsercionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Inserci&oacute;n</td>
+      <td class="dat"><span id="fechaInsercionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Modificaci&oacute;n</td>
+      <td class="dat"><span id="usuarioModificacionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Modificaci&oacute;n</td>
+      <td class="dat"><span id="fechaModificacionEd">&nbsp;</span></td>
+      <tr>
+       <td class="dat2" colspan="4">
+ 	        <input type="hidden" name="idProcedimiento" id="idProcedimientoKey">
+       <input type="submit" class="BOT" value="Editar"   id="btnModificar" onClick="Modificar();">
+    </td>
+   </tr>
+  </table>
+ </div>
+  </form>
+ </DIV>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

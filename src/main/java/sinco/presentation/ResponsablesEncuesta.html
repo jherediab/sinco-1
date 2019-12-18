@@ -1,0 +1,98 @@
+<html>
+<head>
+<title> index.htm </title>
+<meta http-equiv="Content-Type" content= "text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type= "text/css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+<br>
+
+ <div class="container">
+	  <table class="tabf" summary="" border="0" width="100%">
+	   <tr>
+		<td class ="ca" COLSPAN="2"><STRONG>GENERACION DE SERVICIO MULTIPLE #<span id="numeroEncuesta">0</span></STRONG></td>
+	   </tr> 
+	   <tr> 
+		 <td class="tit" width="50%"> Servicio: </td>
+		 <td  class="dat" width="50%"><span id="servicio">&nbsp;</span> 
+		 </td>
+	   </tr>
+	   <tr> 
+		<td  class="tit" width="50%"> Estado: </td>
+		<td  class="dat" width="50%"><span id="estado">&nbsp;</span> 
+		  </td>
+	   </tr>
+	   </table>
+	   <br>
+
+      <div id="divFiltro">
+		Busqueda Rapida. Digite Aproximaci&oacute;n al nombre del area <br>
+		<form action="ResponsablesEncuesta.po" method="get">
+		  <INPUT class="INP" TYPE="text" name="filtro" onkeypress="validarTecla(event, 'AL');"> 
+		  <INPUT class="INP" TYPE="hidden" id="idEncuestaArea1" name="encuesta"> 
+		<INPUT class="INP" TYPE="hidden" value="FI" name="accion"> 
+		  <INPUT class="INP" TYPE= "submit" value="Buscar"><br>
+		</form>
+       </div>
+
+
+      <div id="divAreas">
+                Area a incluir en el servicio m&uacute;ltiple<br>
+                <form action="ResponsablesEncuesta.po" method="get">
+                  <SELECT class="INP" NAME="area" id="idArea"> </select><br>
+                  <INPUT class="INP" TYPE="hidden" id="idEncuestaArea" name="encuesta"> 
+		      	<INPUT class="INP" TYPE="hidden" value="IA" name="accion"> 
+			      <INPUT class="INP" TYPE= "submit" value="Seleccionar"><br>
+                </form>
+       </div>
+       
+      <div id="divPersonas">
+                Personas a incluir en el servicio m&uacute;ltiple<br>
+                <form action="ResponsablesEncuesta.po" method="get">
+                  <INPUT class="INP" TYPE="text" name="aproximacion" size="50" maxlength="25" onkeypress="validarTecla(event, 'AL');"><br>
+                  <INPUT class="INP" TYPE="hidden" value="not_yet" id= "idEncuestaPersona" name="encuesta">
+                  <INPUT class="INP" TYPE="hidden" value="P" name= "accion"> 
+	  		      <INPUT class="INP" TYPE="hidden" value="1" name="recargar"> 
+			      <INPUT TYPE="Submit" class="BOT" value="buscar"><br>
+                </form>
+       </div>
+
+      <div id="divPersonasI">
+		Personas a incluir en el servicio m&uacute;ltiple<br>
+		<form name="gmm_form" action="ResponsablesEncuesta.po" method="post">
+		  <table class="tabf" summary="" border="0" id= "detalle" cellspacing="2" cellpadding="4">
+			<tr>
+			  <td class="cf2">Incluir<INPUT class="INP" TYPE='checkbox' name= 'clickcontrol' onclick= "fMarcar(this.checked,self.document.gmm_form,'E_')"></td>
+			  <td class="cf1"> Nombres </td>
+			  <td class="cf2"> Apellidos </td>
+			  <td class="cf1"> Area Proveedor </td>
+			</tr>
+		  </table>
+		  <br>
+		  <INPUT class="INP" TYPE="hidden" id= "idEncuestaPersonas" name="encuesta">
+		  <INPUT class="INP" TYPE="hidden" value="IP" name= "accion"> 
+		<INPUT TYPE="Submit" class="BOT" value="Incluir en servicio m&uacute;ltiple"><br>
+		</form>
+       </div>
+
+	<div>
+	  <form action="LlenarEncuesta.po" method= "get">
+	  <INPUT class="INP" TYPE="hidden" value="not_yet" id= "idEncuestaVolver" name="encuesta">
+	  <INPUT TYPE="Submit" class="BOT" value= "Volver a la descripci&oacute;n del servicio m&uacute;ltiple"><br>
+	 </form>
+	</div>
+   </div>
+  </body>    
+</body>
+</html>
+

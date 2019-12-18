@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>index.htm</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<script type="text/javascript" language="JavaScript">
+
+function newSelectUnSelectAll( my_form, field_name )
+{
+    if(my_form.clickcontrol.checked){
+      flag = true;
+    }
+    else
+    {
+     flag = false;
+    }
+    len     =       my_form.elements.length;
+    var     index   =       0;
+    for( index=0; index < len; index++ )
+    {
+        if( (my_form.elements[index].name).substring(0,1)== field_name )
+        {
+            my_form.elements[index].checked=flag;
+        }
+    }
+}
+function newSelectUnSelectAll2( my_form, field_name )
+{
+    if(my_form.clickcontrol2.checked){
+      flag = true;
+    }
+    else
+    {
+     flag = false;
+    }
+    len     =       my_form.elements.length;
+    var     index   =       0;
+    for( index=0; index < len; index++ )
+    {
+        if( (my_form.elements[index].name).substring(0,4)== field_name )
+        {
+            my_form.elements[index].checked=flag;
+        }
+    }
+}
+
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+<br>
+ <div class="container">
+  <div class="ca"><span id="elServicio">&nbsp;</span></div>
+	<FORM name="miForma" ACTION="RepCar01F2.po" METHOD="post" id="forma">
+		 <table class="tabf" summary="" border="0" id="cabecera" cellspacing="2" cellpadding="0">
+		  <tr>
+			<td class="cf1">Cabecera</td>
+			<td class="cf2"> 
+			<INPUT class="INP" TYPE='checkbox' name= 'clickcontrol2' onclick= "newSelectUnSelectAll2(self.document.miForma, 'cab_')">
+			</td>
+			<td class="cf1">&nbsp;</td>
+			<td class="cf2">&nbsp;</td>
+			<td class="cf1">&nbsp;</td>
+			<td class="cf2">&nbsp;</td>
+		  </tr>
+		</table>
+		<br>
+
+		 <table class="tabf"  summary="" border="0" id="caracteristicas" cellspacing="2" cellpadding="0">
+		  <tr>
+			<td class="cf1">Caracteristica</td>
+			<td class="cf2"> 
+			<INPUT class="INP" TYPE='checkbox' name= 'clickcontrol' onclick= "newSelectUnSelectAll( self.document.miForma, '_')"> 
+			</td>
+		  </tr>
+		</table>
+		<br>
+		<table class="tabf"  summary="" border="0">
+		  <tr> 
+			<td>
+			  <INPUT class="INP" TYPE="hidden" NAME="area" id="idArea">
+			  <INPUT class="INP" TYPE="hidden" NAME="servicio" id="idServicio">
+			  <INPUT class="INP" TYPE="hidden" NAME="fechaInicio" id="idFechaInicio">
+			  <INPUT class="INP" TYPE="hidden" NAME="fechaFin" id="idFechaFin">
+			  <INPUT class="INP" TYPE="hidden" NAME="rol" id="idRol">
+			</td>
+			<td align="right"><INPUT TYPE="Submit" class="BOT" VALUE="Listar" name="miBoton" onClick="Ocultar();"></td>
+		  </tr>
+		</table>
+	</FORM>
+  </div>
+ </body>
+</html>
+
+

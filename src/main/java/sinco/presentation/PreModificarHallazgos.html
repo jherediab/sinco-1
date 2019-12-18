@@ -1,0 +1,130 @@
+
+<html>
+<head>
+<title>Sistema de Solicitud de Servicios</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript">
+  function add_member( proceso,subproceso,nombre) {
+    this.proceso=proceso;
+    this.subproceso=subproceso;
+    this.nombre=nombre;
+  }
+</SCRIPT>
+
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript"  id="elScript">
+
+/*
+  // Declaramos la matriz
+  var matriz=new Array(100);
+  
+  // inicializamos la matriz
+  var iCont=0;
+  matriz[iCont++]=new add_member('01','01','Sub Proceso 1.1');
+  matriz[iCont++]=new add_member('01','02','Sub Proceso 1.2');
+  matriz[iCont++]=new add_member('01','03','Sub Proceso 1.3');
+
+  matriz[iCont++]=new add_member('02','01','Sub Proceso 2.1');
+  matriz[iCont++]=new add_member('02','02','Sub Proceso 2.2');
+  matriz[iCont++]=new add_member('02','03','Sub Proceso 2.3');
+
+  matriz[iCont++]=new add_member('03','01','Sub Proceso 3.1');
+  matriz[iCont++]=new add_member('03','02','Sub Proceso 3.2');
+  matriz[iCont++]=new add_member('03','03','Sub Proceso 3.3');
+*/
+</SCRIPT>
+
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript">
+function cambioProceso(id,proceso){
+var i=0;
+var j=0;
+var objeto=document.getElementById(id);
+objeto.length=0;
+var optionObj = new Option("","");
+objeto.options[j] = optionObj;
+j++;
+for (i=0; i<matriz.length; i++){
+   var elItem=matriz[i];
+   if (elItem.proceso==proceso){
+      optionObj = new Option( elItem.nombre,elItem.subproceso);
+      objeto.options[j] = optionObj;
+      j++;
+    }
+ } // for
+}
+</SCRIPT>
+
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+ <div class="container">
+    <table summary="" width="278" cellpadding="1" cellspacing="1" align="center" class="tabf">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Aceptar Hallazgos #<span id="numerosolicitud">0</span></STRONG></td>
+        </tr> 
+        <tr> 
+          <td class="tit">Servicio:</td>
+          <td class="dat"> <span id="servicio">&nbsp;</span></td>
+          <td class="tit">Area Proveedora:</td>
+          <td class="dat"><span id="areap">&nbsp;</span></td>
+        </tr>
+        <tr> 
+          <td class="tit">Persona Responsable:&nbsp;&nbsp;</td>
+          <td class="dat"><span id="proveedor">&nbsp;</span></td>
+          <td class="tit">Fecha Generada:</td>
+          <td class="dat"><span id="fecha">&nbsp;</span></td>
+        </tr>
+      </table>
+  
+	<div id="detalles">
+        <form name="miForma" action="ModificarHallazgos.po" method="post">
+          <table class="tabf" summary="" border="0" align="center" cellpadding="1" cellspacing="1">
+             <tr>
+              <td class ="ca" COLSPAN="2"><STRONG>Caracteristicas</STRONG></td>
+             </tr> 
+             <tr>
+              <td>
+                  <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguiente" name="pagina_siguiente">
+                  <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitud" name="solicitud">
+              </td>
+            </tr>
+            <tr> 
+              <td>
+                <table class="tabf" summary="" border="0" id="idDetalle" cellpadding="1" cellspacing="1">
+                  <tr> 
+                    <td class="cf1">Caracteristica</td>
+                    <td class="cf2">Descripci&oacute;n</td>
+                    <td class="cf1">Acepta</td>
+                    <td class="cf2">Norma</td>
+                    <td class="cf1">Numeral</td>
+                    <td class="cf2">Proceso</td>
+                    <td class="cf1">Sub Proceso</td>
+                  </tr>
+                </table>
+             </td>
+           </tr>
+		  
+           <tr> 
+          <td align="right"> 
+          <INPUT TYPE="Submit" class="BOT" value="Salvar " name="miBoton" onClick="Ocultar();">
+         </td>
+        </tr>
+       </table>
+      </form>
+     </div>
+    </div>
+</body>
+</html>

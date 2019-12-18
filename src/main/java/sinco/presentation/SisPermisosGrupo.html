@@ -1,0 +1,176 @@
+<html>
+ <head>
+ <title>Permisos Grupo</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+ <SCRIPT TYPE="text/javascript"language="JavaScript">
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   if (document.ff._operacion.value=="RECARGA"){
+     return true;   
+   }
+   
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+   
+   return resp;
+}
+
+function Grabar(){
+
+   document.ff.destino.value ="";
+   for(i=0; i < document.ff.destinoSelected.options.length; i++) { 
+        if(document.ff.destino.value != "") {
+            document.ff.destino.value  += ","; 
+        }
+        document.ff.destino.value  += document.ff.destinoSelected.options[i].value; 
+   } 
+   return true;
+}
+
+
+function Recarga(){
+ document.ff._operacion.value="RECARGA";
+ document.ff.submit();
+ return true;
+}
+
+
+function agrega(){ 
+    var i=0; 
+    for(i=0; i < document.ff.origenSelected.options.length; i++) {
+        if (document.ff.origenSelected.options[i].selected){
+            var option  = new Option(
+               document.ff.origenSelected.options[i].text,
+               document.ff.origenSelected.options[i].value
+            );
+            document.ff.destinoSelected[document.ff.destinoSelected.options.length]=option;
+            
+            document.ff.origenSelected.remove(i); 
+            i--; 
+         } 
+    } 
+    //document.F.pagrega.disabled = true;
+}
+
+function quita() {
+    var i=0; 
+	for(i=0; i<document.ff.destinoSelected.options.length; i++) { 
+        if(document.ff.destinoSelected.options[i].selected) { 
+            var option  = new Option(
+               document.ff.destinoSelected.options[i].text,
+               document.ff.destinoSelected.options[i].value
+            );
+            document.ff.origenSelected[document.ff.origenSelected.options.length]=option;
+            document.ff.destinoSelected.remove(i); 
+            i--; 
+        }
+    }
+    //document.ff.pquita.disabled = true; 
+}
+
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<div class="container">
+ <FORM name="ff" ACTION="SisPermisosGrupo.po" METHOD="post" onsubmit="return Salvar()">
+  <table  class="tabw" summary=""  border="0">
+	 <tr>
+	   <td class ="ca" COLSPAN="2"><STRONG>ASIGNACION DE PERMISOS AL GRUPO</STRONG></td>
+	 </tr>
+	 <tr>
+	  <td class="tit">Grupo</td>
+	  <td class="dat"><SELECT NAME="grupo" class="INP" id="Grupo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="Recarga();"></SELECT></td>
+	 </tr>
+
+	 <tr>
+	  <td class="tit" colspan="2">
+	 <table summary=""  border="0" align="center" width="100%">
+	   <tr>
+		  <td class="dat">Por Asignar</td>
+		  <td class="tit">&nbsp;</td>
+		  <td class="tit">Asignados</td>
+	   </tr>
+	 
+	   <tr>
+		  <td width="45%" class="dat">
+		  <input type="hidden" name="origen" value="" id="origen">
+		  <SELECT NAME="origenSelected" size="40"  multiple="multiple" class="INP" id="origenSelected" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+		  <td width="10%">
+			<table summary="" border="0" cellpadding="0" cellspacing="0" width="100%">
+			 <tr>
+			 <td align="center">
+			   <input type="button" name="btnDeploy" value=">>>" onclick="agrega()">
+			 </td></tr>
+			 <tr><td>&nbsp;</td></tr>
+			 <tr><td align="center">
+			   <input type="button" name="btnUndeploy" value="<<<" onclick="quita()">
+			 </td></tr>
+		   </table>
+		   </td>
+		  
+		  <td width="45%" class="dat">
+		  <input type="hidden" name="destino" value="" id="destino">
+		  <SELECT NAME="destinoSelected" size="40" multiple="multiple" class="INP" id="destinoSelected" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+	   </tr>
+	 </TABLE>
+
+	 <tr>
+		<td class="dat2" colspan="2">
+		<INPUT TYPE="hidden" NAME="_operacion" ID="_operacion" value="C">
+		<INPUT TYPE="Submit" class="BOT" VALUE="Grabar" onclick="return Grabar();" name="miBotonG" accesskey="G"></td>
+	  </tr>
+	</table>
+	
+  </FORM>
+ </DIV>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

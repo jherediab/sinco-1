@@ -1,0 +1,1467 @@
+<!--<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transizional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> -->
+<!-- <html xmlns="http://www.w3.org/1999/xhtml">-->
+<html>
+<head>
+<title>Estudio Previo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" href="media/global.css" type="text/css"/>
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1"/>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script type="text/javascript" language="JavaScript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+<script type="text/javascript" src="media/moment.min.js"></script>
+<script type="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+<script type="text/javascript"language="JavaScript">
+var totalProductosEntregar = 0;
+var totalDefinicionTecnica = 0;
+var totalActividadesDesarrollar = 0;
+var totalEspecificacionesTecnicas = 0;
+var totalAlternativasEjecucion = 0;
+var totalDescripcionRiesgos = 0;
+var totalPolizas = 0;
+var res = false;
+
+ 
+ function verificarNumero(){
+
+	var numeroEstudio=document.getElementById('NumeroEstudio').value;
+	var url='ConsultasAjaxOld.po?_operacion=consultarNumeroEstudio&numeroEstudio='+numeroEstudio;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+		var resultado=getNodeValue(transport.responseXML.getElementsByTagName('respuesta')[0],'existe');
+           	if(resultado=='true'){					
+				alert("El numero de estudio ya existe, es necesario cambiarlo");							
+           	}else{	
+
+			}
+		},     
+        onFailure: function() {
+        alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    } );  
+	
+
+ }
+ 
+
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   if(document.miForma._operacionCarga.value=="D"){
+	   return true;
+   }
+   if(document.miForma._operacion.value=="D"){
+	   return true;
+   }	
+
+   //-----------------------------VALIDAR LOS CAMPOS 1..N
+   
+   if( totalProductosEntregar <= 0 ){
+      alert("No ha agregado algun 7. SUPERVISION Y CONTROL");
+      document.getElementById("ProductosEntregarText").focus();
+      Mostrar();
+      return false;
+   }
+   rta=totalizarProductosAEntregar();
+   if (!rta) { 
+      Mostrar();
+      return false;
+   }
+   if( totalDefinicionTecnica <= 0 ){
+      alert("No ha agregado alguna Definici\u00f3n T\u00e9cnica");
+      document.getElementById("DefinicionTecnicaText").focus();
+      Mostrar();
+      return false;
+   }
+   rta=totalizarDefinicionTecnica();
+   if (!rta) { 
+      Mostrar();
+      return false;
+   }
+   if( totalActividadesDesarrollar <= 0 ){
+      alert("No ha agregado alguna Actividad a Desarrollar");
+      document.getElementById("ActividadesDesarrollarText").focus();
+      Mostrar();
+      return false;
+   }
+   rta=totalizarActividadesDesarrollar();
+   if (!rta) { 
+      Mostrar();
+      return false;
+   }
+   if( totalEspecificacionesTecnicas <= 0 ){
+      alert("No ha agregado alguna Especificaci\u00f3n T\u00e9cnica");
+      document.getElementById("EspecificacionesTecnicasText").focus();
+      Mostrar();
+      return false;
+   }
+   rta=totalizarEspecificacionesTecnicas();
+   if (!rta) { 
+      Mostrar();
+      return false;
+   }
+   //if( totalAlternativasEjecucion <= 0 ){
+  //    alert("No ha agregado alguna Alternativa de Ejecuci\u00f3n");
+  //    document.getElementById("AlternativasEjecucionText").focus();
+  //    Mostrar();
+  //    return false;
+ //  }
+  // rta=totalizarAlternativasEjecucion();
+  // if (!rta) { 
+  //    Mostrar();
+  //    return false;
+  // }
+   if( totalDescripcionRiesgos <= 0 ){
+      alert("No ha agregado alg\u00fan Riesgo");
+      document.getElementById("DescripcionRiesgosText").focus();
+      Mostrar();
+      return false;
+   }
+   rta=totalizarDescripcionRiesgos();
+   if (!rta) { 
+      Mostrar();
+      return false;
+   }
+
+   rta=totalizarPolizas();
+   if (!rta) { 
+      Mostrar();
+      return false;
+   }
+   //-----------------------------FIN VALIDACION CAMPOS 1..N
+   rta=validar(document.miForma.fechaPresentacion,"Fecha Presentaci\u00f3n","FEC",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   var datePresentacion = moment($('fechaPresentacion').value,'YYYY-MM-DD');
+   var dateUltimo = moment($('fechaEstudio').value,'YYYY-MM-DD');
+   var now = moment();
+   var hoy = moment(now.format('YYYY-MM-DD'),'YYYY-MM-DD');
+   
+	if (datePresentacion.diff(hoy,'days')>0){
+		alert("La fecha del estudio previo debe ser igual o anterior a la fecha del dia");
+		Mostrar();
+		return false;
+	}
+	
+	if (datePresentacion.diff(dateUltimo,'days')<0){
+		alert("La fecha del estudio debe ser posterior o igual al ultimo estudio."+$('fechaEstudio').value);
+		Mostrar();
+		return false;
+	}
+	
+   
+   rta=validar(document.miForma.dependencia,"Dependencia","ALFA",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.interventor,"Interventor","ENT",0,"OBL","0","9999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.objetoContratarText,"Objeto Contratar","ALFA",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   /*
+   rta=validar(document.miForma.codigoImputacionPresupuestal,"C\u00f3digo Imputaci\u00f3n Presupuestal","ENT",0,"OBL","0","9999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   */
+	   
+   rta=validar(document.miForma.actividadEspecifica,"Actividad Especifica","ALFA",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.nombreImputacionPresupuestal,"Nombre Imputaci\u00f3n Presupuestal","ALFA",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.descripcionNecesidadText,"Descripci\u00f3n Necesidad","ALFA",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }   
+   rta=validar(document.miForma.tipoContrato,"Tipo Contrato","ENT",0,"OBL","0","9999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.plazo,"Plazo (Meses)","ENT",0,"OBL","0","999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.plazoD,"Plazo (Dias)","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar(document.miForma.fechaDesde,"Fecha Desde","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaHasta,"Fecha Hasta","FEC",0,"OBL","0","999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   	var fechaInicio = moment($('fechaDesde').value,'YYYY-MM-DD');
+	var fechaFin = moment($('fechaHasta').value,'YYYY-MM-DD');
+		
+	if (fechaInicio.diff(fechaFin,'days')>=0){
+	alert("La Fecha Final debe ser mayor a la Fecha de Inicio");
+	Mostrar();
+	return false;
+	}
+   
+   
+   rta=validar(document.miForma.valor,"Valor","ENT",0,"OBL","0","9999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar(document.miForma.justificacionValor,"Justificacion","ALF",0,"OBL","0","9999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.formaPago,"Forma Pago","ALFA",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }   
+   rta=validar(document.miForma.lugarEjecucion,"Lugar Ejecuci\u00f3n","ALFA",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }   
+   
+   var resp = confirm('Esta seguro de realizar esta operaci\u00f3n?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+}
+function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+}
+function Modificar(){
+   document.miForma._operacion.value="P";
+   return true;
+}
+function Copiar(){
+   document.miForma._operacion.value="Copiar";
+   return true;
+}
+
+function generarContrato(){
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContContratoAct.po?numeroEstudio="+document.miForma.numeroEstudio.value+
+							"&formaContrato="+document.miForma.formaContrato.value+
+							"&tipoContrato="+document.miForma.tipoContrato.value+
+							"&formaPago="+document.miForma.formaPago.value+
+							"&valorContrato="+document.miForma.valor.value;
+	return true;
+}
+
+function Grabar(){
+   return true;
+}
+function seleccionarFecha(){
+ 	window.open("Calendario.po","ventana","width=380,height=300,scrollbars=NO");
+}
+function agregarFecha(fecha){
+ 	document.miForma.fechaPresentacion.value=fecha;
+}
+
+function Procedimientos(){
+  document.miForma2.numeroEstudio.value=document.miForma.numeroEstudio.value;
+  document.miForma2.formaContrato.value=document.miForma.formaContrato.value;
+  document.miForma2.submit();
+}
+
+function FaddFirmas(){
+  document.miForma._operacion.value="Nuevo";
+  document.miForma.dependencia.disabled=false;
+  document.miForma.dependencia.readOnly=false;
+  document.miForma.action="ContEstudioPrevioFirmaAct.po";
+  return true;
+}
+</script>
+
+<script type="text/javascript"  language="JavaScript"  id="ScriptCarga"></script>
+
+<script type="text/javascript"language="JavaScript">
+//FUNCIONES AGREGAR PRODUCTOS A ENTREGAR
+function agregarProductoEntregar(){
+  if(document.miForma.ProductosEntregarText.value.length!=0){
+	     var tabla=document.getElementById('TablaProductosEntregarText').getElementsByTagName("TBODY")[0];
+      var fila = document.createElement("TR"); 
+      fila.id = "FilaProductosEntregarText" + totalProductosEntregar;
+      var td1 = document.createElement("TD");
+      var td2 = document.createElement("TD");
+	  
+	      var col = document.createElement("td");
+	  	var img = document.createElement("img");
+	  	img.src = "media/up.gif";
+	  	img.onclick = function(){moverFila(this,-1,'TablaProductosEntregarText')};
+	  	col.appendChild(img);
+	  	
+	  	img = document.createElement("img");
+	  	img.src = "media/down.gif";
+	  	img.onclick = function(){moverFila(this,1,'TablaProductosEntregarText')};
+	  	col.appendChild(img);
+	  	fila.appendChild(col);
+		
+	     input = document.createElement("input");
+      input.id = "FilaProductosEntregarText"+ totalProductosEntregar;
+      input.idfila = "FilaProductosEntregarText" + totalProductosEntregar;
+      input.name = "EliminarLinea";
+      input.type = "button";
+      input.value = "Eliminar";
+      input.className="submitLink";
+	 //input.onclick = eliminarProductoEntregar;
+	 input.onclick = function(){eliminarProductoEntregar(fila);};
+						if(document.miForma._operacionCarga.value=="D"){
+							td2.appendChild(document.createTextNode(" "));
+						}else{
+							td2.appendChild(input);
+						}
+						td1.appendChild(document.createTextNode(document.miForma.ProductosEntregarText.value));
+						fila.appendChild(td1); 
+					      fila.appendChild(td2);
+						tabla.appendChild(fila);
+						totalProductosEntregar = totalProductosEntregar + 1;
+						document.miForma.ProductosEntregarText.value="";
+  }
+  else{
+  	alert("Debe digitar un Producto");
+  }
+}
+function eliminarProductoEntregar(e){
+     var Tabla = document.getElementById("TablaProductosEntregarText");
+     var obj;
+     if (navigator.appVersion.indexOf("MSIE")!=-1){
+        obj=window.event.srcElement;
+     }       
+     //else if(navigator.userAgent.indexOf("Firefox")!=-1){
+	 else if(navigator.userAgent.indexOf("Firefox")!=-1||navigator.userAgent.indexOf("Chrome")!=-1){	 
+       //obj=e.target;
+	   obj=e;
+     }	 
+     //Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+	 Tabla.tBodies[0].removeChild(document.getElementById(obj.id));
+     totalProductosEntregar = totalProductosEntregar - 1;
+     return;
+}
+function totalizarProductosAEntregar(){
+   var productos="";
+   for(var i=1;i<document.getElementById('TablaProductosEntregarText').rows.length;i++){
+      if(productos!=""){
+         productos = productos + "~";
+      }
+      productos = productos + document.getElementById('TablaProductosEntregarText').rows[i].cells[1].innerHTML;
+   }
+   document.miForma.ProductosAEntregar.value = productos;
+   return true;
+}
+
+//FUNCIONES AGREGAR DEFINICIONES TECNICAS
+function agregarDefinicionTecnica(){
+  if(document.miForma.DefinicionTecnicaText.value.length!=0){
+	     var tabla=document.getElementById('TablaDefinicionTecnicaText').getElementsByTagName("TBODY")[0];
+      var fila = document.createElement("TR"); 
+      fila.id = "FilaDefinicionTecnicaText" + totalDefinicionTecnica;
+      var td1 = document.createElement("TD");
+      var td2 = document.createElement("TD");
+	  
+	var col = document.createElement("td");
+	  	var img = document.createElement("img");
+	  	img.src = "media/up.gif";
+	  	img.onclick = function(){moverFila(this,-1,'TablaDefinicionTecnicaText')};
+	  	col.appendChild(img);
+	  	
+	  	img = document.createElement("img");
+	  	img.src = "media/down.gif";
+	  	img.onclick = function(){moverFila(this,1,'TablaDefinicionTecnicaText')};
+	  	col.appendChild(img);
+	  	fila.appendChild(col);
+	  
+	     input = document.createElement("input");
+      input.id = "FilaDefinicionTecnicaText"+ totalDefinicionTecnica;
+      input.idfila = "FilaDefinicionTecnicaText" + totalDefinicionTecnica;
+      input.name = "EliminarLinea";
+      input.type = "button";
+      input.value = "Eliminar";
+      input.className="submitLink";
+	     //input.onclick = eliminarDefinicionTecnica(input);
+	  input.onclick = function(){eliminarDefinicionTecnica(fila);};
+      if(document.miForma._operacionCarga.value=="D"){
+							     td2.appendChild(document.createTextNode(" "));
+						}else{
+							td2.appendChild(input);
+						}
+						td1.appendChild(document.createTextNode(document.miForma.DefinicionTecnicaText.value));
+						fila.appendChild(td1); 
+						fila.appendChild(td2);
+						tabla.appendChild(fila);
+						totalDefinicionTecnica = totalDefinicionTecnica + 1;
+						document.miForma.DefinicionTecnicaText.value="";
+  }
+  else{
+    alert("Debe digitar la Definici\u00f3n T\u00e9cnica");
+  }
+}
+function eliminarDefinicionTecnica(e){
+     var Tabla = document.getElementById("TablaDefinicionTecnicaText");
+     var obj;
+     if (navigator.appVersion.indexOf("MSIE")!=-1){
+        obj=window.event.srcElement;
+     }       
+     else if(navigator.userAgent.indexOf("Firefox")!=-1||navigator.userAgent.indexOf("Chrome")!=-1){	 
+       //obj=e.target;
+	   obj=e;
+     }
+	 //alert(obj.id);
+     Tabla.tBodies[0].removeChild(document.getElementById(obj.id));
+     totalDefinicionTecnica = totalDefinicionTecnica - 1;
+     return;
+}
+function totalizarDefinicionTecnica(){
+   var definicion="";
+   console.log(document.getElementById('TablaDefinicionTecnicaText').rows);
+   for(var i=1;i<document.getElementById('TablaDefinicionTecnicaText').rows.length;i++){
+      if(definicion!=""){
+         definicion = definicion + "~";
+      }
+      definicion = definicion + document.getElementById('TablaDefinicionTecnicaText').rows[i].cells[1].innerHTML;
+   }
+   document.miForma.DefinicionTecnica.value = definicion;
+   return true;
+}
+
+//FUNCIONES AGREGAR ACTIVIDADES A DESARROLLAR
+function agregarActividadesDesarrollar(){
+  if(document.miForma.ActividadesDesarrollarText.value.length!=0){
+	   var tabla=document.getElementById('TablaActividadesDesarrollarText').getElementsByTagName("TBODY")[0];
+    var fila = document.createElement("TR"); 
+    fila.id = "FilaActividadesDesarrollarText" + totalActividadesDesarrollar;
+    var td1 = document.createElement("TD");
+    var td2 = document.createElement("TD");
+      
+    var col = document.createElement("td");
+	  	var img = document.createElement("img");
+	  	img.src = "media/up.gif";
+	  	img.onclick = function(){moverFila(this,-1,'TablaActividadesDesarrollarText')};
+	  	col.appendChild(img);
+	  	
+	  	img = document.createElement("img");
+	  	img.src = "media/down.gif";
+	  	img.onclick = function(){moverFila(this,1,'TablaActividadesDesarrollarText')};
+	  	col.appendChild(img);
+	  	fila.appendChild(col);
+  	
+	   input = document.createElement("input");
+    input.id = "FilaActividadesDesarrollarText"+ totalActividadesDesarrollar;
+    input.idfila = "FilaActividadesDesarrollarText" + totalActividadesDesarrollar;
+    input.name = "EliminarLinea";
+    input.type = "button";
+    input.value = "Eliminar";
+    input.className="submitLink";
+	input.onclick = function(){eliminarActividadesDesarrollar(fila);};
+    if(document.miForma._operacionCarga.value=="D"){
+		   td2.appendChild(document.createTextNode(" "));
+				}else{
+					td2.appendChild(input);
+				}
+	   td1.appendChild(document.createTextNode(document.miForma.ActividadesDesarrollarText.value));
+	   fila.appendChild(td1); 
+    fila.appendChild(td2);
+	   tabla.appendChild(fila);
+	   totalActividadesDesarrollar = totalActividadesDesarrollar + 1;
+	   document.miForma.ActividadesDesarrollarText.value="";
+  }
+  else{
+    alert("Debe digitar una Actividad a Desarrollar");
+  }
+}
+function eliminarActividadesDesarrollar(e){
+     var Tabla = document.getElementById("TablaActividadesDesarrollarText");
+     var obj;
+     if (navigator.appVersion.indexOf("MSIE")!=-1){
+        obj=window.event.srcElement;
+     }       
+     else if(navigator.userAgent.indexOf("Firefox")!=-1||navigator.userAgent.indexOf("Chrome")!=-1){	 
+       //obj=e.target;
+	   obj=e;
+     }
+     Tabla.tBodies[0].removeChild(document.getElementById(obj.id));
+     totalActividadesDesarrollar = totalActividadesDesarrollar - 1;
+     return;
+}
+function totalizarActividadesDesarrollar(){
+   var actividades="";
+   for(var i=1;i<document.getElementById('TablaActividadesDesarrollarText').rows.length;i++){
+      if(actividades!=""){
+         actividades = actividades + "~";
+      }
+      actividades = actividades + document.getElementById('TablaActividadesDesarrollarText').rows[i].cells[1].innerHTML;
+   }
+   document.miForma.ActividadesADesarrollar.value = actividades;
+   return true;
+}
+
+//FUNCIONES AGREGAR ESPECIFICACIONES TECNICAS
+function agregarEspecificacionesTecnicas(){
+  if(document.miForma.EspecificacionesTecnicasText.value.length!=0){
+	     var tabla=document.getElementById('TablaEspecificacionesTecnicasText').getElementsByTagName("TBODY")[0];
+      var fila = document.createElement("TR"); 
+      fila.id = "FilaEspecificacionesTecnicasText" + totalEspecificacionesTecnicas;
+      var td1 = document.createElement("TD");
+      var td2 = document.createElement("TD");
+	  
+	      var col = document.createElement("td");
+	  	var img = document.createElement("img");
+	  	img.src = "media/up.gif";
+	  	img.onclick = function(){moverFila(this,-1,'TablaEspecificacionesTecnicasText')};
+	  	col.appendChild(img);
+	  	
+	  	img = document.createElement("img");
+	  	img.src = "media/down.gif";
+	  	img.onclick = function(){moverFila(this,1,'TablaEspecificacionesTecnicasText')};
+	  	col.appendChild(img);
+	  	fila.appendChild(col);
+	  
+	     input = document.createElement("input");
+      input.id = "FilaEspecificacionesTecnicasText"+ totalEspecificacionesTecnicas;
+      input.idfila = "FilaEspecificacionesTecnicasText" + totalEspecificacionesTecnicas;
+      input.name = "EliminarLinea";
+      input.type = "button";
+      input.value = "Eliminar";
+      input.className="submitLink";
+	  //input.onclick = eliminarEspecificacionesTecnicas;
+	  input.onclick =function(){eliminarEspecificacionesTecnicas(fila);};
+      if(document.miForma._operacionCarga.value=="D"){
+	      	td2.appendChild(document.createTextNode(" "));
+						}else{
+							 td2.appendChild(input);
+						}
+	     td1.appendChild(document.createTextNode(document.miForma.EspecificacionesTecnicasText.value));
+	     fila.appendChild(td1); 
+      fila.appendChild(td2);
+						tabla.appendChild(fila);
+						totalEspecificacionesTecnicas = totalEspecificacionesTecnicas + 1;
+						document.miForma.EspecificacionesTecnicasText.value="";
+  }
+  else{
+    alert("Debe digitar una Especificaci\u00f3n T\u00e9cnica");
+  }
+}
+function eliminarEspecificacionesTecnicas(e){
+     var Tabla = document.getElementById("TablaEspecificacionesTecnicasText");
+     var obj;
+     if (navigator.appVersion.indexOf("MSIE")!=-1){
+        obj=window.event.srcElement;
+     }       
+     else if(navigator.userAgent.indexOf("Firefox")!=-1||navigator.userAgent.indexOf("Chrome")!=-1){	 
+       //obj=e.target;
+	   obj=e;
+     }
+     //Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+	 Tabla.tBodies[0].removeChild(document.getElementById(obj.id));
+     totalEspecificacionesTecnicas = totalEspecificacionesTecnicas - 1;
+     return;
+}
+function totalizarEspecificacionesTecnicas(){
+   var especificaciones="";
+   for(var i=1;i<document.getElementById('TablaEspecificacionesTecnicasText').rows.length;i++){
+      if(especificaciones!=""){
+         especificaciones = especificaciones + "~";
+      }
+      especificaciones = especificaciones + document.getElementById('TablaEspecificacionesTecnicasText').rows[i].cells[1].innerHTML;
+   }
+   document.miForma.EspecificacionesTecnicas.value = especificaciones;
+<!--   alert(especificaciones);-->
+   return true;
+}
+
+//FUNCIONES AGREGAR ALTERNATIVAS DE EJECUCION
+function agregarAlternativasEjecucion(){
+  if(document.miForma.AlternativasEjecucionText.value.length!=0){
+	     var tabla=document.getElementById('TablaAlternativasEjecucionText').getElementsByTagName("TBODY")[0];
+      var fila = document.createElement("TR"); 
+      fila.id = "FilaAlternativasEjecucionText" + totalAlternativasEjecucion;
+      var td1 = document.createElement("TD");
+      var td2 = document.createElement("TD");
+	     input = document.createElement("input");
+      input.id = "FilaAlternativasEjecucionText"+ totalAlternativasEjecucion;
+      input.idfila = "FilaAlternativasEjecucionText" + totalAlternativasEjecucion;
+      input.name = "EliminarLinea";
+      input.type = "button";
+      input.value = "Eliminar";
+      input.className="submitLink";
+	  //input.onclick = eliminarAlternativasEjecucion;
+	  input.onclick =function(){eliminarAlternativasEjecucion(fila);};
+      if(document.miForma._operacionCarga.value=="D"){
+		      td2.appendChild(document.createTextNode(" "));
+	     }else{
+		      td2.appendChild(input);
+	     }
+						td1.appendChild(document.createTextNode(document.miForma.AlternativasEjecucionText.value));
+						fila.appendChild(td1); 
+      fila.appendChild(td2);
+						tabla.appendChild(fila);
+						totalAlternativasEjecucion = totalAlternativasEjecucion + 1;
+						document.miForma.AlternativasEjecucionText.value="";
+  }
+  else{
+    alert("Debe digitar una Alternativa de ejecuci\u00f3n");
+  }
+}
+function eliminarAlternativasEjecucion(e){
+     var Tabla = document.getElementById("TablaAlternativasEjecucionText");
+     var obj;
+     if (navigator.appVersion.indexOf("MSIE")!=-1){
+        obj=window.event.srcElement;
+     }       
+     //else if(navigator.userAgent.indexOf("Firefox")!=-1){
+else if(navigator.userAgent.indexOf("Firefox")!=-1||navigator.userAgent.indexOf("Chrome")!=-1){	 
+       //obj=e.target;
+	   obj=e;
+     }
+//     Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+     Tabla.tBodies[0].removeChild(document.getElementById(obj.id));
+     totalAlternativasEjecucion = totalAlternativasEjecucion - 1;
+     return;
+}
+function totalizarAlternativasEjecucion(){
+   var alternativas="";
+   for(var i=1;i<document.getElementById('TablaAlternativasEjecucionText').rows.length;i++){
+      if(alternativas!=""){
+         alternativas = alternativas + "~";
+      }
+      alternativas = alternativas + document.getElementById('TablaAlternativasEjecucionText').rows[i].cells[1].innerHTML;
+   }
+   document.miForma.AlternativasEjecucion.value = alternativas;
+   return true;
+}
+
+//FUNCIONES AGREGAR DESCRPCION DE RIESGOS
+function agregarDescripcionRiesgos(){
+  if(document.miForma.DescripcionRiesgosText.value.length!=0){
+	     var tabla=document.getElementById('TablaDescripcionRiesgosText').getElementsByTagName("TBODY")[0];
+      var fila = document.createElement("TR"); 
+      fila.id = "FilaDescripcionRiesgosText" + totalDescripcionRiesgos;
+      var td1 = document.createElement("TD");
+      var td2 = document.createElement("TD");
+	  
+	      var col = document.createElement("td");
+	  	var img = document.createElement("img");
+	  	img.src = "media/up.gif";
+	  	img.onclick = function(){moverFila(this,-1,'TablaDescripcionRiesgosText')};
+	  	col.appendChild(img);
+	  	
+	  	img = document.createElement("img");
+	  	img.src = "media/down.gif";
+	  	img.onclick = function(){moverFila(this,1,'TablaDescripcionRiesgosText')};
+	  	col.appendChild(img);
+	  	fila.appendChild(col);
+		
+	     input = document.createElement("input");
+      input.id = "FilaDescripcionRiesgosText"+ totalDescripcionRiesgos;
+      input.idfila = "FilaDescripcionRiesgosText" + totalDescripcionRiesgos;
+      input.name = "EliminarLinea";
+      input.type = "button";
+      input.value = "Eliminar";
+      input.className="submitLink";
+//	     input.onclick = eliminarDescripcionRiesgos;
+	  input.onclick =function(){eliminarDescripcionRiesgos(fila);};
+      if(document.miForma._operacionCarga.value=="D"){
+		      td2.appendChild(document.createTextNode(" "));
+						}else{
+							 td2.appendChild(input);
+						}
+	     td1.appendChild(document.createTextNode(document.miForma.DescripcionRiesgosText.value));
+	     fila.appendChild(td1); 
+      fila.appendChild(td2);
+						tabla.appendChild(fila);
+						totalDescripcionRiesgos = totalDescripcionRiesgos + 1;
+						document.miForma.DescripcionRiesgosText.value="";
+  }
+  else{
+    alert("Debe digitar la Descripci\u00f3n de Riesgos");
+  }
+}
+function eliminarDescripcionRiesgos(e){
+     var Tabla = document.getElementById("TablaDescripcionRiesgosText");
+     var obj;
+     if (navigator.appVersion.indexOf("MSIE")!=-1){
+        obj=window.event.srcElement;
+     }       
+     //else if(navigator.userAgent.indexOf("Firefox")!=-1){
+	 else if(navigator.userAgent.indexOf("Firefox")!=-1||navigator.userAgent.indexOf("Chrome")!=-1){	 
+       //obj=e.target;
+	   obj=e;	   
+     }
+     //Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+	 Tabla.tBodies[0].removeChild(document.getElementById(obj.id));
+     totalDescripcionRiesgos = totalDescripcionRiesgos - 1;
+     return;
+}
+function totalizarDescripcionRiesgos(){
+   var riesgos="";
+   for(var i=1;i<document.getElementById('TablaDescripcionRiesgosText').rows.length;i++){
+      if(riesgos!=""){
+         riesgos = riesgos + "~";
+      }
+      riesgos = riesgos + document.getElementById('TablaDescripcionRiesgosText').rows[i].cells[1].innerHTML;
+   }
+   document.miForma.DescripcionRiesgos.value = riesgos;
+   return true;
+}
+
+//FUNCIONES AGREGAR POLIZAS
+function agregarPolizas(){
+  if(document.miForma.PolizasText.value.length!=0){
+	     var tabla=document.getElementById('TablaPolizasText').getElementsByTagName("TBODY")[0];
+      var fila = document.createElement("TR"); 
+      fila.id = "FilaPolizasText" + totalPolizas;
+      var td1 = document.createElement("TD");
+      var td2 = document.createElement("TD");
+	  
+	      var col = document.createElement("td");
+	  	var img = document.createElement("img");
+	  	img.src = "media/up.gif";
+	  	img.onclick = function(){moverFila(this,-1,'TablaPolizasText')};
+	  	col.appendChild(img);
+	  	
+	  	img = document.createElement("img");
+	  	img.src = "media/down.gif";
+	  	img.onclick = function(){moverFila(this,1,'TablaPolizasText')};
+	  	col.appendChild(img);
+	  	fila.appendChild(col);
+		
+	     input = document.createElement("input");
+      input.id = "FilaPolizasText"+ totalPolizas;
+      input.idfila = "FilaPolizasText" + totalPolizas;
+      input.name = "EliminarLinea";
+      input.type = "button";
+      input.value = "Eliminar";
+      input.className="submitLink";
+	     //input.onclick = eliminarPolizas;
+		 input.onclick =function(){eliminarPolizas(fila);};
+      if(document.miForma._operacionCarga.value=="D"){
+		td2.appendChild(document.createTextNode(" "));
+	  }else{
+		td2.appendChild(input);
+	  }
+	  td1.appendChild(document.createTextNode(document.miForma.PolizasText.value));
+	  fila.appendChild(td1); 
+      fila.appendChild(td2);
+	  tabla.appendChild(fila);
+	  totalPolizas = totalPolizas + 1;
+	  document.miForma.PolizasText.value="";
+  }
+ /* else{
+    alert("Debe digitar una Poliza");
+  }*/
+}
+function eliminarPolizas(e){
+     var Tabla = document.getElementById("TablaPolizasText");
+     var obj;
+     if (navigator.appVersion.indexOf("MSIE")!=-1){
+        obj=window.event.srcElement;
+     }       
+     //else if(navigator.userAgent.indexOf("Firefox")!=-1){
+	 else if(navigator.userAgent.indexOf("Firefox")!=-1||navigator.userAgent.indexOf("Chrome")!=-1){	 
+       //obj=e.target;
+	   obj=e;
+     }
+     //Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+	 Tabla.tBodies[0].removeChild(document.getElementById(obj.id));
+     totalPolizas = totalPolizas - 1;
+     return;
+}
+function totalizarPolizas(){
+   var polizas="";
+    
+    for(var i=1;i<document.getElementById('TablaPolizasText').rows.length;i++){
+      if(polizas!=""){
+         polizas = polizas + "~";
+      }
+      polizas = polizas + document.getElementById('TablaPolizasText').rows[i].cells[1].innerHTML;
+    }
+	 for(var i=0;i<document.miForma.cuantos.value;i++){ 
+	  if (document.getElementById('poliza' + i).checked){
+	   polizas = polizas + "~";
+	   
+	   
+	   
+		
+		if(document.getElementById('cod' + i).innerHTML=="BUEN MANEJO Y CORRECTA INVERSION DEL ANTICIPO"){
+
+			polizas=polizas+document.getElementById('cod' + i).innerHTML+'. Este amparo cubre los perjuicios sufridos por la E.S.E. con ocasi\xf3n de: la no inversi\xf3n del anticipo; el uso indebido del anticipo; y la apropiaci\xf3n indebida de los recursos recibidos en calidad de anticipo. ';
+		
+		}else if(document.getElementById('cod' + i).innerHTML=="CALIDAD DEL SERVICIO"){
+		
+			polizas=polizas+document.getElementById('cod' + i).innerHTML+'. Para asegurar a la E.S.E por los perjuicios derivados de la deficiente calidad del servicio prestado. ';
+		
+		}else if(document.getElementById('cod' + i).innerHTML=="CALIDAD Y CORRECTO FUNCIONAMIENTO DE LOS BIENES"){
+		
+			polizas=polizas+document.getElementById('cod' + i).innerHTML+'. Este amparo debe cubrir la calidad y el correcto funcionamiento de los bienes que recibe la E.S.E. en cumplimiento de un contrato. ';
+			
+		}else if(document.getElementById('cod' + i).innerHTML=="CUMPLIMIENTO DEL CONTRATO"){
+		
+			polizas=polizas+document.getElementById('cod' + i).innerHTML+'. Para amparar a la E.S.E. de los perjuicios derivados de: A. El incumplimiento total o parcial del contrato, cuando el incumplimiento es imputable al contratista; B. El cumplimiento tard\xedo o defectuoso del contrato, cuando el incumplimiento es imputable al contratista; C. Los da\xf1os imputables al contratista por entregas parciales de la obra, cuando el contrato no prev\xe9 entregas parciales; y D. El pago del valor de las multas y de la cl\xe1usula penal pecuniaria. ';
+		
+		}else if(document.getElementById('cod' + i).innerHTML=="DEVOLUCION DEL PAGO ANTICIPADO"){
+		
+			polizas=polizas+document.getElementById('cod' + i).innerHTML+'. Para cubrir los perjuicios sufridos por la E.S.E. por la no devoluci\xf3n total o parcial del dinero entregado al contratista a t\xedtulo de pago anticipado. ';
+		
+		}else if(document.getElementById('cod' + i).innerHTML=="ESTABILIDAD Y CALIDAD DE LA OBRA"){
+		
+			polizas=polizas+document.getElementById('cod' + i).innerHTML+'. Para asegurar a la E.S.E. respecto de los perjuicios ocasionados por cualquier tipo de da\xf1o o deterioro, imputable al contratista, sufrido por la obra entregada a satisfacci\xf3n. ';
+		
+		}else if(document.getElementById('cod' + i).innerHTML=="PAGO DE SALARIOS, PRESTACIONES SOCIALES LEGALES E INDEMNIZACIONES LABORALES"){
+		
+			polizas=polizas+document.getElementById('cod' + i).innerHTML+'. Para cubrir a la E.S.E. de los perjuicios ocasionados por el incumplimiento de las obligaciones laborales del contratista derivadas de la contrataci\xf3n del personal utilizado en el territorio nacional para la ejecuci\xf3n del contrato amparado. ';
+			
+		}else if(document.getElementById('cod' + i).innerHTML=="RESPONSABILIDAD CIVIL EXTRACONTRACTUAL"){
+		
+			polizas=polizas+document.getElementById('cod' + i).innerHTML+'. La E.S.E debe exigir que la p\xf3liza de responsabilidad extracontractual cubra tambi\xe9n los perjuicios ocasionados por eventuales reclamaciones de terceros derivadas de la responsabilidad extracontractual que surjan de las actuaciones, hechos u omisiones de los subcontratistas autorizados o en su defecto, que acredite que el subcontratista cuenta con un seguro propio con el mismo objeto y que la Entidad Estatal sea el asegurado. ';
+		
+		}
+
+       if(document.getElementById('porcentaje' + i).value==""){
+	       polizas=polizas+' '+document.getElementById('duracion' + i).value;
+		   polizas=polizas+'-'+document.getElementById('durabilidad' + i).value;	      
+	   }else{
+	     polizas=polizas+' con un porcentaje de '+document.getElementById('porcentaje' + i).value+'% '+document.getElementById('duracion' + i).value;
+		  polizas=polizas+'-'+document.getElementById('durabilidad' + i).value;	      
+	   }
+      }
+    }
+
+   document.miForma.Polizas.value = polizas;
+   return true;
+}
+
+function cargarPantalla(){
+
+	convertirNumero(document.miForma.valor.value);
+
+	var i=0;
+	if(document.miForma._operacionCarga.value=="M" || document.miForma._operacionCarga.value=="D"){
+		for (i=0; i<nuevosProductosEntregar.length; i++){
+       		document.miForma.ProductosEntregarText.value = nuevosProductosEntregar[i];
+       		agregarProductoEntregar();
+    		}
+		for (i=0; i<nuevosDefinicionTecnica.length; i++){
+       		document.miForma.DefinicionTecnicaText.value = nuevosDefinicionTecnica[i];
+       		agregarDefinicionTecnica();
+    		}
+		for (i=0; i<nuevosActividadesDesarrollar.length; i++){
+       		document.miForma.ActividadesDesarrollarText.value = nuevosActividadesDesarrollar[i];
+       		agregarActividadesDesarrollar();
+    		}
+		for (i=0; i<nuevosEspecificacionesTecnicas.length; i++){
+       		document.miForma.EspecificacionesTecnicasText.value = nuevosEspecificacionesTecnicas[i];
+       		agregarEspecificacionesTecnicas();
+    		}
+		//for (i=0; i<nuevosAlternativasEjecucion.length; i++){
+     //  		document.miForma.AlternativasEjecucionText.value = nuevosAlternativasEjecucion[i];
+       	//	agregarAlternativasEjecucion();
+    //		}
+		for (i=0; i<nuevosRiesgos.length; i++){
+       		document.miForma.DescripcionRiesgosText.value = nuevosRiesgos[i];
+       		agregarDescripcionRiesgos();
+    		}
+		for (i=0; i<nuevosPolizas.length; i++){
+       		document.miForma.PolizasText.value = nuevosPolizas[i];
+       		agregarPolizas();
+    		}
+		if(document.miForma._operacionCarga.value=="D"){
+			document.miForma.BotonFechaPresentacion.style.visibility = 'hidden';
+			document.miForma.BotonFechaPresentacion.style.position = 'absolute';			
+			document.miForma.bfechaDesde.style.visibility = 'hidden';
+			document.miForma.bfechaDesde.style.position = 'absolute';
+			document.miForma.bfechaHasta.style.visibility = 'hidden';
+			document.miForma.bfechaHasta.style.position = 'absolute';	
+			document.miForma.BotonAgregarProductoEntregar.style.visibility = 'hidden';
+			document.miForma.BotonAgregarProductoEntregar.style.position = 'absolute';
+			document.miForma.BotonAgregarDefinicionTecnica.style.visibility = 'hidden';
+			document.miForma.BotonAgregarDefinicionTecnica.style.position = 'absolute';
+			document.miForma.BotonAgregarActividadesDesarrollar.style.visibility = 'hidden';
+			document.miForma.BotonAgregarActividadesDesarrollar.style.position = 'absolute';
+			document.miForma.BotonAgregarEspecificacionesTecnicas.style.visibility = 'hidden';
+			document.miForma.BotonAgregarEspecificacionesTecnicas.style.position = 'absolute';
+			//document.miForma.BotonAgregarAlternativasEjecucion.style.visibility = 'hidden';
+			//document.miForma.BotonAgregarAlternativasEjecucion.style.position = 'absolute';
+			document.miForma.BotonAgregarDescripcionRiesgos.style.visibility = 'hidden';
+			document.miForma.BotonAgregarDescripcionRiesgos.style.position = 'absolute';
+			document.miForma.BotonAgregarPolizas.style.visibility = 'hidden';
+			document.miForma.BotonAgregarPolizas.style.position = 'absolute';
+		}
+	}
+	document.miForma.objetoContratarText.value=document.miForma.objetoContratar.value;
+	document.miForma.descripcionNecesidadText.value=document.miForma.descripcionNecesidad.value;
+	document.miForma.soporteTecnicoEconomicoText.value=document.miForma.soporteTecnicoEconomico.value;
+}
+
+	function moverFila(obj,num,tab){
+	  var tabla = document.getElementById(tab);
+	  var fila = obj.parentNode.parentNode;
+	  filas = tabla.tBodies[0].getElementsByTagName("tr");
+	  for (i=0; ele = tabla.getElementsByTagName("tr")[i]; i++)
+		if (ele == fila) {numFila=i; break}
+	  copia = filas[numFila].cloneNode(true);
+	  copia.getElementsByTagName('img')[0].onclick = function() { moverFila(this,-1,tab) }
+	  copia.getElementsByTagName('img')[1].onclick = function() { moverFila(this,1,tab) }
+	  copia.getElementsByTagName('input')[0].onclick = eliminarActividadesDesarrollar;
+	  var idFila = filas[numFila].getElementsByTagName('input')[0].idfila
+	  copia.getElementsByTagName('input')[0].idfila = idFila;
+
+	  tabla.tBodies[0].removeChild(filas[numFila]);
+	  numFila += num;
+	  if (numFila > filas.length-1) 
+		tabla.tBodies[0].appendChild(copia);
+	  else
+		tabla.tBodies[0].insertBefore(copia,filas[numFila]);
+	  mostrarOcultar();
+	}
+
+	function mostrarOcultar(){
+	  filas = tabla.tBodies[0].getElementsByTagName("tr");
+	  for (i=0; ele = filas[i]; i++) {
+		ele.getElementsByTagName('img')[0].style.visibility = (i==0) ? 'hidden' : 'visible';
+		ele.getElementsByTagName('img')[1].style.visibility = (i==filas.length-1) ? 'hidden' : 'visible';
+	  }
+	}
+
+	function  cargarImputaciones(anio){
+	
+			var datePresentacion = moment($('fechaPresentacion').value,'YYYY-MM-DD');
+	
+		    var url='ConsultasAjaxOld.po?_operacion=cargarImputaciones&anio='+datePresentacion.year();
+		    new Ajax.Request(url,{
+		        method:'get',  
+		        onSuccess: function(transport) {
+		        llenarComboBlanco(document.getElementById('nombreImputacionPresupuestal'), transport.responseXML.getElementsByTagName('imputacion'),'codigo','nombre');
+		        },     
+		        onFailure: function() {
+		        alert("Ups... Error obteniendo respuesta Ajax");
+		        }    
+		    } );  
+		 }
+		 
+	function AgregarCdp(){
+		sVolver="SI";
+		document.miForma._operacion.value="L";
+		document.miForma.action="ContCdpEstudio.po";
+	}
+	
+	
+ function cargarSupervisores(area, interventor){
+	var url='ConsultasAjaxOld.po?_operacion=buscarSupervisores&area='+area;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+        llenarComboBlanco(document.getElementById(interventor), transport.responseXML.getElementsByTagName('supervisor'),'codigo','nombre');
+		},     
+        onFailure: function() {
+        alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    } );  
+ }
+ 
+  function convertirNumero(numero){
+ 
+ 	var url="ConsultasAjaxOld.po?_operacion=convertirNumero&numero="+numero;
+ 	new Ajax.Request(url,{
+     	method:'get',  
+     	onSuccess: function(transport) {
+
+        document.getElementById('valorLetra').value = transport.responseXML.getElementsByTagName('numero')[0].childNodes[0].textContent;
+     	},     
+     	onFailure: function() {
+      		alert("No fue posible cargar la información");
+     	}    
+ 	}); 
+	
+ }
+ </script>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="cargarPantalla();">
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   <td align=left">
+     <script type="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+<br/>
+<br/>
+<div class="container">
+<table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr id="idCreacionRegistro">
+ <td>
+  <table summary="" class="tabf" align="center" border="0" cellspacing="2" cellpadding="0">
+   <tr>
+    <td align="center">
+          <form name="miForma" action="ContEstudioPrevioAdminAct.po" method="post" onsubmit="limpieza();return Salvar()">
+           <input type="hidden" id="fechaEstudio" value=""/>	   
+           <table summary=""  border="0" >
+             <tr>
+               <td class ="ca" colspan="4"><strong>ESTUDIO PREVIO</strong></td>
+             </tr>
+             <tr>
+               <td class ="ca" colspan="4">1. Informaci&oacute;n General</td>
+             </tr>
+             <tr>
+              <td class="tit">N&uacute;mero Estudio</td>
+              <td class="dat"><input type="text" class="IND" name="numeroEstudio" id="NumeroEstudio" maxlength="10" size="15"  onkeypress="validarTecla(event, 'EN');" onkeydown="f_salto()" readonly="readonly"/></td>
+              <td class="tit">Fecha Presentacion</td>
+              <td class="dat">
+              	<input type="text" class="INP" name="fechaPresentacion" id="fechaPresentacion" maxlength="10" size="20"  onkeypress="validarTecla(event, 'F2');" onkeydown="f_salto()" onchange="cargarImputaciones(this.value.substring(1,4));"/>
+              	<input type="button" id="BotonFechaPresentacion" class="btnCalendario"/>
+              </td>
+             </tr>
+             <tr>
+              <td class="tit">Dependencia</td>
+              <td class="dat" colspan="3"><select class="INP" name="dependencia" id="dependencia" onchange="cargarSupervisores(this.value, 'interventor')"></select></td>
+             </tr>
+             <tr>
+			  <td class="tit">Supervisor</td>
+              <td class="dat" colspan="3"><select class="INP" name="interventor" id="interventor"></select></td>
+			 </tr>
+             <tr>
+              <td class="tit">Objeto Contratar</td>
+              <td class="dat" colspan="3">
+              	<textarea name="objetoContratarText" id="objetoContratarText" rows="4" cols="100" 
+              	           onkeypress="validarTecla(event, 'AL');"
+                             onkeydown="textCounter(this,txtCont1,100000);" 
+                             onkeyup="textCounter(this,txtCont1,100000);"></textarea>
+                             <input type="hidden" name="txtCont1" value="0"/>
+              	<input type="hidden" name="objetoContratar" id="ObjetoContratar" value=""/>
+              </td>
+             </tr>
+
+			 </tr>
+              <td class="tit">Actividad Especifica</td>
+              <td class="dat"><select name="actividadEspecifica" class="INP" id="actividadEspecifica" onkeydown="f_salto()"></select>
+			           </td>
+             
+              <td class="tit">Nombre Imputacion Presupuestal</td>
+              <td class="dat"><select name="nombreImputacionPresupuestal" class="INP" id="nombreImputacionPresupuestal" onkeydown="f_salto()"></select>
+					<input type="submit" class="BOT" id="agregarCdp" value="+ CDP" onclick="AgregarCdp();"/>
+	          </td>
+            </tr>
+             <tr>
+               <td class ="ca" colspan="4">2. Descripci&oacute;n De La Necesidad</td>
+             </tr>
+             <tr>
+			<td class="tit">Descripci&oacute;n de la necesidad</td>
+              <td class="dat" colspan="3">
+              	<textarea name="descripcionNecesidadText" id="descripcionNecesidadText" rows="4" cols="100" 
+              	           onkeypress="validarTecla(event, 'AL');"
+                             onkeydown="textCounter(this,txtCont3,100000);" 
+                             onkeyup="textCounter(this,txtCont3,100000);"></textarea>
+                             <input type="hidden" name="txtCont3" value="0"/>
+             	 <input type="hidden" name="descripcionNecesidad" id="DescripcionNecesidad" value=""/>
+              </td>
+             </tr>
+             <tr>
+               <td class ="ca" colspan="4">3. Definici&oacute;n de seleccion y evaluaci&oacute;n</td>
+             </tr>
+             <tr>
+              <td class="tit">3.1. Fundamentos juridicos que soportan la modalidad de selecci&oacute;n</td>
+              <td class="dat" colspan="3">
+              	<textarea name="definicionTecnicaText" id="DefinicionTecnicaText" rows="4" cols="100" 
+              	           onkeypress="validarTecla(event, 'ALSE');"
+                             onkeydown="textCounter(definicionTecnicaText,txtCont4,100000);" 
+                             onkeyup="textCounter(definicionTecnicaText,txtCont4,100000);"></textarea>
+                             <input type="hidden" name="txtCont4" value="0"/>
+                             
+			                  <input type="button" class="bot" name="botonAgregarDefinicionTecnica" id="BotonAgregarDefinicionTecnica" value="Agregar" onclick="agregarDefinicionTecnica();"/>
+			             <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0" id="TablaDefinicionTecnicaText">
+                   <tbody>
+                     <tr class="tit">
+					 <td width="5%"></td>
+                       <td>3.1. Fundamentos juridicos que soportan la modalidad de selecci&oacute;n</td>
+			                    <td>Eliminar</td>
+                     </tr>
+                   </tbody>
+                  </table>
+              </td>
+             </tr>
+			 
+		      <tr>
+              <td class="tit">3.2 Especificaciones T&eacute;cnicas y criterios de seleccion</td>
+              <td class="dat" colspan="3">
+              	<textarea name="especificacionesTecnicasText" id="EspecificacionesTecnicasText" rows="4" cols="100"
+              	           onkeypress="validarTecla(event, 'ALSE');"
+                             onkeydown="textCounter(this,txtCont7,100000);" 
+                             onkeyup="textCounter(this,txtCont7,100000);"></textarea>
+							 
+                    <input type="hidden" name="txtCont7" value="0"/>
+                    <input type="hidden" name="soporteTecnicoEconomicoText" id="soporteTecnicoEconomicoText" value=""/>
+       	            <input type="hidden" name="soporteTecnicoEconomico" id="SoporteTecnicoEconomico" value=""/>              
+					<input type="button" class="bot" name="botonAgregarEspecificacionesTecnicas" id="BotonAgregarEspecificacionesTecnicas" value="Agregar" onclick="agregarEspecificacionesTecnicas();"/>
+				<table summary="" width="100%" border="0" cellspacing="0" cellpadding="0" id="TablaEspecificacionesTecnicasText">
+                   <tbody>
+                     <tr class="tit">
+					  <td width="5%"></td>
+                       <td>Especificaci&oacute;n</td>
+			                    <td>Eliminar</td>
+                     </tr>
+                   </tbody>
+                  </table>
+              </td>
+             </tr>
+			 
+             <tr>
+				<td class ="ca" colspan="4">4. Especificaciones tecnicas del objeto o producto a contratar</td>
+		     </tr>
+			 
+			 <tr>
+              <td class="tit">4.1 Actividades Generales</td>
+              <td class="dat" colspan="3"> <td>Plantilla</td></td>
+             </tr>
+			 
+             
+             <tr>
+              <td class="tit">4.2 Actividades espec&iacute;ficas a desarrollar para el logro del objeto o producto a contratar</td>
+              <td class="dat" colspan="3">
+              	<textarea name="actividadesDesarrollarText" id="ActividadesDesarrollarText" rows="4" cols="100" 
+             	           onkeypress="validarTecla(event, 'ALSE');"
+                             onkeydown="textCounter(actividadesDesarrollarText,txtCont5,100000);" 
+                             onkeyup="textCounter(actividadesDesarrollarText,txtCont5,100000);"></textarea>
+                             <input type="hidden" name="txtCont5" value="0"/>              	
+					<input type="button" class="bot" name="botonAgregarActividadesDesarrollar" id="BotonAgregarActividadesDesarrollar" value="Agregar" onclick="agregarActividadesDesarrollar();"/>
+					<table summary="" width="100%" border="0" cellspacing="0" cellpadding="0" id="TablaActividadesDesarrollarText">
+                   <tbody>
+                     <tr class="tit">
+                       <td width="5%"></td>
+						   <td width="90%">Actividad</td>
+						   <td width="5%">Eliminar</td>
+                     </tr>
+                   </tbody>
+                  </table>
+              </td>
+             </tr>
+			 
+		  <!--   <tr>
+              <td class="tit">4.2 Identificacion de alternativa de ejecucion</td>
+              <td class="dat" colspan="3">
+              	<textarea name="alternativasEjecucionText" id="AlternativasEjecucionText"  rows="4" cols="100"
+              	           onkeypress="validarTecla(event, 'ALSE');"
+                             onkeydown="textCounter(this,txtCont9,100000);" 
+                             onkeyup="textCounter(this,txtCont9,100000);"></textarea>
+                             <input type="hidden" name="txtCont9" value="0"/>              	
+																			<input type="button" class="bot" name="botonAgregarAlternativasEjecucion" id="BotonAgregarAlternativasEjecucion" value="Agregar" onclick="agregarAlternativasEjecucion();"/>
+																			<table summary="" width="100%" border="0" cellspacing="0" cellpadding="0" id="TablaAlternativasEjecucionText">
+                   <tbody>
+                     <tr class="tit">
+                       <td>Alternativa</td>
+			                    <td>Eliminar</td>
+                     </tr>
+                   </tbody>
+                  </table>  	
+              </td>
+             </tr>-->
+             <tr>
+               <td class ="ca" colspan="4">5. Riesgos De La Contrataci&oacute;n y actividades de contigencia</td>
+             </tr>
+             <tr>
+              <td class="tit">5.1 Descripci&oacute;n de los posibles Riesgos y actividades de contingencia</td>
+              <td class="dat" colspan="3">
+              	<textarea name="descripcionRiesgosText" id="DescripcionRiesgosText"  rows="4" cols="100"
+              	           onkeypress="validarTecla(event, 'ALSE');"
+                             onkeydown="textCounter(this,txtCont10,100000);" 
+                             onkeyup="textCounter(this,txtCont10,100000);"></textarea>
+                             <input type="hidden" name="txtCont10" value="0"/>              	
+																	 	<input type="button" class="bot" name="botonAgregarDescripcionRiesgos" id="BotonAgregarDescripcionRiesgos" value="Agregar" onclick="agregarDescripcionRiesgos();"/>
+																		 <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0" id="TablaDescripcionRiesgosText">
+                   <tbody>
+                     <tr class="tit">
+					 <td width="5%"></td>
+                       <td>Riesgos</td>
+			                    <td>Eliminar</td>
+                     </tr>
+                   </tbody>
+                  </table>
+              </td>
+             </tr>
+             <tr>
+              <td class="tit">5.2 Garantias</td>
+              <td class="dat" colspan="3">
+              
+              <table summary=""  border="0" id="TPoliza" name="TPoliza">
+               <tr>
+                <td class ="ca" colspan="4"><strong>Garantias</strong></td>
+			            </tr>
+               <tr>
+                <td class="tit"></td>
+				   <td class="tit">Descripci&oacute;n</td>
+				   <td class="tit">%</td>
+				   <td class="tit">Durabilidad</td>
+               </tr>
+               <tr><td></td></tr>
+			           </table>
+			           Otra Garantia:
+			  	        <textarea name="polizasText" id="PolizasText"  rows="4" cols="100"
+              	           onkeypress="validarTecla(event, 'ALSE');"
+                             onkeydown="textCounter(this,txtCont11,10000);" 
+                             onkeyup="textCounter(this,txtCont11,10000);"></textarea>
+                             <input type="hidden" name="txtCont11" value="0"/>              	
+			              <input type="button" class="bot" name="botonAgregarpolizas" id="BotonAgregarPolizas" value="Agregar" onclick="agregarPolizas();"/>
+			
+			               <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0" id="TablaPolizasText">
+                   <tbody>
+                     <tr class="tit">
+					 <td width="5%"></td>
+                       <td>Garantia</td>
+                       <td>Eliminar</td>
+                     </tr>
+                   </tbody>
+                  </table>
+              </td>
+             </tr>
+             <tr>
+               <td class ="ca" colspan="4">6. Condiciones Del Objeto Contractual</td>
+             </tr>
+             <tr>
+              <td class="tit">6.1 Modalidad de Contrataci&oacute;n</td>
+              <td class="dat"><select name="formaContrato" class="INP" id="formaContrato" onkeydown="f_salto()"></select></td>
+              <td class="tit">6.2 Tipo Contrato</td>
+              <td class="dat"><select name="tipoContrato" class="INP" id="tipoContrato" onkeydown="f_salto()"></select></td>
+             </tr>
+             <tr>
+			  <td class="tit">6.3 Plazo</td>
+			  <td class="dat">A partir de la fecha de:<br/><br/>
+					<input type="radio" class="inp" id="tipoPlazoTA" name="tipoPlazo" value="textoActa"/>Acta Inicio<br/>
+					<input type="radio" class="inp" id="tipoPlazoTP" name="tipoPlazo" value="textoPoliza"/>P&oacute;liza<br/>
+					<input type="radio" class="inp" id="tipoPlazoTRP" name="tipoPlazo" value="textoRP"/>Registro Presupuestal<br/>		
+				<br/>
+			 </td>
+	          <td class="tit">Hasta:</td>
+			  <td class="dat">
+			   <input type="text" class="INP" name="plazo" id="plazo" maxlength="3" size="3" value="0" onkeypress="validarTecla(event, 'EN');" onkeydown="f_salto()"/> Meses 
+			 <input type="text" class="INP" name="plazoD" id="plazoD" maxlength="3" size="3" value="0"	onkeypress="validarTecla(event, 'EN');" onkeydown="f_salto()"/> D&iacute;as <br/>
+			  </td>
+			 </tr>
+			 
+			<tr>
+				<td class="tit">Fecha Desde</td>
+				<td class="dat"> <input type="text" class="INP" name="fechaDesde" id="fechaDesde" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+				<input type="button" id="bfechaDesde" class="btnCalendario"/>
+				</td>           
+
+				<td class="tit">Fecha Hasta</td>
+				<td class="dat"> <input type="text" class="INP" name="fechaHasta" id="fechaHasta" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+				<input type="button" id="bfechaHasta" class="btnCalendario"/>
+				</td> 
+			</tr>
+			 
+            
+             <tr>
+              <td class="tit">6.4 Valor</td>
+              <td class="dat"><input type="text" class="INP" name="valor" id="valor" maxlength="30" size="20"  title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="f_salto()" onfocus="this.value=desformatnum(this.value)" onblur="convertirNumero(this.value); this.value=formatnum(this.value)"/></td>
+			  <td class="tit">Valor en Letra</td>
+              <td class="dat"> <input type="text" class="INPD" name="valorLetra" id="valorLetra" maxlength="92" size="90" title="numeroLetra" readOnly onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+             </tr> 
+			 
+             <tr>
+              <td class="tit">6.4 Justificaci&oacute;n del valor</td>
+              <td class="dat" colspan="3"><input type="text" class="INP" name="justificacionValor" id="justificacionValor" maxlength="500" size="120" onkeypress="validarTecla(event, 'AL');"></td>
+             </tr> 
+             
+             <tr>
+				<td class="tit">6.5 Forma Pago</td>
+				<td class="dat" colspan="3"><textarea name="formaPagoText" id="formaPagoText" rows="3" cols="100"
+					onkeypress="validarTecla(event, 'AL');"
+					onkeydown="textCounter(this,txtCont48,3000);"
+					onkeyup="textCounter(this,txtCont48,3000);"></textarea> <input type="hidden" name="txtCont48" value="0"/></td>
+			 </tr>
+             <tr>              
+              <td class="tit">Forma Pago</td>
+              <td class="dat"><select name="formaPago" class="INP" id="formaPago" onkeydown="f_salto()"></select></td>
+              <td class="tit">6.6 Lugar Ejecuci&oacute;n</td>
+              <td class="dat"><input type="text" class="INP" name="lugarEjecucion" id="lugarEjecucion" maxlength="500" size="80"  onkeypress="validarTecla(event, 'AL');" onkeydown="f_salto()"/></td>
+             </tr>
+             <tr>              
+              <td class="tit">Clase de Gasto</td>
+              <td class="dat"><select name="claseGasto" class="INP" id="claseGasto" onkeydown="f_salto()"></select></td>
+			  <td class="tit">6.7 Aplica IVA</td>
+			  <td class="dat"><select name="iva" class="INP" id="iva" onkeydown="f_salto()"></select></td>
+             </tr>
+
+            <tr>
+              <td class="tit">7. SUPERVISION Y CONTROL</td>
+              <td class="dat" colspan="3">
+              	<textarea name="productosEntregarText" id="ProductosEntregarText" rows="4" cols="100"  
+              	           onkeypress="validarTecla(event, 'ALSE');"
+                             onkeydown="textCounter(this,txtCont2,100000);" 
+                             onkeyup="textCounter(this,txtCont2,100000);"></textarea>
+                             <input type="hidden" name="txtCont2" value="0"/>
+			            <input type="button" class="bot" name="botonAgregarProductoEntregar" id="BotonAgregarProductoEntregar" value="Agregar" onclick="agregarProductoEntregar();"/>
+			            <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0" id="TablaProductosEntregarText">
+                <tbody>
+                 <tr class="tit">
+				 <td width="5%"></td>
+                  <td>Producto</td>
+			               <td>Eliminar</td>
+                 </tr>
+                </tbody>
+               </table>
+              </td>
+             </tr>
+
+             <tr>
+              <td class="tit">Fecha Inserci&oacute;n</td>
+              <td class="dat"><input type="text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="20" disabled="disabled" onkeypress="validarTecla(event, 'FE');" onkeydown="f_salto()"/></td>
+              <td class="tit">Usuario Inserci&oacute;n</td>
+              <td class="dat"><input type="text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="50" disabled="disabled" onkeypress="validarTecla(event, 'AL');" onkeydown="f_salto()"/></td>
+             </tr>
+             <tr>
+              <td class="tit">Fecha Modificaci&oacute;n</td>
+              <td class="dat"><input type="text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="20" disabled="disabled" onkeypress="validarTecla(event, 'FE');" onkeydown="f_salto()"/></td>
+              <td class="tit">Usuario Modificaci&oacute;n</td>
+              <td class="dat"><input type="text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="50" disabled="disabled" onkeypress="validarTecla(event, 'AL');" onkeydown="f_salto()"/></td>
+             </tr>
+
+             <tr>
+                <td class="dat2" colspan="4">
+                	<input type="hidden" name="_operacion" id="_operacion" value="C"/>
+                	<input type="hidden" name="tipoEstudio" id="tipoEstudio" value="A"/>
+																	<input type="hidden" name="_operacionCarga" id="_operacionCarga" value=""/>
+																	<input type="hidden" id="ProductosAEntregar" name="productosAEntregar" value=""/>
+																	<input type="hidden" id="DefinicionTecnica" name="definicionTecnica" value=""/>
+																	<input type="hidden" id="ActividadesADesarrollar" name="actividadesADesarrollar" value=""/>
+																	<input type="hidden" id="EspecificacionesTecnicas" name="especificacionesTecnicas" value=""/>
+																	<input type="hidden" id="AlternativasEjecucion" name="alternativasEjecucion" value=""/>
+																	<input type="hidden" id="DescripcionRiesgos" name="descripcionRiesgos" value=""/>
+																	<input type="hidden" id="Polizas" name="polizas" value=""/>
+																	<input type="hidden" name="cuantos" id="cuantos" value=""/>
+	               	<input type="submit" class="BOT"  id="eliminarRegistro" value="Eliminar" name="miBotonE" onclick="Eliminar();" accesskey="E"/>
+	               	<input type="submit" class="BOT" value="Grabar"  name="miBotonG" id="miBotonG" onclick="Grabar();" accesskey="G"/>
+	               	<input type="submit" class="BOT" value="Modificar" id="miBotonM" name="miBotonM" onclick="Modificar();" accesskey="M"/>
+	               	<input type="submit" class="BOT" value="Copiar y Guardar" id="copiar" onclick="Copiar();" accesskey="C"/>
+	               	<input type="submit" class="BOT" id="btnFirmas" value="Firmas" onclick="FaddFirmas();"/> 
+	               	<input type="submit" class="BOT" value="Realizar Contrato" id="miBotonContrato" name="miBotonContrato" onclick="generarContrato();" accesskey="L"/>
+
+			
+		       </td>
+        </tr>
+      </table>
+     </form>
+    </td>
+   </tr> 
+  </table>
+ </td>
+</tr>
+
+<tr id="trDocumentos">
+ <td align="center">
+   <br/>
+  <table summary="" width="50%" border="0" cellspacing="1" cellpadding="0"  id="detalleDocumentos">
+   <tr>
+    <td class="cf1">Documento </td>
+    <td class="cf1">Tipo de documento </td>
+    <td class="cf2">Fecha de generaci&oacute;n</td>
+   </tr> 
+  </table>
+ </td>
+</tr>
+
+
+
+<tr>
+<td class="cp"><img alt="" src="media/z.gif" width="1" height="150"/></td>
+</tr>
+
+</table>
+<div>
+<form name="miForma2" action="EstudioPrevioDet.po" method="post">
+   <input type="hidden" class="IND" name="numeroEstudio"/>
+   <input type="hidden" class="IND" name="formaContrato"/>
+</form>
+
+
+<script type="text/javascript">
+   function disabledDate(date) {
+            var today = new Date();
+            var dd = today.getDate();
+            return date.getDate() > dd ;                    
+
+        };
+		
+	Calendar.setup({
+       inputField :  'fechaDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaDesde'
+      });
+	Calendar.setup({
+       inputField :  'fechaHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaHasta'
+      });
+
+    Calendar.setup({
+       inputField :  'fechaPresentacion',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'BotonFechaPresentacion',
+	   disableFunc: function(date) {
+						  var now= new Date();
+
+						if(date.getFullYear()>now.getFullYear())
+						{
+							return true;
+						}
+						if(date.getFullYear()==now.getFullYear())
+						{
+							if(date.getMonth()>now.getMonth())
+							{
+								return true;
+							}
+						}
+						if(date.getMonth()==now.getMonth())
+						{
+							if(date.getDate()>now.getDate())
+							{
+								return true;
+							}
+						}
+					}
+      });
+
+     </script>
+
+</body>
+</html>

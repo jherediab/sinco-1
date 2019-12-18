@@ -1,0 +1,443 @@
+<html>
+ <head>
+ <title>ContPoliza</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+ <script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script type="text/javascript" src="media/moment.min.js"></script>
+ <script type="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+ 
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+   rta=validar(document.miForma.numeroContrato,"Número Contrato","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.numeroPoliza,"Número P&oacute;liza","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.tipoPoliza,"Tipo Póliza","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.valor,"Valor","DEC",2,"OBL","0","999999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.entidadExpide,"Entidad Expide","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaExpedicion,"Fecha Expedición","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaAprobacion,"Fecha Aprobación","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaInicioPoliza,"Fecha Inicio Póliza","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaFinalPoliza,"Fecha Final Póliza","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   sVolver="SI";
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if(document.miForma.origen.value=="C"){
+     	 document.miForma.numeroContrato.value="";
+  		 document.miForma.action="ContContratoAct.po";
+   		 document.miForma._operacion.value="P";
+    }
+    else if(document.miForma.origen.value=="A"){
+  		 document.miForma.action="ContAdicionContratoAct.po";
+   		 document.miForma._operacion.value="P";
+    }
+    return true;
+ }
+
+ function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+ }
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+
+var  sVolver2="NO";
+
+function converToDate(string) {
+	var date = new Date();
+	var anio = parseInt(string.substring(6, 10),10);
+	var mes = eval(string.substring(3, 5)-1);
+	var dia = parseInt(string.substring(0, 2),10);
+	date.setYear(anio);
+	date.setMonth(mes);
+	date.setDate(dia);
+	return date;
+}
+
+function validarFecha(fecha){
+	var hoy = new Date();
+	var fechaHoy = converToDate(document.getElementById(fecha).value);
+	if(hoy.getTime()< fechaHoy.getTime()){
+		alert("La Fecha debe ser anterior o igual a hoy");
+		document.getElementById(fecha).value="";
+	}
+}
+
+function validarFechas(fecha1, fecha2, alerta){
+	if(document.getElementById(fecha1).value.length!=0 && document.getElementById(fecha2).value.length!=0){
+	 	var fechaInicio=converToDate(document.getElementById(fecha1).value);
+		var fechaFin=converToDate(document.getElementById(fecha2).value);
+		if(fechaInicio.getTime()>fechaFin.getTime()){
+			if(alerta==1){
+				alert("La Fecha de Aprobacion debe ser mayor a la Fecha de Expedicion");
+   				document.getElementById(fecha2).value="";
+   				return false;
+			}
+			else if(alerta==2){
+				alert("La Fecha de Expedicion debe ser mayor a la Fecha del Regisrtro Presupuestal");
+   				document.getElementById(fecha2).value="";
+   				return false;
+			}
+			else if(alerta==3){
+				//alert("La Fecha Inicio de la Poliza debe ser mayor a la Fecha de Expedicion");
+   				//document.getElementById(fecha2).value="";
+   				//return false;
+			}
+			else if(alerta==4){
+				alert("La Fecha Final de la Poliza debe ser mayor a la Fecha Inicio de la Poliza");
+   				document.getElementById(fecha2).value="";
+   				return false;
+			}
+			else if(alerta==5){
+				alert("La Fecha Final de la Poliza debe ser mayor al plazo establecido en el contrato");
+   				document.getElementById(fecha2).value="";
+   				return false;
+			}
+		}
+	}
+}
+
+function existePolizaEnResultados(poliza,id){
+  	var existe=false;
+  	var i=1;
+  	tabla=document.getElementById(id);
+  	while(existe==false && i<tabla.rows.length-1){
+  		if(tabla.rows[i].cells[2].innerHTML==document.getElementById(poliza).options[document.getElementById(poliza).selectedIndex].text){
+  		    existe=true;
+  	    }
+  		i++;
+  	}
+  	if(existe==true){
+ 	  	alert("La Poliza Ya Se Encuentra Asignada");
+ 	  	document.miForma.tipoPoliza.value="";
+ 	}
+  	else{
+  		cargarSuma('numeroEstudio', 'tipoPoliza');
+  	}
+}
+
+function cargarSuma(estudio, poliza){
+	var url='ConsultasAjaxOld.po?_operacion=buscarPorcentajePoliza'+
+	'&numeroEstudio='+document.getElementById(estudio).value+
+	"&tipoPoliza="+document.getElementById(poliza).options[document.getElementById(poliza).selectedIndex].text;
+	new Ajax.Request(url,{
+     	method:'get',  
+       	onSuccess: function(transport){
+   			mostrarDetalle(transport.responseXML.getElementsByTagName('porcen'));
+   		},     
+       	onFailure: function() {
+       		alert("Upss error en el ajax");
+       	}    
+    }	
+	);  
+}
+
+function mostrarDetalle(registro){
+	var eldato=registro[0].attributes.getNamedItem('porcentaje').value;
+	document.miForma.valor.value=parseInt(eldato)*parseInt(document.miForma.valorContrato.value)/100;  
+	 eldato=registro[0].attributes.getNamedItem('plazo').value; 
+	 if(parseInt(eldato)>0){
+		 var fechaMin = sumarMeses(document.miForma.fechaFinal.value,eldato);
+		 document.miForma.fechaMinima.value=fechaMin.getDate()+"/"+(fechaMin.getMonth()+1)+"/"+fechaMin.getFullYear();  
+	 }
+}
+
+function agregarAmparo(){
+    sVolver="SI";
+	document.miForma._operacion.value="Amparo";
+	return true;
+}
+
+ function sumarMeses(fechaInicial,cantidad ){ 
+	var mes = parseInt(fechaInicial.substring(3, 5))-1;
+    var date = new Date(fechaInicial.substring(6,10),mes,fechaInicial.substring(0, 2));
+    date.setMonth(date.getMonth()+ parseInt(cantidad));   
+	return date;
+}
+ 
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+ </script>
+
+ <br>
+ <br>
+ <div class="container">
+ 
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+  <tr id="trCreacionRegistro">
+   <td>
+    <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td align="center">
+        <form name="miForma" action="ContPolizaAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">Poliza</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContPolizaActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">N&uacute;mero Contrato</td>
+           <td class="dat"><input type="Text" readonly class="IND" name="numeroContrato" id="numeroContrato" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">N&uacute;mero P&oacute;liza</td>
+           <td class="dat"> <input type="Text" class="INP" name="numeroPoliza" id="numeroPoliza" maxlength="40" size="40"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">N&uacute;mero(s) CDP</td>
+           <td class="dat" colspan="3"><input type="Text" readonly class="IND" name="numeroCdp" id="numeroCdp" maxlength="100" size="50"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Tipo P&oacute;liza</td>
+           <td class="dat"> <select name="tipoPoliza" class="INP" id="tipoPoliza" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="existePolizaEnResultados('tipoPoliza', 'polizasAgregadas')"></select></td>
+           <td class="tit">Entidad Expide</td>
+           <td class="dat"> <input type="Text" name="entidadExpide" class="INP" id="entidadExpide" maxlength="40" size="40"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td></tr>
+
+          <tr>
+           <td class="tit">Fecha Expedici&oacute;n</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaExpedicion" id="fechaExpedicion" onchange="validarFecha('fechaExpedicion'), validarFechas('fechaRp', 'fechaExpedicion', '2'); validarFechas('fechaExpedicion', 'fechaAprobacion', '1'), validarFechas('fechaExpedicion', 'fechaInicioPoliza', '3')" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="button" id="bfechaExpedicion" class="btnCalendario">
+           </td>
+           <td class="tit">Fecha Aprobaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaAprobacion" id="fechaAprobacion" onchange="validarFecha('fechaAprobacion'), validarFechas('fechaExpedicion', 'fechaAprobacion', '1')" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="button" id="bfechaAprobacion" class="btnCalendario">
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Fecha Inicio Poliza</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaInicioPoliza" id="fechaInicioPoliza" onchange="validarFechas('fechaExpedicion', 'fechaInicioPoliza', '3'); validarFechas('fechaInicioPoliza', 'fechaFinalPoliza', '4')" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="button" id="bfechaInicio" class="btnCalendario">
+           </td>
+           <td class="tit">Fecha Fin Poliza</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaFinalPoliza" id="fechaFinalPoliza" onchange="validarFechas('fechaExpedicion', 'fechaInicioPoliza', '3'); validarFechas('fechaInicioPoliza', 'fechaFinalPoliza', '4'); validarFechas( 'fechaMinima','fechaFinalPoliza', '5')" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="button" id="bfechaFinal" class="btnCalendario">
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Fecha Inicio Contrato</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInicio" id="fechaInicio" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Terminaci&oacute;n Contrato</td>
+           <td class="dat"> <input type="Text" readonly class="IND" name="fechaFinal" id="fechaFinal" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Suma Asegurada</td>
+           <td class="dat" colspan="3"><input type="Text" class="INP" name="valor" id="valor" maxlength="20" size="20"  onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4"><input type="hidden" name="_operacion" ID="_operacion" value="C">
+            <input type="hidden" name="origen" id="origen">
+            <input type="hidden" name="valorContrato" id="valorContrato">
+            <input type="hidden" name="fechaRp" id="fechaRp"> 
+            <input type="hidden" name="fechaMinima" id="fechaMinima"> 
+            <input type="hidden" name="numeroEstudio" id="numeroEstudio">
+            <input type="hidden" name="consecutivoAdicion" id="consecutivoAdicion">
+            <input type="hidden" name="consecutivoContrato" id="consecutivoContrato">
+            <input type="Submit" class="BOT" value="Volver" onClick="Salir();">
+            <input type="Submit" class="BOT" id="BtnAgregarAmparo" value="Agregar Amparo" onClick="agregarAmparo();">
+            <input type="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+        </td>
+       </tr> 
+      </table>
+     </td>
+    </tr>  
+    <tr id="trResultados">
+     <td align="center">
+      <br>
+      <table summary=""  class="tabf sortable resizable" id="polizasAgregadas">
+       <thead>
+        <tr>
+          <th class="cf2">Consecutivo Contrato</th>
+          <th class="cf1">N&uacute;mero P&oacute;liza</th>
+          <th class="cf2">Tipo P&oacute;liza</th>
+          <th class="cf1">Entidad Expide</th>
+          <th class="cf2">Fecha Expedici&oacute;n</th>
+          <th class="cf1">Fecha Aprobaci&oacute;n</th>
+          <th class="cf2">Valor</th>
+        </tr>
+       </thead>
+       <tbody id="detalle">
+       </tbody>
+       <tfoot>
+        <tr>
+         <td  class="PIE" colspan="7">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+        </tr>
+       </tfoot>
+      </table>
+     </td>
+    </tr>
+   </table>
+ </div>
+
+<script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaExpedicion',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaExpedicion'
+      });
+     Calendar.setup({
+       inputField :  'fechaAprobacion',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaAprobacion'
+      });
+     Calendar.setup({
+       inputField :  'fechaInicioPoliza',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaInicio'
+      });
+     Calendar.setup({
+       inputField :  'fechaFinalPoliza',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaFinal'
+      });
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

@@ -1,0 +1,141 @@
+<html>
+<head>
+<title>Clientes preferenciales del servicio</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" id="elcss" href="media/global.css"  type="text/css">
+<script TYPE="text/javascript" language="JavaScript" src="media/prototype.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+var volver="";
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   if (volver=="SI"){
+     return true;
+   }
+
+   if(document.ff.codigoEmpleado.value==""){
+        Mostrar();
+        alert("Debe seleccionar una persona");
+        return false;
+   }
+
+   try{
+     if (parseInt(document.ff.codigoEmpleado.value) == 0){
+        Mostrar();
+        alert("Debe seleccionar una persona");
+        return false;
+     }
+   }
+   catch(e){
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+}
+
+function buscarPersona(){
+    var url='ConsultasAjax.po?_operacion=buscarPersonas&apellidosCliente='+document.ff.apellidosCliente.value;
+    new Ajax.Request(url,{
+          method:'get',  
+             onSuccess: function(transport) {
+               llenarBlancoAtr(document.ff.codigoEmpleado,transport.responseXML.getElementsByTagName('persona'),'codigo','nombre');
+          },     
+          onFailure: function() {
+               alert("Error obteniendo respuesta Ajax");
+          }    
+        }
+     );  
+}
+
+function Volver(){
+   document.ff.action="Servicios.po";
+   document.ff._operacion.value="V";
+   volver="SI";
+   return true;
+}
+
+function Eliminar(){
+   document.ff._operacion.value="E";
+   return true;
+}
+
+</SCRIPT>
+
+</head>
+
+<body class="cb" onLoad="try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){}">
+<br>
+<table  class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td align="left">
+  <SCRIPT TYPE="text/javascript" language="JavaScript">
+  	new menu (MENU_ITEMS0, MENU_POS0);
+  </script>
+</td> 
+</tr>
+</table>
+
+<br>
+<div class="container">
+
+<div id="idCreacionRegistro">
+	  <FORM name="ff" ACTION="AdmClientePreferencial.po" METHOD="get" onsubmit="return Salvar()">
+	   <table summary=""  width="100%"  border="0" >
+		 <tr>
+		   <td class ="ca" COLSPAN="4"><STRONG>Cliente Preferencial Del Servicio</STRONG></td>
+		 </tr>
+		 <tr>
+		  <td class="tit">C&oacute;digo Servicio</td>
+		  <td class="dat"><INPUT TYPE="Text" class="INP" NAME="codigo" id="CodigoServicio" maxlength="10" size="15" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" readonly></td>
+		  <td class="tit">Nombre Servicio</td>
+		  <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nombreServicio" id="nombreServicio" size="50"  disabled></td>
+		 </tr>
+
+		 <tr>
+		  <td class="tit">Apellidos del Funcionario</td>
+		  <td class="dat">
+		  <INPUT TYPE="Text" class="INP" NAME="apellidosCliente" id="apellidosCliente" maxlength="15" size="20"  onkeypress="validarTecla(event, 'ALF');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onBlur="buscarPersona();"></td>
+		  <td class="tit">Funcionario</td>
+		  <td class="dat"><SELECT NAME="codigoEmpleado" class="INP" id="codigoEmpleado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"  ></SELECT></td>
+		 </tr>
+
+		 <tr>
+		  <td class="tit">Usuario Inserci&oacute;n</td>
+		  <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="UsuarioInsercion" maxlength="30" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		  <td class="tit">Fecha Inserci&oacute;n</td>
+		  <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="FechaInsercion" maxlength="10" size="20" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		 </tr>
+
+		 <tr>
+		  <td class="tit">Usuario Modificaci&oacute;n</td>
+		  <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="UsuarioModificacion" maxlength="30" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		  <td class="tit">Fecha Modificaci&oacute;n</td>
+		  <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="FechaModificacion" maxlength="10" size="20" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		 </tr>
+
+		 <tr>
+			<td class="dat2" colspan="4"><INPUT TYPE="hidden" NAME="_operacion" ID="_operacion" value="C">
+			<INPUT TYPE="Submit" class="BOT" VALUE="Grabar" accesskey="G">
+			<INPUT TYPE="Submit" class="BOT"  id="eliminarRegistro" VALUE="Eliminar" onClick="Eliminar();" accesskey="E">
+			<INPUT TYPE="Submit" class="BOT"  VALUE="Volver" onClick="Volver();" accesskey="V">
+			</td>
+		  </tr>
+		</table>
+	   </FORM>
+	</div>
+	  <table summary=""  class="tabf" border="0" id="detalle">
+	   <tr class="tSup">
+			 <td class="cf2">Nombre Funcionario</td>
+			 <td class="cf1">Nombre Area</td>
+	   </tr> 
+	  </table>
+</div>
+</body>
+</html>

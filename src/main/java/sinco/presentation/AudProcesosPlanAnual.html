@@ -1,0 +1,514 @@
+<html>
+ <head>
+ <title>Procesos a auditar</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+ <SCRIPT TYPE="text/javascript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+  	$('equipoAuditor').value=$('equipoAuditor2').value;
+	$('alcanceText').value=$('alcance').value;
+	$('objetivosEspecificosText').value=$('objetivosEspecificos').value;
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('codigoProceso'),"Código Proceso","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('tipoAuditoria'),"Tipo Auditoria","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar($('tituloAuditoria'),"Titulo","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar($('objetivosEspecificosText'),"Objetivos Especificos","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar($('alcanceText'),"Alcance","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   
+   rta=validar($('coordinadorAuditoría'),"Coordinador Auditoría","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar($('areaResponsable'),"Area Responsable","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+  
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function PreparaVolver(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="V";
+   document.ff.action="AudPlanAnual.po";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+ 
+ function Preguntas(){
+   sVolver="SI";
+   $('_operacion').value="L";
+   document.ff.action="AudBloques.po";
+   return true;
+ }
+ 
+function GrupoAuditor(){
+   sVolver="SI";
+   document.ff.action="AudGrupoAuditor.po";
+   $('_operacion').value="L";
+   return true;
+ }
+ 
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<div class="container">
+ <FORM name="ff" ACTION="AudProcesosPlanAnual.po" METHOD="post" onsubmit="return Salvar()">
+  <input type="hidden" name="_operacion" id="_operacion" value="X">
+
+ <input type="hidden" name="ciclo" id="cicloHidden">
+
+  <table   class="tabf" summary="" width="100%" border="0">
+   <tr>
+ 	  <td class="dat">Procesos a auditar</td>
+    <td class="datc">
+     <label id="labelNombre" name="labelNombre" align="center"></label>
+    </td>
+ 	  <td class="dat2">
+       <input type="submit" class="BOB"  value= "Regresar" id="btnVolver"  onClick="PreparaVolver();">
+       <input type="submit" class="BOB"  value= "Consultar" id="btnConsultar"  onClick="PreparaConsulta();">
+       <input type="submit" class="BOB"  value= "Nuevo" id="btnCrear" onClick="Nuevo();">
+       <input type="Button" class="BOB"  value= "Ayuda" id="btnAyuda" onClick="show_help('AudProcesosPlanAnual');">
+    </td>
+   </tr>
+  </table>
+  
+  <div id="divConsulta">
+   <br>
+   <table width="100%" class="tabf" summary="" border="0">
+    <tr>
+      <td colspan="4" class="ca" width="95%">CONSULTA</td>
+    </tr>
+      <tr>
+         <td class="tit">Tipo Auditoria</td>
+        <td class="dat"><SELECT NAME="tipoAuditoria" class="INP" id="ftipoAuditoria" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+
+      <tr>
+      <td class="dat2" colspan="4">
+       <input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+      </td>
+     </tr>
+    </table>
+   </div>
+	 
+  <div id="divResultados">
+   <br>
+   <table summary=""  width="100%" class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2">Ciclo</th>
+        <th class="cf1">Nombre Proceso</th>
+        <th class="cf2">Tipo Auditoria</th>
+        <th class="cf1">Coordinador Auditoría</th>
+        <th class="cf2">Equipo Auditor</th>
+     </tr>
+    </thead>
+   <tbody id="detalle">
+   </tbody>
+   <tfoot>
+    <tr>
+     <td  class="PIE" colspan="5">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+    </tr>
+   </tfoot>
+  </table>
+ </div>
+ 
+ <div id="divCreacionRegistro">
+  <br>
+  <table width="100%" class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td colspan="4" class="ca" width="98%">Creaci&oacute;n / Modificaci&oacute;n</td>
+   </tr>
+   <tr>
+    <td class="tit">C&oacute;digo Proceso</td>
+    <td class="dat"> <SELECT NAME="codigoProceso" class="INP" id="codigoProceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+    <td class="tit">Tipo Auditoria</td>
+    <td class="dat"> <SELECT NAME="tipoAuditoria" class="INP" id="tipoAuditoria" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   </tr>
+   
+    <tr>   
+	  <td class="tit">T&iacute;tulo</td>	
+      <td class="dat" colspan="3"><input type="text" class="INP" name="tituloAuditoria" id="tituloAuditoria" maxlength="255" size="80"  onkeypress="validarTecla(event, 'AL');" onkeydown="f_salto()"/></td>
+    </tr>
+
+   <tr>
+    <td class="tit">Coordinador Auditoría</td>
+    <td class="dat"> <SELECT NAME="coordinadorAuditoría" class="INP" id="coordinadorAuditoría" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+	<td class="tit">Area Responsable</td>
+    <td class="dat"> <SELECT NAME="areaResponsable" class="INP" id="areaResponsable" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+	
+   </tr>
+   
+   
+      <tr>
+    <td class="tit">Objetivos Especificos</td>
+    <td class="dat" colspan="3">
+		
+        <INPUT TYPE="hidden" NAME="objetivosEspecificos" id="objetivosEspecificos">
+        <TEXTAREA NAME="objetivosEspecificosText" id="objetivosEspecificosText" ROWS="4" COLS="150" 
+				onkeypress="validarTecla(event, 'AL');"  
+				onkeyDown="textCounter(objetivosEspecificosText,txtContequipoAuditor,10000);" 
+				onkeyup="textCounter(objetivosEspecificosText,txtContequipoAuditor,10000);"></TEXTAREA>
+        <INPUT TYPE="hidden" name="txtObjetivosEspecificos value="0">
+	</td>
+   </tr>
+   
+   <tr>
+    <td class="tit">Alcance</td>
+    <td class="dat" colspan="3">
+		
+        <INPUT TYPE="hidden" NAME="alcance" id="alcance">
+        <TEXTAREA NAME="alcanceText" id="alcanceText" ROWS="4" COLS="150" 
+				onkeypress="validarTecla(event, 'AL');"  
+				onkeyDown="textCounter(alcanceText,txtAlcance,10000);" 
+				onkeyup="textCounter(alcanceText,txtAlcance,10000);"></TEXTAREA>
+        <INPUT TYPE="hidden" name="txtAlcance" value="0">
+	
+	</td>
+   </tr>
+
+   <tr>
+    <td class="tit">Equipo Auditor</td>
+    <td class="dat" colspan="3"> 
+		
+        <INPUT TYPE="hidden" NAME="equipoAuditor2" id="equipoAuditor2">
+        <TEXTAREA NAME="equipoAuditor" id="equipoAuditor" ROWS="4" COLS="150" 
+				onkeypress="validarTecla(event, 'AL');"  
+				onkeyDown="textCounter(equipoAuditor,txtContequipoAuditor,512);" 
+				onkeyup="textCounter(equipoAuditor,txtContequipoAuditor,512);" 
+				onpaste="textCounter(equipoAuditor,txtContequipoAuditor,512);"></TEXTAREA>
+        <INPUT TYPE="hidden" name="txtContequipoAuditor" value="0">
+	
+	</td>
+   </tr>
+   
+   <tr>
+    <td class="tit">Enero</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes01" id="mes01" value="S"/></td>
+    <td class="tit">Febrero</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes02" id="mes02" value="S"/></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Marzo</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes03" id="mes03" value="S"/></td>
+    <td class="tit">Abril</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes04" id="mes04" value="S"/></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Mayo</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes05" id="mes05" value="S"/></td>
+    <td class="tit">Junio</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes06" id="mes06" value="S"/></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Julio</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes07" id="mes07" value="S"/></td>
+    <td class="tit">Agosto</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes08" id="mes08" value="S"/></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Septiembre</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes09" id="mes09" value="S"/></td>
+    <td class="tit">Octubre</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes10" id="mes10" value="S"/></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Noviembre</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes11" id="mes11" value="S"/></td>
+    <td class="tit">Diciembre</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes12" id="mes12" value="S"/></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="fechaInsercion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="usuarioInsercion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="fechaModificacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="usuarioModificacion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+     <tr>
+      <td class="dat2" colspan="4">
+      <input type="submit" class="BOT" value="Grabar"   id="btnGrabar" onclick="Grabar();">
+      <input type="submit" class="BOT" value="Eliminar" id="btnEliminar" onclick="Eliminar();">
+      <input type="submit" class="BOT" value="Salir"   id="btnSalir" onclick="Salir();">
+     </td>
+    </tr>
+   </table>
+  </div>
+  <div id="divEdicion">
+  <br>
+    <table width="100%" class="tabf" summary="">
+     <tr>
+      <td colspan="4" class="ca">Edici&oacute;n</td>
+     </tr>
+     <tr>
+      <td class="tit">Ciclo</td>
+      <td class="dat"><span id="cicloEd">&nbsp;</span></td>
+      <td class="tit">C&oacute;digo Proceso</td>
+      <td class="dat"><span id="codigoProcesoEd">&nbsp;</span></td>
+     </tr>
+	 <tr>
+      <td class="tit">Titulo</td>
+      <td class="dat" colspan="3"><span id="tituloAuditoriaEd">&nbsp;</span></td>
+     </tr>
+	 
+	 <tr>
+      <td class="tit">Objetivos Especificos</td>
+      <td class="dat" colspan="3"><span id="objetivosEspecificosEd">&nbsp;</span></td>
+     </tr>
+	 
+	 <tr>
+      <td class="tit">Alcance</td>
+      <td class="dat" colspan="3"><span id="alcanceEd">&nbsp;</span></td>
+     </tr>
+	 
+
+     <tr>
+      <td class="tit">Tipo Auditoria</td>
+      <td class="dat"><span id="tipoAuditoriaEd">&nbsp;</span></td>
+      <td class="tit">Coordinador Auditoría</td>
+      <td class="dat"><span id="coordinadorAuditoríaEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Equipo Auditor</td>
+      <td class="dat"><span id="equipoAuditorEd">&nbsp;</span></td>
+	  <td class="tit">Area Responsable</td>
+      <td class="dat"><span id="areaResponsableEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+	  <td class="tit">Enero</td>
+      <td class="dat"><span id="mes01Ed">&nbsp;</span></td>
+      <td class="tit">Febrero</td>
+      <td class="dat"><span id="mes02Ed">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+	 <td class="tit">Marzo</td>
+      <td class="dat"><span id="mes03Ed">&nbsp;</span></td>
+      <td class="tit">Abril</td>
+      <td class="dat"><span id="mes04Ed">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+	 <td class="tit">Mayo</td>
+      <td class="dat"><span id="mes05Ed">&nbsp;</span></td>
+      <td class="tit">Junio</td>
+      <td class="dat"><span id="mes06Ed">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+	 <td class="tit">Julio</td>
+      <td class="dat"><span id="mes07Ed">&nbsp;</span></td>
+      <td class="tit">Agosto</td>
+      <td class="dat"><span id="mes08Ed">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+	 <td class="tit">Septiembre</td>
+      <td class="dat"><span id="mes09Ed">&nbsp;</span></td>
+      <td class="tit">Octubre</td>
+      <td class="dat"><span id="mes10Ed">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+	 <td class="tit">Noviembre</td>
+      <td class="dat"><span id="mes11Ed">&nbsp;</span></td>
+      <td class="tit">Diciembre</td>
+      <td class="dat"><span id="mes12Ed">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Inserci&oacute;n</td>
+      <td class="dat"><span id="fechaInsercionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Inserci&oacute;n</td>
+      <td class="dat"><span id="usuarioInsercionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Modificaci&oacute;n</td>
+      <td class="dat"><span id="fechaModificacionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Modificaci&oacute;n</td>
+      <td class="dat"><span id="usuarioModificacionEd">&nbsp;</span></td>
+     </tr>
+
+      <tr>
+       <td class="dat2" colspan="4">
+       <input type="hidden" name="ciclo" id="cicloKey">
+       <input type="hidden" name="codigoProceso" id="codigoProcesoKey">
+       <input type="hidden" name="codigoPadre" id="codigoPadre">
+       <input type="hidden" name="asociadoA" id="asociadoA" value="P">
+       <input type="submit" class="BOT" value="Grupo Auditor"   id="btnGrupo" onClick="GrupoAuditor();">
+       <input type="submit" class="BOT" value="Preguntas"   id="btnPreguntas" onClick="Preguntas();">
+       <input type="submit" class="BOT" value="Editar"   id="btnModificar" onClick="Modificar();">
+      </td>
+   </tr>
+  </table>
+ </div>
+  </FORM>
+ </DIV>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

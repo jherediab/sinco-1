@@ -1,0 +1,656 @@
+<html>
+ <head>
+ <title>Metas</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+ 
+ 
+ <SCRIPT TYPE="text/javascript"  language="JavaScript">
+ function add_area(codigo,nombre) {
+    this.codigo=codigo;
+    this.nombre=nombre;
+ }
+
+</SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript"  id="responsables">
+</SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript"  id="scriptAreas">
+</SCRIPT>
+ <SCRIPT TYPE="text/javascript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ var nuevaOperacion = "";
+ /*function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }*/ 
+  function Cargar(){
+  var i=0;
+  try {
+		for (i=0; i<mResponsables.length; i++){
+		 var elItem=mResponsables[i];
+		 InsertarArea('tablaResponsables','',elItem.codigo);
+		}
+   }
+   catch(e){
+   }
+}
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('idMeta'),"Id Meta","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoMeta'),"Codigo Meta","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   rta=validar($('nombreMeta'),"Meta","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar($('tipoMeta'),"Tipo Meta","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+  rta=validar($('tipoUnidad'),"Tipo Unidad","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoUnidad'),"Unidad","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('cantidad'),"Cantidad","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('lineaBase'),"Linea Base","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   } 
+   
+   
+   /*	if(document.getElementById("tblAnios").rows.length > 1){	
+		for(i=1;i<document.getElementById("tblAnios").rows.length;i++){				
+				if(document.getElementById("tblAnios").rows[i].cells[2].children[0].value ==""){
+					alert("Complete el valor de todos los a\u00f1os ");
+					Mostrar();
+					return false;
+				}
+			
+		}
+	
+	}*/
+   
+   
+   rta=validar($('indicador'),"Indicador","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   if($('_operacion').value != "E"){
+	nuevaOperacion = $('_operacion').value;
+   }
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+    if($('_operacion').value=="E"){
+		$('_operacion').value = nuevaOperacion;
+   }
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+  
+  function PreparaVolver2(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="V";
+   document.ff.action="PdeUnidadNivel.po";
+   return true;
+ }
+ 
+ function PreparaVolver(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="V";
+   document.ff.action="PdeObjetivosEspecificos.po";
+   return true;
+ }
+ 
+ 
+   function CambiarVolver(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="L";
+   document.ff.action="PdeMetas.po";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+ 
+ function cargarUnidades(GrupoUnidad, codigoUnidad){
+	var url='ConsultasAjaxOld.po?_operacion=buscarUnidades&codigo_grupo='+GrupoUnidad;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+        llenarComboBlanco(document.getElementById(codigoUnidad), transport.responseXML.getElementsByTagName('unidad'),'codigo_unidad','nombre_unidad');
+		},     
+        onFailure: function() {
+        alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    } );  
+ }
+ 
+ function mostrarUnidades(unidad){
+	document.getElementById("nomUnidad").innerHTML = unidad.innerHTML;
+	document.getElementById("nomUnidad2").innerHTML = unidad.innerHTML;
+ }
+ 
+
+ 
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" class="tabw" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<div class="container">
+ <FORM name="ff" ACTION="PdeMetas.po" METHOD="post" onsubmit="return Salvar()">
+  <input type="hidden" name="_operacion" id="_operacion" value="X">
+
+ <input type="hidden" name="idUnidadNivel" id="idUnidadNivelHidden">
+ <input type="hidden" name="idNivel" id="idNivelHidden">
+ <input type="hidden" name="idObjetivoEspecifico" id="idObjetivoEspecificoHidden">
+
+  <table   class="tabf" summary="" border="0">
+   <tr>
+ 	  <td class="dat"><span id="nombrePlan">&nbsp;</span></td>
+    <td class="datc">
+     <label id="labelNombre" name="labelNombre" align="center"></label>
+    </td>
+ 	  <td class="dat2">
+       <input type="submit" class="BOB"  value= "Regresar" id="btnVolver"  onClick="PreparaVolver();">
+       <input type="submit" class="BOB"  value= "Consultar" id="btnConsultar"  onClick="PreparaConsulta();">
+       <input type="submit" class="BOB"  value= "Nuevo" id="btnCrear" onClick="Nuevo();">
+       <input type="Button" class="BOB"  value= "Ayuda" id="btnAyuda" onClick="show_help('PdeMetas');">
+    </td>
+   </tr>
+   <tr>
+    <td class="dat" colspan="3"><span id="nombreEntidad">&nbsp;</span></td> 
+   </tr>
+   <tr>
+    <td class="dat" colspan="3"><span id="nombreNivel">&nbsp;</span></td> 
+   </tr>
+   <tr>
+    <td class="dat" colspan="3"><span id="objetivoGeneralNivel">&nbsp;</span></td> 
+   </tr>
+   <tr id="objEspecificoRefe">
+    <td class="dat" colspan="3"><span id="objetivoEspecificoNivel">&nbsp;</span></td> 
+   </tr>
+  </table>
+  <div id="divConsulta">
+  <br>
+   <table class="tabf" summary="" border="0">
+    <tr>
+      <td colspan="4" class="ca">CONSULTA</td>
+    </tr>
+      <tr>
+       <td class="dat2" colspan="4">
+        <input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+       </td>
+      </tr>
+      </table>
+     </div>
+  <div id="divResultados">
+   <br>
+   <table summary=""  class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2">C&oacute;digo Meta</th>
+        <th class="cf1">Meta</th>
+		<th class="cf2">Unidad</th>
+        <th class="cf1">Cantidad</th>
+        <th class="cf2">Linea Base</th>
+     </tr>
+    </thead>
+   <tbody id="detalle">
+   </tbody>
+   <tfoot>
+    <tr>
+     <td  class="PIE" colspan="5">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+    </tr>
+   </tfoot>
+  </table>
+ </div>
+ <div id="divCreacionRegistro">
+  <br>
+  <table  class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td colspan="4" class="ca">Creaci&oacute;n / Modificaci&oacute;n</td>
+   </tr>
+   <tr>
+    <td class="tit">Id Registro</td>
+    <td class="dat" colspan="3"><INPUT TYPE="Text" class="INP" NAME="idMeta" id="idMeta" maxlength="5" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+   
+   <tr>
+    <td class="tit">C&oacute;digo Meta</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="codigoMeta" id="codigoMeta" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Meta</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="nombreMeta" id="nombreMeta" maxlength="200" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+   
+   
+   <tr>
+    <td class="tit">Tipo Meta</td>
+    <td class="dat" colspan="3"> <SELECT NAME="tipoMeta" class="INP" id="tipoMeta" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   </tr>
+   
+   <tr>
+    <td class="tit">Tipo Unidad</td>
+    <td class="dat"> <SELECT NAME="tipoUnidad" class="INP" id="tipoUnidad" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cargarUnidades(this.value, 'codigoUnidad')"></SELECT></td>
+    <td class="tit">Unidad</td>
+    <td class="dat"> <SELECT NAME="codigoUnidad" class="INP" id="codigoUnidad" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="mostrarUnidades(this.options[this.selectedIndex])"></SELECT><a href="http://190.14.255.23:8080/sinco/WelcomeLdap.po" target="_blank">&nbsp;&nbsp;&nbsp;Ir a la configuración de Unidades</a></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Cantidad</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="cantidad" id="cantidad" maxlength="12" size="20" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"><span>&nbsp;&nbsp;</span><span id="nomUnidad">&nbsp;</span></td>
+    <td class="tit">Linea Base</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="lineaBase" id="lineaBase" maxlength="15" size="20" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"><span>&nbsp;&nbsp;</span><span id="nomUnidad2">&nbsp;</span></td>
+   </tr>
+   
+   <tr id="trProceso">
+    <td class="tit">Proceso</td>
+    <td class="dat" colspan="3"> <SELECT NAME="proceso" class="INP" id="proceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   </tr>
+   
+ 
+   
+    <tr id="trResponsable">
+        <td class="tit">Responsable</td>
+            <td class="dat" colspan="3">
+                <table summary=""  border="0" id="tablaResponsables">
+                   <tr>
+                      <th class="cf2" align="center">C&oacute;digo Cargo</th>
+                      <th class="cf1" align="center">Eliminar</th>
+                   </tr>
+                 </table>
+                 <input name="filtroResp" type="input" maxlength="15" size="10"> 
+                 <input name="AgregarLinea" TYPE="button" class="BOT" value="Agregar Responsable" onclick="InsertarArea('tablaResponsables',document.ff.filtroResp.value,0);"> 
+        </td>
+     </tr>
+   
+   
+   	<tr>
+	   <td class="tit" colspan="4">
+		<table summary="" border="0" cellpadding="1" cellspacing="1" class="tabf" id="tblAnios">
+		 <caption class="ca">A&ntilde;os del Plan de Desarrollo</caption>
+		  <thead>
+		   <tr>
+		   	<th rowspan="4" id="anio" class="cf1">A&ntilde;o</th>
+			<th id="trimestre" class="cf1">Trimestre</th>
+			<th id="programado" class="cf2">Programado</th>
+			<th id="ejecutado" class="cf1">Ejecutado</th>
+			<th id="porcentaje" class="cf2">%</th>
+		   </tr>   
+		  </thead>
+		<tbody id="idDetalleAnio">
+		 </tbody>
+		  </table>
+	   </td>
+	</tr>
+	
+	
+   <tr>
+    <td class="tit">Indicador</td>
+    <td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="indicador" id="indicador" maxlength="200" size="150"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="fechaInsercion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="fechaModificacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+     <tr>
+      <td class="dat2" colspan="4">
+      <input type="submit" class="BOT" value="Grabar"   id="btnGrabar" onclick="Grabar();">
+      <input type="submit" class="BOT" value="Eliminar" id="btnEliminar" onclick="Eliminar();">
+      <input type="submit" class="BOT" value="Salir"   id="btnSalir" onclick="Salir();">
+     </td>
+    </tr>
+   </table>
+  </div>
+  <div id="divEdicion">
+  <br>
+    <table class="tabf" summary="">
+     <tr>
+      <td colspan="4" class="ca">Edici&oacute;n</td>
+     </tr>
+	 
+     <tr>
+      <td class="tit">C&oacute;digo Meta</td>
+      <td class="dat" colspan="3"><span id="codigoMetaEd">&nbsp;</span></td>
+     </tr>
+	 
+	 <tr>
+	  <td class="tit">Nombre Meta</td>
+      <td class="dat" colspan="3"><span id="nombreMetaEd">&nbsp;</span></td>	
+	 </tr>
+	 
+	 <tr>
+	  <td class="tit">Tipo Meta</td>
+      <td class="dat" colspan="3"><span id="tipoMetaEd">&nbsp;</span></td>	
+	 </tr>
+	 
+     <tr>
+      <td class="tit">Unidad</td>
+      <td class="dat" colspan="3"><span id="codigoUnidadEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Cantidad</td>
+      <td class="dat"><span id="cantidadEd">&nbsp;</span></td>
+      <td class="tit">Linea Base</td>
+      <td class="dat"><span id="lineaBaseEd">&nbsp;</span></td>
+     </tr>
+	 
+	 <tr id="trProcesoEd">
+	  <td class="tit">Proceso</td>
+      <td class="dat" colspan="3"><span id="procesoEd">&nbsp;</span></td>	
+	 </tr>
+	 
+	 <tr>
+	  <td class="tit">Indicador</td>
+      <td class="dat" colspan="3"><span id="indicadorEd">&nbsp;</span></td>	
+	 </tr>
+	 
+	<tr>
+	   <td class="tit" colspan="4">
+		<table summary="" border="0" cellpadding="1" cellspacing="1" class="tabf" id="tblAniosEd">
+		 <caption class="ca">A&ntilde;os del Plan de Desarrollo</caption>
+		  <thead>
+		   <tr>
+			<th id="anioEd" class="cf1">A&ntilde;o</th>
+			<th id="trimestreEd" class="cf2">Trimestre</th>
+			<th id="programadoEd" class="cf1">Programado</th>
+			<th id="ejecutadoEd" class="cf2">Ejecutado</th>
+			<th id="porcentajeEd" class="cf1">%</th>
+		   </tr>   
+		  </thead>
+		  <tbody id="detalleEd">  
+		  </tbody>	  
+		  </table>
+	   </td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Inserci&oacute;n</td>
+      <td class="dat"><span id="fechaInsercionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Inserci&oacute;n</td>
+      <td class="dat"><span id="usuarioInsercionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Modificaci&oacute;n</td>
+      <td class="dat"><span id="fechaModificacionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Modificaci&oacute;n</td>
+      <td class="dat"><span id="usuarioModificacionEd">&nbsp;</span></td>
+     </tr>
+
+      <tr>
+       <td class="dat2" colspan="4">
+ 	        <input type="hidden" name="idMeta" id="idMetaKey">
+ 	        <input type="hidden" name="idUnidadNivel" id="idUnidadNivelKey">
+			 <input type="hidden" name="idNivel" id="idNivelKey">
+ 	        <input type="hidden" name="idObjetivoEspecifico" id="idObjetivoEspecificoKey">
+ 	        <input type="hidden" name="codigoUnidad" id="codigoUnidadKey">
+       <input type="submit" class="BOT" value="Editar"   id="btnModificar" onClick="Modificar();">
+    </td>
+   </tr>
+  </table>
+ </div>
+  </FORM>
+ </DIV>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+	
+<script TYPE="text/javascript" language="JavaScript">
+	var iFilaLineas=0;
+	function InsertarArea(miTabla,filtro,codigoArea){
+
+	   //console.log("paso 1. subproceso="+$('subproceso').value);	
+
+		var Tabla = document.getElementById(miTabla);
+
+		var tr = document.createElement("tr");
+		tr.id = "FilaLineas" + iFilaLineas;
+		
+		td = document.createElement("td");
+		select = document.createElement("select");
+		select.id = "areaAsignada";
+		if (miTabla=='tablaResponsables') {
+		   select.name = "ar_"+iFilaLineas;
+		}
+		else {
+		   select.name = "aa_"+iFilaLineas;
+		}
+		//select.disabled = "true";
+		select.numero = iFilaLineas;
+		select.size = "1";
+		select.className = "INP";
+		var j=0;
+		
+		var optionObj = new Option(" ",0);
+		select.options[j] = optionObj;    
+		
+		var i=0;
+		for (j=0; j<mAreas.length; j++){
+		   var elItem=mAreas[i];
+		   var bValido=1;
+		   if (filtro.length>0){
+		   
+			  if (elItem.nombre.substring(0,filtro.length).toLowerCase()!=filtro.toLowerCase()) {
+				  bValido=0;
+			   }
+		   }
+		   if (bValido==1){
+			  var option = document.createElement("option");
+			  
+			  option.setAttribute("value",elItem.codigo);
+			  option.appendChild(document.createTextNode(elItem.nombre));
+			  
+			  if (codigoArea==elItem.codigo){
+				 option.setAttribute("selected","true");
+			  }       
+			  select.appendChild(option);
+		   }
+		   i++;
+		}
+		
+		td.appendChild(select);
+		tr.appendChild(td);
+		
+		// EliminarLinea
+		td = document.createElement("td");
+		input = document.createElement("input");
+		input.id = "FilaLineas"+ iFilaLineas;
+		input.idfila = "FilaLineas" + iFilaLineas;
+		input.name = "EliminarLinea";
+		input.type = "button";
+		input.value = "Eliminar";
+		input.className="submitLink";
+		if (miTabla=='tablaResponsables') {
+		   input.onclick = BorrarResponsables;
+		}
+		else {
+		   input.onclick = BorrarArea;
+		}
+		td.appendChild(input);
+		tr.appendChild(td);
+
+		Tabla.tBodies[0].appendChild(tr);
+		iFilaLineas=iFilaLineas+1;
+		return;
+	}
+
+	function BorrarResponsables(e){
+		var Tabla = document.getElementById("tablaResponsables");
+		
+		var obj;
+		if (Rutinas.Browser.IE){     
+			obj=window.event.srcElement;
+		}       
+		else {
+		   obj=e.target;
+		}
+		Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		return;
+	}
+
+	function BorrarArea(e){
+		var Tabla = document.getElementById("tablaLineas");
+		
+		var obj;
+		if (Rutinas.Browser.IE){     
+			obj=window.event.srcElement;
+		}       
+		else {
+		   obj=e.target;
+		}
+		Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		return;
+	}
+
+
+</SCRIPT>
+ </body>
+</html>

@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>Solicitudes por Calificar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<script type="text/javascript" src="media/tablekit.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<script type="text/javascript"language="JavaScript">
+
+ function Salvar(){
+   Ocultar();
+
+   return true;
+ }
+ 
+ function CambioCalificacion(){       
+	   var estado=$('confiabilidad').value;
+       $$('select.cal').each (
+	   function (elem) {	   
+	      elem.value=estado;
+	   }
+	  ); 
+ }
+ </script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+<br>
+<div class="container">
+ 
+  <div class="ca">SOLICITUDES POR EVALUAR</div>
+  <br>
+  
+	<form name="ff" action="Calificar.po" method="post" onsubmit="return Salvar()">
+ 
+    <table summary="" class="tabf sortable resizable">
+     <thead>
+     <tr> 
+       <th class="cf1">Nro Solicitud</th>
+       <th class="cf2">Servicio</th>
+       <th class="cf1">Area Proveedora</th>
+       <th class="cf2">Proveedor</th>
+	   <th class="cf1">Observaci&oacute;n</th>
+	   <th class="cf2">Fecha Estimada terminaci&oacute;n</th>
+	   <th class="cf1">Fecha Real de terminaci&oacute;n</th>
+	   <th class="cf2">Nivel Escalamiento</th>
+	   <th class="cf1 nosort">Percepci&oacute;n del Servicio <SELECT class="INP" NAME="confiabilidad" id= "confiabilidad" onchange="CambioCalificacion();"> </select></th>
+     </tr>
+     </thead>
+     <tbody id="solicitudes" >
+     </tbody>
+     <tfoot>
+         <tr> 
+           <td  class="PIE" colspan="9">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+        </tr>
+         <tr> 
+           <td  class="TRASPARENTE" colspan="9">
+		   <input type="hidden" name="_operacion" value="MUL">
+		   <input type="submit" class="BOT"  value= "Calificar Solicitudes Seleccionadas"></td>
+        </tr>
+
+     </tfoot>
+    </table>
+   </div>
+	
+</form>
+   <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+   </script>
+    
+
+</body>
+</html>
+

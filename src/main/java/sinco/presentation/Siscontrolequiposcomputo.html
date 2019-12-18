@@ -1,0 +1,835 @@
+<html>
+ <head>
+ <title>HOJAS COMPUTO EQUIPOS</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1"/>
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+ <SCRIPT TYPE="text/javascript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('nHojaControl'),"N Hoja Control","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('fechaInventario'),"Fecha Inventario","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('marca'),"Marca","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('serial'),"Serial","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('nInventarioPc'),"N Inventario Pc","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('ubicacion'),"Ubicación","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('estadoPc'),"Estado Pc","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('marcaCpu'),"Marca Cpu","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('serialCpu'),"Serial Cpu","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('nInventarioCpu'),"N Inventario Cpu","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('memoriaRam'),"Memoria Ram","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('marcaDiscoDuro'),"Marca Disco Duro","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('serialDiscoDuro'),"Serial Disco Duro","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('procesador'),"Procesador","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('marcaBoard'),"Marca Board","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('serialBoard'),"Serial Board","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('marcaTeclado'),"Marca Teclado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('nInventarioT'),"N Inventario T","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('estadoT'),"Estado T","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('marcaMouse'),"Marca Mouse","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('nInventario'),"N Inventario","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('estadoM'),"Estado M","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('conectorMause'),"Conector Mause","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('conectorTeclado'),"Conector Teclado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('marcaUnidadCd'),"Marca Unidad Cd","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('serialUnidadCd'),"Serial Unidad Cd","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('marcaFuentePoder'),"Marca Fuente Poder","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('targetaRed'),"Targeta Red","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('sistemaOperativo'),"Sistema Operativo","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('particionDiscoDuro'),"Partición Disco Duro","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('microsoftOffice'),"Microsoft Office","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('versionOffice'),"Versión Office","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('navegadores'),"Navegadores","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('adobeReader'),"Adobe Reader","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('versionAdobe'),"Versión Adobe","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('antivirus'),"Antivirus","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('deepFreeze'),"Deep Freeze","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('versionDeepFreeze'),"Versión Deep Freeze","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('otrosSoftware'),"Otros Software","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('versionSoftware'),"Versión Software","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('tipoMatenimiento'),"Tipo Matenimiento","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('fechaRealizado'),"Fecha Realizado","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('realizo'),"Realizo","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('recibio'),"Recibio","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('descripcion'),"Descripción","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('observaciones'),"Observaciónes","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="X";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" class="tabw" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<div class="container">
+ <FORM name="ff" ACTION="Siscontrolequiposcomputo.po" METHOD="post" onsubmit="return Salvar()">
+  <input type="hidden" name="_operacion" id="_operacion" value="X">
+
+  <table   class="tabf" summary="" border="0">
+   <tr>
+ 	  <td class="dat">HOJAS COMPUTO EQUIPOS</td>
+    <td class="datc">
+     <label id="labelNombre" name="labelNombre" align="center"></label>
+    </td>
+ 	  <td class="dat2">
+       <input type="submit" class="BOB"  value= "Consultar" id="btnConsultar"  onClick="PreparaConsulta();">
+       <input type="submit" class="BOB"  value= "Nuevo" id="btnCrear" onClick="Nuevo();">
+       <input type="Button" class="BOB"  value= "Ayuda" id="btnAyuda" onClick="show_help('Siscontrolequiposcomputo');">
+    </td>
+   </tr>
+  </table>
+  <div id="divConsulta">
+  <br>
+   <table class="tabf" summary="" border="0">
+    <tr>
+      <td colspan="4" class="ca">CONSULTA</td>
+    </tr>
+      <tr>
+       <td class="dat2" colspan="4">
+        <input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+       </td>
+      </tr>
+      </table>
+     </div>
+  <div id="divResultados">
+   <br>
+   <table summary=""  class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2">N Hoja Control</th>
+        <th class="cf1">Fecha Inventario</th>
+        <th class="cf2">Marca</th>
+        <th class="cf1">Serial</th>
+        <th class="cf2">N Inventario Pc</th>
+        <th class="cf1">Ubicaci&oacute;n</th>
+        <th class="cf2">Estado Pc</th>
+        <th class="cf1">Marca Cpu</th>
+        <th class="cf2">Serial Cpu</th>
+        <th class="cf1">N Inventario Cpu</th>
+        <th class="cf2">Memoria Ram</th>
+        <th class="cf1">Marca Disco Duro</th>
+        <th class="cf2">Serial Disco Duro</th>
+        <th class="cf1">Procesador</th>
+        <th class="cf2">Marca Board</th>
+        <th class="cf1">Serial Board</th>
+        <th class="cf2">Marca Teclado</th>
+        <th class="cf1">N Inventario T</th>
+        <th class="cf2">Estado T</th>
+        <th class="cf1">Marca Mouse</th>
+        <th class="cf2">N Inventario</th>
+        <th class="cf1">Estado M</th>
+        <th class="cf2">Conector Mause</th>
+        <th class="cf1">Conector Teclado</th>
+        <th class="cf2">Marca Unidad Cd</th>
+        <th class="cf1">Serial Unidad Cd</th>
+        <th class="cf2">Marca Fuente Poder</th>
+        <th class="cf1">Targeta Red</th>
+        <th class="cf2">Sistema Operativo</th>
+        <th class="cf1">Partici&oacute;n Disco Duro</th>
+        <th class="cf2">Microsoft Office</th>
+        <th class="cf1">Versi&oacute;n Office</th>
+        <th class="cf2">Navegadores</th>
+        <th class="cf1">Adobe Reader</th>
+        <th class="cf2">Versi&oacute;n Adobe</th>
+        <th class="cf1">Antivirus</th>
+        <th class="cf2">Deep Freeze</th>
+        <th class="cf1">Versi&oacute;n Deep Freeze</th>
+        <th class="cf2">Otros Software</th>
+        <th class="cf1">Versi&oacute;n Software</th>
+        <th class="cf2">Tipo Matenimiento</th>
+        <th class="cf1">Fecha Realizado</th>
+        <th class="cf2">Realizo</th>
+        <th class="cf1">Recibio</th>
+        <th class="cf2">Descripci&oacute;n</th>
+        <th class="cf1">Observaci&oacute;nes</th>
+     </tr>
+    </thead>
+   <tbody id="detalle">
+   </tbody>
+   <tfoot>
+    <tr>
+     <td  class="PIE" colspan="46">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+    </tr>
+   </tfoot>
+  </table>
+ </div>
+ <div id="divCreacionRegistro">
+  <br>
+  <table  class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td colspan="4" class="ca">Creaci&oacute;n / Modificaci&oacute;n</td>
+   </tr>
+   <tr>
+    <td class="tit">N Hoja Control</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nHojaControl" id="nHojaControl" maxlength="4" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Fecha Inventario</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="fechaInventario" id="fechaInventario" maxlength="20" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="button" id="bfechaInventario" value="...">
+    </td>
+   </tr>
+
+   <tr>
+    <td class="tit">Marca</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="marca" id="marca" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Serial</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="serial" id="serial" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">N Inventario Pc</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nInventarioPc" id="nInventarioPc" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Ubicaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="ubicacion" id="ubicacion" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Estado Pc</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="estadoPc" id="estadoPc" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Marca Cpu</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="marcaCpu" id="marcaCpu" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Serial Cpu</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="serialCpu" id="serialCpu" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">N Inventario Cpu</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nInventarioCpu" id="nInventarioCpu" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Memoria Ram</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="memoriaRam" id="memoriaRam" maxlength="30" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Marca Disco Duro</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="marcaDiscoDuro" id="marcaDiscoDuro" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Serial Disco Duro</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="serialDiscoDuro" id="serialDiscoDuro" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Procesador</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="procesador" id="procesador" maxlength="30" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Marca Board</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="marcaBoard" id="marcaBoard" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Serial Board</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="serialBoard" id="serialBoard" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Marca Teclado</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="marcaTeclado" id="marcaTeclado" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">N Inventario T</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nInventarioT" id="nInventarioT" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Estado T</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="estadoT" id="estadoT" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Marca Mouse</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="marcaMouse" id="marcaMouse" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">N Inventario</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nInventario" id="nInventario" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Estado M</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="estadoM" id="estadoM" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Conector Mause</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="conectorMause" id="conectorMause" maxlength="5" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Conector Teclado</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="conectorTeclado" id="conectorTeclado" maxlength="5" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Marca Unidad Cd</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="marcaUnidadCd" id="marcaUnidadCd" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Serial Unidad Cd</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="serialUnidadCd" id="serialUnidadCd" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Marca Fuente Poder</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="marcaFuentePoder" id="marcaFuentePoder" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Targeta Red</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="targetaRed" id="targetaRed" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Sistema Operativo</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="sistemaOperativo" id="sistemaOperativo" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Partici&oacute;n Disco Duro</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="particionDiscoDuro" id="particionDiscoDuro" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Microsoft Office</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="microsoftOffice" id="microsoftOffice" maxlength="2" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Versi&oacute;n Office</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="versionOffice" id="versionOffice" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Navegadores</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="navegadores" id="navegadores" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Adobe Reader</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="adobeReader" id="adobeReader" maxlength="2" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Versi&oacute;n Adobe</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="versionAdobe" id="versionAdobe" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Antivirus</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="antivirus" id="antivirus" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Deep Freeze</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="deepFreeze" id="deepFreeze" maxlength="2" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Versi&oacute;n Deep Freeze</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="versionDeepFreeze" id="versionDeepFreeze" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Otros Software</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="otrosSoftware" id="otrosSoftware" maxlength="30" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Versi&oacute;n Software</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="versionSoftware" id="versionSoftware" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Tipo Matenimiento</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="tipoMatenimiento" id="tipoMatenimiento" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Fecha Realizado</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="fechaRealizado" id="fechaRealizado" maxlength="20" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="button" id="bfechaRealizado" value="...">
+    </td>
+   </tr>
+
+   <tr>
+    <td class="tit">Realizo</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="realizo" id="realizo" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Recibio</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="recibio" id="recibio" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Descripci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="descripcion" id="descripcion" maxlength="100" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Observaci&oacute;nes</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="observaciones" id="observaciones" maxlength="100" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+     <tr>
+      <td class="dat2" colspan="4">
+      <input type="submit" class="BOT" value="Grabar"   id="btnGrabar" onclick="Grabar();">
+      <input type="submit" class="BOT" value="Eliminar" id="btnEliminar" onclick="Eliminar();">
+      <input type="submit" class="BOT" value="Salir"   id="btnSalir" onclick="Salir();">
+     </td>
+    </tr>
+   </table>
+  </div>
+  <div id="divEdicion">
+  <br>
+    <table class="tabf" summary="">
+     <tr>
+      <td colspan="4" class="ca">Edici&oacute;n</td>
+     </tr>
+     <tr>
+      <td class="tit">N Hoja Control</td>
+      <td class="dat"><span id="nHojaControlEd">&nbsp;</span></td>
+      <td class="tit">Fecha Inventario</td>
+      <td class="dat"><span id="fechaInventarioEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Marca</td>
+      <td class="dat"><span id="marcaEd">&nbsp;</span></td>
+      <td class="tit">Serial</td>
+      <td class="dat"><span id="serialEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">N Inventario Pc</td>
+      <td class="dat"><span id="nInventarioPcEd">&nbsp;</span></td>
+      <td class="tit">Ubicaci&oacute;n</td>
+      <td class="dat"><span id="ubicacionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Estado Pc</td>
+      <td class="dat"><span id="estadoPcEd">&nbsp;</span></td>
+      <td class="tit">Marca Cpu</td>
+      <td class="dat"><span id="marcaCpuEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Serial Cpu</td>
+      <td class="dat"><span id="serialCpuEd">&nbsp;</span></td>
+      <td class="tit">N Inventario Cpu</td>
+      <td class="dat"><span id="nInventarioCpuEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Memoria Ram</td>
+      <td class="dat"><span id="memoriaRamEd">&nbsp;</span></td>
+      <td class="tit">Marca Disco Duro</td>
+      <td class="dat"><span id="marcaDiscoDuroEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Serial Disco Duro</td>
+      <td class="dat"><span id="serialDiscoDuroEd">&nbsp;</span></td>
+      <td class="tit">Procesador</td>
+      <td class="dat"><span id="procesadorEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Marca Board</td>
+      <td class="dat"><span id="marcaBoardEd">&nbsp;</span></td>
+      <td class="tit">Serial Board</td>
+      <td class="dat"><span id="serialBoardEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Marca Teclado</td>
+      <td class="dat"><span id="marcaTecladoEd">&nbsp;</span></td>
+      <td class="tit">N Inventario T</td>
+      <td class="dat"><span id="nInventarioTEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Estado T</td>
+      <td class="dat"><span id="estadoTEd">&nbsp;</span></td>
+      <td class="tit">Marca Mouse</td>
+      <td class="dat"><span id="marcaMouseEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">N Inventario</td>
+      <td class="dat"><span id="nInventarioEd">&nbsp;</span></td>
+      <td class="tit">Estado M</td>
+      <td class="dat"><span id="estadoMEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Conector Mause</td>
+      <td class="dat"><span id="conectorMauseEd">&nbsp;</span></td>
+      <td class="tit">Conector Teclado</td>
+      <td class="dat"><span id="conectorTecladoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Marca Unidad Cd</td>
+      <td class="dat"><span id="marcaUnidadCdEd">&nbsp;</span></td>
+      <td class="tit">Serial Unidad Cd</td>
+      <td class="dat"><span id="serialUnidadCdEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Marca Fuente Poder</td>
+      <td class="dat"><span id="marcaFuentePoderEd">&nbsp;</span></td>
+      <td class="tit">Targeta Red</td>
+      <td class="dat"><span id="targetaRedEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Sistema Operativo</td>
+      <td class="dat"><span id="sistemaOperativoEd">&nbsp;</span></td>
+      <td class="tit">Partici&oacute;n Disco Duro</td>
+      <td class="dat"><span id="particionDiscoDuroEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Microsoft Office</td>
+      <td class="dat"><span id="microsoftOfficeEd">&nbsp;</span></td>
+      <td class="tit">Versi&oacute;n Office</td>
+      <td class="dat"><span id="versionOfficeEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Navegadores</td>
+      <td class="dat"><span id="navegadoresEd">&nbsp;</span></td>
+      <td class="tit">Adobe Reader</td>
+      <td class="dat"><span id="adobeReaderEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Versi&oacute;n Adobe</td>
+      <td class="dat"><span id="versionAdobeEd">&nbsp;</span></td>
+      <td class="tit">Antivirus</td>
+      <td class="dat"><span id="antivirusEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Deep Freeze</td>
+      <td class="dat"><span id="deepFreezeEd">&nbsp;</span></td>
+      <td class="tit">Versi&oacute;n Deep Freeze</td>
+      <td class="dat"><span id="versionDeepFreezeEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Otros Software</td>
+      <td class="dat"><span id="otrosSoftwareEd">&nbsp;</span></td>
+      <td class="tit">Versi&oacute;n Software</td>
+      <td class="dat"><span id="versionSoftwareEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Tipo Matenimiento</td>
+      <td class="dat"><span id="tipoMatenimientoEd">&nbsp;</span></td>
+      <td class="tit">Fecha Realizado</td>
+      <td class="dat"><span id="fechaRealizadoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Realizo</td>
+      <td class="dat"><span id="realizoEd">&nbsp;</span></td>
+      <td class="tit">Recibio</td>
+      <td class="dat"><span id="recibioEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Descripci&oacute;n</td>
+      <td class="dat"><span id="descripcionEd">&nbsp;</span></td>
+      <td class="tit">Observaci&oacute;nes</td>
+      <td class="dat"><span id="observacionesEd">&nbsp;</span></td>
+     </tr>
+
+      <tr>
+       <td class="dat2" colspan="4">
+ 	        <input type="hidden" name="nHojaControl" id="nHojaControlKey">
+       <input type="submit" class="BOT" value="Editar"   id="btnModificar" onClick="Modificar();">
+    </td>
+   </tr>
+  </table>
+ </div>
+  </FORM>
+ </DIV>
+<script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaInventario',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaInventario'
+      });
+     Calendar.setup({
+       inputField :  'fechaRealizado',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaRealizado'
+      });
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

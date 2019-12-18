@@ -1,0 +1,391 @@
+<html>
+ <head>
+ <title>Bloques de preguntas</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" language="javascript" src="media/fabtabulous.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+ 
+
+ <SCRIPT TYPE="text/javascript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ var iFilasPregunta=1;
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('bloque'),"Bloque","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function PreparaVolver(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="V";
+   document.ff.action="AudProcesosPlanAnual.po";
+   if ($('asociadoAHidden').value!="P"){
+      document.ff.action="AudInformesPlanAnual.po";
+   }
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="X";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+ 
+  function InsertarPregunta(codigoPregunta,nombrePregunta){
+
+	var tabla=document.getElementById('tblDetalles');
+
+	var tr = document.createElement("tr");
+	tr.className="FOS"; 
+   	tr.id = "FilasAreas" + iFilasPregunta;
+
+	if (iFilasPregunta% 2 ==0){
+	 tr.className="ct1";
+	}
+	else{
+	 tr.className="ct2";
+	}
+
+	// codigo
+
+	var td1 = document.createElement("td");
+	td1.appendChild(document.createTextNode(codigoPregunta));
+
+	var td2 = document.createElement("td");
+	td2.appendChild(document.createTextNode(nombrePregunta));
+
+	var input1 = document.createElement("input");
+	input1.setAttribute("type","hidden");	  
+	input1.name = "P_"+codigoPregunta;
+	input1.value=nombrePregunta;
+	td2.appendChild(input1); 
+
+	// EliminarLinea
+	var td4 = document.createElement("td");
+	input = document.createElement("input");
+	input.id = "EliminarLinea";
+	input.idFila = "FilasAreas" + iFilasPregunta;
+	input.name = "EliminarLinea";
+	input.type = "button";
+	input.value = "Eliminar";
+	input.className="BOT";
+	input.onclick = BorrarLinea;
+	td4.appendChild(input);
+
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+	tr.appendChild(td4);	
+
+	tabla.appendChild(tr);
+	iFilasPregunta=codigoPregunta+1;
+	return;
+ } 
+
+
+ function BorrarLinea(e){
+      
+      var obj;
+      if (Rutinas.Browser.IE){
+         obj=window.event.srcElement;
+      }       
+      else {
+        obj=e.target;
+      }
+	  $(obj.idFila).remove();
+      return;
+ }
+
+ 
+ function Agregar(){
+			   
+   rta=validar($('descripcionPregunta'),"Pregunta","ALF",0,"OBL","0","999999999999999");
+   if(!rta){
+      return false;
+   }
+  
+   InsertarPregunta(iFilasPregunta,$('descripcionPregunta').value); 
+   $('descripcionPregunta').value="";   
+ } 
+
+ </SCRIPT>
+ 
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<div class="container">
+ <FORM name="ff" ACTION="AudBloques.po" METHOD="post" onsubmit="return Salvar()">
+  <input type="hidden" name="_operacion" id="_operacion" value="M">
+  <input type="hidden" name="ciclo" id="cicloHidden">
+  <input type="hidden" name="codigoPadre" id="codigoPadreHidden">
+  <input type="hidden" name="asociadoA" id="asociadoAHidden">
+  <input type="hidden" name="codigoInforme" id="codigoInformeKey">
+  <input type="hidden" name="codigoProceso" id="codigoProcesoKey">
+  <table   class="tabf" summary="" width="100%" border="0">
+   <tr>
+ 	  <td class="dat">Bloques de preguntas</td>
+    <td class="datc">
+     <label id="labelNombre" name="labelNombre" align="center"></label>
+    </td>
+ 	  <td class="dat2">
+       <input type="submit" class="BOB"  value= "Regresar" id="btnVolver"  onClick="PreparaVolver();">
+       <input type="submit" class="BOB"  value= "Consultar" id="btnConsultar"  onClick="PreparaConsulta();">
+       <input type="submit" class="BOB"  value= "Nuevo" id="btnCrear" onClick="Nuevo();">
+       <input type="Button" class="BOB"  value= "Ayuda" id="btnAyuda" onClick="show_help('AudBloques');">
+    </td>
+   </tr>
+  </table>
+  <div id="divResultados">
+   <br>
+   <table summary=""  width="100%" class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2">Bloque</th>
+        <th class="cf1">Asociado A</th>
+     </tr>
+    </thead>
+   <tbody id="detalle">
+   </tbody>
+   <tfoot>
+    <tr>
+     <td  class="PIE" colspan="4">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+    </tr>
+   </tfoot>
+  </table>
+ </div>
+ 
+ <div id="divCreacionRegistro">
+  <br>
+  <table width="100%" class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td colspan="4" class="ca" width="98%">Creaci&oacute;n / Modificaci&oacute;n</td>
+   </tr>
+   <tr>
+    <td class="tit">Bloque</td>
+    <td class="dat" colspan="3"><INPUT TYPE="Text" class="INP" NAME="bloque" id="bloque" maxlength="4" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    </tr>
+
+	
+
+   <tr>
+	<td colspan="4" class="tit"> 
+	
+	<ul id="tabs">
+	<li><a  href="#dvCriterios" id="dvCriterios-tab">Criterios Asociados</a></li>
+	<li><a  href="#dvPreguntas" id="dvPreguntas-tab">Preguntas</a></li>
+	</ul>
+	
+	<div  class="panel" id="dvCriterios">   	
+	 <table summary="" class="tabf">
+	  <thead>
+	   <tr>
+		 <th width="15%" class="cf2">Incluir Todos&nbsp;<INPUT class="INP" TYPE="checkbox" name= "clickcontrol2" onclick= "fMarcar(this.checked,self.document.ff,'C_')"></th>
+		 <th width="15%" class="cf1">Criterios</th>
+		 <th width="70%" class="cf2">Descripci&oacute;n</th>
+	  </tr>
+	  </thead>
+	  <tbody id="detalleCri">
+	  </tbody>
+	 </table>
+	 </div>
+	 
+   	 <div class="panel" id="dvPreguntas">   
+	 
+
+	  <table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+	   <tr>
+	   <td class="tit">Pregunta</td>
+       <td class="dat">
+	   <INPUT TYPE="Text" class="INP" NAME="descripcionPregunta" id="descripcionPregunta" maxlength="250" size="120"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+	   <td class="dat2">              
+	   <input type="button" class="BOT" value="Agregar Pregunta"   id="btnAgregar" onclick="Agregar();">
+	   </td>
+	  </tr>			  
+	 </table>
+	 <br> 
+
+		  
+	 <table summary="" class="tabf">
+	  <thead>
+	   <tr>
+		 <th class="cf1">Consecutivo</th>
+		 <th class="cf2">Descripci&oacute;n</th>
+		 <th class="cf1">Acci&oacute;n</th>
+	   </tr>
+	   </thead>
+	   <tbody id="tblDetalles">
+	   </tbody>
+	  </table>	 
+	 </div>
+	</td>
+   </tr>
+   
+   
+   <tr>
+    <td class="tit">Fecha Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="fechaInsercion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="usuarioInsercion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="fechaModificacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="usuarioModificacion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+     <tr>
+      <td class="dat2" colspan="4">
+      <input type="submit" class="BOT" value="Grabar"   id="btnGrabar" onclick="Grabar();">
+      <input type="submit" class="BOT" value="Eliminar" id="btnEliminar" onclick="Eliminar();">
+      <input type="submit" class="BOT" value="Salir"   id="btnSalir" onclick="Salir();">
+     </td>
+    </tr>
+   </table>
+  </div>
+  
+  </FORM>
+ </DIV>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+	
+	if ($('_operacion').value=='M'){
+		var _tabs = new Fabtabs('tabs');
+				$$('a.next-tab').each(function(a) {
+					Event.observe(a, 'click', function(e){
+						Event.stop(e);
+						var t = $(this.href.match(/#(\w.+)/)[1]+'-tab');
+						_tabs.show(t);
+						_tabs.menu.without(t).each(_tabs.hide.bind(_tabs));
+					}.bindAsEventListener(a));
+				});
+		Event.observe(window, 'load', init, false);
+			
+		function init() {
+			Lightbox.init();
+		}
+	}	
+	
+    </script>
+	
+ <SCRIPT TYPE="text/javascript"  language="JavaScript"  id="elScript">
+ </SCRIPT>
+	
+ </body>
+</html>

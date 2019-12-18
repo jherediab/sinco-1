@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>Inicio Ciclo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+  if (document.miForma.ciclo.length==0){
+     mostrar_mensaje("No hay ciclos disponibles para realizar la operación"); 
+     Mostrar(); 
+     return false;
+  }
+  
+  if (document.miForma.numeroAreas.value==0){
+     mostrar_mensaje("Esta operación requiere que se asignen algunas areas al ciclo"); 
+     Mostrar(); 
+     return false;
+  }
+   
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+}
+
+function Grabar(){
+   document.miForma._operacion.value="C";
+   return true;
+}
+
+function Recarga(){
+ document.miForma._operacion.value="L";
+ document.miForma.submit();
+ return true;
+}
+</SCRIPT>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){}">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<br> 
+
+ <div class="container">
+
+	<div id="idCreacionRegistro">
+      <FORM name="miForma" ACTION="CalInicioCiclo.po" METHOD="get" onsubmit="return Salvar()">
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="2"><STRONG>Creaci&oacute;n de planes del ciclo</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat"><SELECT NAME="ciclo" class="INP" id="idCiclo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onChange="Recarga()"></SELECT></td>
+        </tr>
+        <tr id="trGrabar">
+          <td class="dat2" colspan="2">
+          <INPUT TYPE="hidden" NAME="_operacion" value="C">
+          <INPUT TYPE="hidden" NAME="numeroAreas" id="numeroAreas" value="0">
+          <INPUT class="BOT"  TYPE="Submit"  VALUE="Abrir o actualizar el ciclo"  id="idBoton" name="miBotonG" onClick="Grabar();" accesskey="G">
+		  </td>
+        </tr>
+
+        <tr>
+           <td class="dat" colspan="2">
+             <table class="tabw" summary=""  border="0" id="detalle">
+               <caption class="CA">Areas Asignadas</caption>
+               <tr>
+               <td class="CF1">Nombre Area</td>
+               <td class="CF2">Plantilla</td>
+               <td class="CF1">Acci&oacute;n</td>
+               </tr>
+               </table>                     
+           </td>
+        </tr>
+        <tr> 
+         <td colspan="2" class="PIE">  
+             Numero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span>
+         </td>         
+       </table>
+      </FORM>
+     </div>
+   </div>
+
+</body>
+</html>

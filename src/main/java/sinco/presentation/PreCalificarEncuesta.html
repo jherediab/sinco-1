@@ -1,0 +1,90 @@
+<html>
+<head>
+<title> Pre calificar </title>
+<link rel="stylesheet" href="media/global.css" type= "text/css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+</head>
+
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+
+ <div class="container">
+
+      <table summary="" border="0" class="tabf">
+        <tr>
+         <td class ="ca" COLSPAN="2"><STRONG>Calificar servicio m&uacute;ltiple&nbsp;#<span id= "numero">&nbsp;</span> </STRONG></td>
+        </tr> 
+        <tr> 
+          <td class="tit">Servicio: </td>
+          <td class="dat"><span id="servicio">&nbsp;</span></td>
+        </tr>
+        <tr > 
+          <td class="tit">Descripci&oacute;n: </td>
+          <td class="dat"><span id="descripcion">&nbsp;</span> </td>
+        </tr>
+        <tr> 
+          <td class="tit">Fecha: </td>
+          <td class="dat"><span id="fecha">&nbsp;</span> </td>
+        </tr>
+        <tr > 
+          <td class="tit">Estado: </td>
+          <td class="dat"><span id="estado">&nbsp;</span> </td>
+        </tr>
+        <tr > 
+          <td class="tit">Participantes: </td>
+          <td class="dat"><span id="participantes">&nbsp;</span> </td>
+        </tr>
+      </table>
+     <br>
+	  
+     <table summary="" class="tabf" border="0" id="detalle">
+        <tr> 
+                <td class="cf2">Estado</td>
+                <td class="cf1">N&uacute;mero</td>
+        </tr>
+     </table>
+      
+	<br>
+	<div id="calificar">
+     
+      <form action="CalificarEncuesta.po" method="post">
+       <table summary="" border="0" cellspacing="2" cellpadding="0" class="tabf">
+        <tr>
+         <td class ="ca" COLSPAN="2"><STRONG>Calificar</STRONG></td>
+        </tr> 
+       <tr>           
+       <td class="tit">
+           <INPUT class="INP" TYPE="hidden" name="encuesta" id="encuesta"> 
+           Percepci&oacute;n del Servicio 
+       </td>
+       <td class="dat">
+           <SELECT class="INP" NAME="confiabilidad" id= "confiabilidades"> </select><br>
+       </td>
+       </tr>      
+       <tr>              
+       <td class="tit">
+          Justificaci&oacute;n  
+       </td>
+       <td class="dat">
+              <INPUT class="INP" TYPE="text" name="observacion" maxlength="200" size="70" onkeypress="validarTecla(event, 'AL');"><br>
+       </tr> 
+       <tr>      
+       <td class="dat2" colspan="2">
+              <INPUT TYPE="Submit" class="BOT" value="Calificar">
+       </td>
+       </tr>      
+       </table>      
+            </form>
+         </div>          
+    </div>
+  </body>
+</html>
+

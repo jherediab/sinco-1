@@ -1,0 +1,174 @@
+<html>
+<head>
+<title>ParametrosAplicacion</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<script TYPE="text/javascript" language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<script type="text/javascript" src="media/tablekit.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   rta=validar(document.miForma.codigo,"codigo","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.valor,"valor","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+ 
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+
+ function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Cargar";
+   return true;
+ }
+
+</SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   <td align="left">
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+ <br>
+ <br>
+ <div class="container">
+  <div id="trConsulta">
+    <form  name="miForma2" action="ParametrosAplicacionAct.po" method="get" onsubmit="return Salvar2();">
+     <table summary="" border="0" cellspacing="0" cellpadding="0" class="tabf">
+      <tr>
+       <td colspan="2">
+        <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+         <tr>
+          <td class="ca" width="99%">CONSULTA Parametros Aplicacion</td>
+          <td class="ca" width="1%"><a href = "Javascript:show_help('ParametrosAplicacionAct');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+         </tr>
+        </table>
+       </td>
+      </tr>
+      <tr>
+       <td class="dat2" colspan="2">
+        <input type="hidden" name="_operacion" value="L">
+        <input TYPE="Submit" class="BOT" value= "Restaurar" id="btnCrear" onClick="Creacion();">
+       </td>
+      </tr>
+     </table>
+    </form>
+   </div>
+  
+  <div id="trResultados">
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf1">C&oacute;digo</th>
+        <th class="cf2">Valor</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="10">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+   
+  <div id="trCreacionRegistro">
+       <FORM name="miForma" ACTION="ParametrosAplicacionAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table summary=""  border="0" class="tabf">
+          <tr>
+           <td colspan="2">
+            <table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">Parametros Aplicaci&oacute;n</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ParametrosAplicacionActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">Parametro </td>
+           <td class="dat"><INPUT TYPE="Text" class="INP" NAME="codigo" id="codigo" maxlength="50" size="50"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" readonly></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Valor</td>
+           <td class="dat"><INPUT TYPE="Text" class="INP" NAME="valor" id="valor" maxlength="500" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+             <td class="dat2" colspan="2"><INPUT TYPE="hidden" NAME="_operacion" ID="_operacion" value="M">
+              <INPUT TYPE="Submit" class="BOT" VALUE="Grabar" id="btnGrabar" accesskey="G">
+              <input TYPE="button" class="BOT" value= "Cancelar" onClick="regresar();">
+			  </td>
+         </tr>
+        </table>
+       </FORM>
+      </div>
+   </div>		  
+ <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

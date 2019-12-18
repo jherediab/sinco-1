@@ -1,0 +1,356 @@
+<html>
+ <head>
+ <title>ContContratoTarifas</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+ <script TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+ <script type="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar(document.miForma.consecutivoContrato,"Consecutivo Contrato","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.codigoProcedimiento,"Codigo Procedimiento","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.valor,"Valor","DEC",2,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ 
+ 
+ function Salir(){
+ 	sVolver="SI";
+ 	document.miForma.action="ContContratoAct.po";
+ 	document.miForma._operacion.value="P";
+    return true;
+ }
+ /* OPERACIONES miForma2 */
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   rta=validar(document.miForma2.consecutivoContrato,"Consecutivo Contrato","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   return true;
+ }
+ 
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+ }
+ 
+ function CargarArchivo(){
+   document.getElementById('trConsulta').style.display = 'none';
+   document.getElementById('trCargarArchivo').style.display = '';
+   document.getElementById('cconsecutivoContrato').value = document.getElementById('fconsecutivoContrato').value;
+   return true;
+ }
+ 
+  function Salir2(){
+ 	Ocultar();
+ 	document.miForma2.consecutivoContrato.value = document.getElementById('cconsecutivoContrato').value;
+ 	document.miForma2.action="ContContratoAct.po";
+    document.miForma2._operacion.value="P";
+    document.miForma2.submit();
+    return true;
+ }
+ 
+  function Consultar2(){
+   Ocultar();
+   document.getElementById('trConsulta').style.display = '';
+   document.getElementById('trCargarArchivo').style.display = 'none';
+   document.getElementById('fconsecutivoContrato').value = document.getElementById('cconsecutivoContrato').value;
+   document.miForma2._operacion.value="L";
+   document.miForma2.submit();
+   return true;
+ }
+ 
+ /* OPERACIONES miForma3 */
+ function Salvar3(){
+	   Ocultar();
+	   if (sVolver2=="SI"){
+	      return true;
+	   }
+
+	   rta=validar(document.getElementById("archivoCarga"),"Archivo","ALFA",0,"OBL","0","999999999999999");
+	   if(!rta){
+	      Mostrar();
+	      return false;
+	   }
+	   return true;
+ }
+ 
+ </script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <br>
+ <br>
+ <div class="container">
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr id="trConsulta" style="display: ;">
+   <td align="center">
+    <form  name="miForma2" action="ContContratoTarifasAct.po" method="get" onsubmit="return Salvar2();">
+     <table class="tabf" summary="" border="0" cellspacing="2" cellpadding="2">
+      <tr>
+       <td colspan="2">
+        <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+         <tr>
+          <td class="ca" width="95%">CONSULTA Tarifas Contrato</td>
+          <td class="ca" width="5%"><a href = "Javascript:show_help('ContContratoTarifasAct');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+         </tr>
+        </table>
+       </td>
+      </tr>
+       
+      <tr>
+       <td class="tit">C&oacute;digo Procedimiento</td>
+       <td class="dat"> <input type="Text" class="INP" name="codigoProcedimiento" id="fcodigoProcedimiento" maxlength="10" size="20" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+      </tr>
+
+      <tr>
+       <td class="dat2" colspan="2">
+        <input type="hidden" name="_operacion" value="L">
+        <input type="hidden" name="consecutivoContrato" id="fconsecutivoContrato">
+        <input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+        <input type="button" class="BOT"  value= "Cargar Archivo" id="btnCargar" onClick="CargarArchivo();">
+        <input type="submit" class="BOT"  value= "Crear" id="btnCrear" onClick="Creacion();">
+        <input type="button" id="btnVolver2" onClick="Salir2();" value="Volver">
+       </td>
+      </tr>
+     </table>
+    </form>
+   </td>
+  </tr>
+  
+  <tr id="trCargarArchivo"  style="display:">
+   <td align="center">
+    <form enctype="multipart/form-data" name="miForma3" action="ContContratoTarifasAct.po" method="post" onsubmit="return Salvar3();" id="myForm">
+     <input type="hidden" name="_operacion" value="cargarArchivo">
+     <input type="hidden" name="consecutivoContrato" id="cconsecutivoContrato">
+     <table class="tabf" summary="" border="0" cellspacing="2" cellpadding="2">
+      <tr>
+       <td colspan="2">
+        <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+         <tr>
+          <td class="ca" width="98%">Cargar Tarifas Contrato</td>
+          <td class="ca" width="2%"><a href = "Javascript:show_help('ContContratoTarifasActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+         </tr>
+        </table>
+       </td>
+      </tr>
+      
+      <tr id="trArchivo">
+        <td class="tit">Nombre de archivo</td> 
+        <td class="dat"><input type="file" class="INP"  size="50" name="upload" id="archivoCarga"/></td>
+      </tr>
+      
+      <tr id="trResultadosCargue">
+       <td colspan="2">
+        <table class="tabf" summary="" border="0" cellspacing="2" cellpadding="2" id="tbResultados" width="100%">
+         <tr>
+          <td class="tit">Registros Leidos</td>
+          <td class="dat"><span id="regLeidos">&nbsp;</span></td>
+         </tr>
+         <tr>
+          <td class="tit">Registros V&aacute;lidos</td>
+          <td class="dat"><span id="regVal">&nbsp;</span></td>
+         </tr>
+         <tr>
+          <td colspan="2">
+           <table summary=""  class="tabf sortable resizable" width="100%">
+		    <thead>
+			 <tr>
+			  <th class="cf1" width="10%">L&iacute;nea</th>
+			  <th class="cf2" width="90%">Error</th>
+			 </tr>
+			</thead>
+			<tbody id="detalleErr">
+		 	</tbody>
+		   </table>
+          </td>
+         </tr>
+        </table>
+       </td>
+      </tr>
+      
+      <tr>
+       <td colspan="2" class="dat2">
+        <input type="submit" id="btnSubir" value="Cargar">
+        <input type="button" id="btnConsultar" onClick="Consultar2();" value="Consultar">
+        <input type="button" id="btnVolver" onClick="Salir2();" value="Volver">
+       </td>
+      </tr>
+     </table>
+    </form>
+   </td>
+  </tr>
+  
+  <tr id="trResultados"  style="display:;">
+   <td align="center">
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf1" width="10%">C&oacute;digo</th>
+        <th class="cf2" width="60%">Procedimiento</th>
+        <th class="cf1" width="40%">Valor</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="3">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </td>
+  </tr>
+  
+  <tr id="trCreacionRegistro" style="display :;">
+   <td>
+    <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td align="center">
+        <form name="miForma" action="ContContratoTarifasAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">Tarifas Contrato</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContContratoTarifasActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          
+          <tr>
+           <td class="tit">N&uacute;mero Contrato</td>
+           <td class="dat"><span id="numeroContrato">&nbsp;</span></td>
+           <td class="tit">C&oacute;d. Procedimiento</td>
+           <td class="dat"><input type="Text" class="INP" name="codigoProcedimiento" id="codigoProcedimiento" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+          
+          <tr>
+           <td class="tit">Procedimiento</td>
+           <td class="dat" colspan="3"><span id="procedimiento">&nbsp;</span></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Valor</td>
+           <td class="dat" colspan="3"><input type="Text" class="INPD" name="valor" id="valor" maxlength="20" size="20"  title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="20" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="20" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4">
+            <input type="hidden" name="_operacion" id="_operacion" value="C">
+            <input type="hidden" name="consecutivoContrato" id="consecutivoContrato" value="">
+            <input type="Submit" class="BOT" id="btnContrato" value= "<- Contrato" onClick="Salir();">
+            <input type="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+        </td>
+       </tr> 
+      </table>
+     </td>
+    </tr>
+   </table>
+   </div>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

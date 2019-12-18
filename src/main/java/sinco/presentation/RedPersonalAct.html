@@ -1,0 +1,414 @@
+<html>
+ <head>
+ <title>Personal</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script type="text/javascript" language="JavaScript" src="media/prototype.js"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+ <SCRIPT TYPE="text/javascript"language="JavaScript">
+ 
+ 	var sVolver2="NO";
+ 	var sVolver="NO";
+ 	
+ 	function Cargar(){
+  		try {
+    		if (document.forms[0]!=null){
+      			document.forms[0].elements[0].focus();
+   			}
+  		}
+   		catch(e){}
+ 	}
+
+ 	function Salvar(){
+   		var rta;
+   		Ocultar();
+   		if (sVolver=="SI"){
+     	 	return true;
+   		}
+   		rta=validar(document.miForma.dv,"Dv","ENT",0,"OBL","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}
+  	 	rta=validar(document.miForma.direccion,"Direccion","ALFA",0,"OBL","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}
+   		rta=validar(document.miForma.telefono,"Telefono","ALFA",0,"OBL","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}
+   		rta=validar(document.miForma.primerApellido,"Primer Apellido","ALFA",0,"OBL","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}
+   		rta=validar(document.miForma.primerNombre,"Primer Nombre","ALFA",0,"OBL","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}	
+   		rta=validar(document.miForma.numeroIdentificacion,"Numero Documento","ALFA",0,"OBL","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}
+   		rta=validar(document.miForma.tipoIdentificacion,"Tipo Documento","ALFA",0,"OBL","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}   		
+   		rta=validar(document.miForma.departamento,"Departamento","ALFA",0,"OBL","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}
+   		rta=validar(document.miForma.municipio,"Municipio","ALFA",0,"OBL","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}
+   		rta=validar(document.miForma.EMail,"Email","EMA",0,"","0","99");
+   		if(!rta){
+      		Mostrar();
+      		return false;
+   		}
+   		var resp = confirm('Esta seguro de realizar esta operación?'); 
+   		if(!resp)  Mostrar(); 
+     		 return resp;
+ 		}
+
+ 	function Eliminar(){
+ 	 	sVolver= "SI";
+   		document.miForma._operacion.value="E";
+   		var resp = confirm('Esta seguro de realizar esta operación?'); 
+   		if(!resp)  Mostrar(); 
+     		 return resp;
+ 	}
+   		
+ 	
+
+ 	function Grabar(){
+ 	 	if(document.miForma._operacion.value=="E"){
+ 	 		document.miForma._operacion.value="M";
+ 	 	}
+   		limpieza();
+   		return true;
+ 	}
+
+ 	function Consultar(){
+   		document.miForma2._operacion.value="L";
+   		return true;
+ 	}
+
+ 	function Salir(){
+    	sVolver="SI";
+    	document.miForma._operacion.value="L";
+    	return true;
+ 	}
+
+ 	function Creacion(){
+   		sVolver2="SI";
+   		document.miForma2._operacion.value="Nuevo";
+   		return true;
+ 	}
+ 	
+ 	function Salvar2(){
+   		Ocultar();
+   		if (sVolver2=="SI"){
+      		return true;
+   		}
+   		return true;
+ 	}
+
+  	function Modificar(){
+	   sVolver="SI";
+	   document.miForma._operacion.value="P";
+	   return true;
+	}	
+
+  	function consultarMunicipios(codigoDepto,combo){
+		 var url="ConsultasAjaxOld.po?_operacion=buscarMunicipiosPorDepartamento&codigoDepto="+codigoDepto;
+		 combo=document.getElementById(combo)
+	     new Ajax.Request(url,{
+	         method:'get',  
+	         onSuccess: function(transport) {
+	            llenarComboBlanco(combo,transport.responseXML.getElementsByTagName('municipio'),'codigo','nombre');
+	         },     
+	         onFailure: function() {
+	          alert("No fue posible cargar la información");
+	         }    
+	     }
+	    ); 
+	 }
+
+	  
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+ <br>
+ <div class="container"> 
+ <table  summary="" class="tabf" border="0" cellspacing="0" cellpadding="0">
+
+  <tr id="trConsulta">
+	<td>
+	<table summary="" class="tabf" border="0" cellspacing="2" cellpadding="0">
+	<tr>
+		<td align="center">
+          <FORM name="miForma2" ACTION="RedPersonalAct.po" METHOD="get" onsubmit="return Salvar2()">
+           <table summary=""  border="0" class="tabw">
+             <tr>
+          	  <td colspan="4">
+        		<table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+         		<tr>
+          		<td class="ca" width="95%">CONSULTAR PERSONAL</td>
+          		<td class="ca" width="5%"><a href = "Javascript:show_help('RedPrestadorAct');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+         		</tr>
+        		</table>
+      		 </td>         
+      		 </tr>
+      		 
+      		 <tr>
+              <td class="tit">Tipo Documento</td>
+              <td class="dat"><SELECT NAME="tipoIdentificacion" class="INP" id="fTipoIdentificacion" onkeyDown="f_salto()"></SELECT></td>
+              <td class="tit">N&uacute;mero Documento</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="numeroIdentificacion" id="fNumeroIdentificacion" maxlength="20" size="20"  onkeypress="validarTecla(event, 'EN');" onkeyDown="f_salto()" onBlur="verificarNit();"></td>
+             </tr>
+      		 
+             <tr>
+             <td class="tit">Primer Nombre</td>
+              <td class="dat" ><INPUT TYPE="Text" class="INP" NAME="primerNombre" id="fPrimerNombre" maxlength="60" size="30"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+              <td class="tit">Primer Apellido</td>
+              <td class="dat"><input TYPE="Text" class="INP" NAME="primerApellido" id="fPrimerApellido" maxlength="60" size="30" onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+             </tr>
+             
+             <tr>
+              <td class="tit">Departamento </td>
+              <td class="dat"><SELECT class="INP" NAME="departamento" id="fDepartamento"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()" onchange="consultarMunicipios(this.value,'fMunicipio');" ></SELECT></td>
+              <td class="tit">Municipio </td>
+              <td class="dat"><SELECT class="INP" NAME="municipio" id="fMunicipio" onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></SELECT></td>
+             </tr>
+
+             <tr>
+                <td class="dat2" colspan="4">
+                 <INPUT TYPE="hidden" NAME="_operacion" value="L">
+                 <INPUT TYPE="Submit" class="BOT" VALUE="Consultar"   name="miBotonC" id="miBotonC" onClick="Consultar();" accesskey="C">
+                </td>
+              </tr>
+            </table>
+           </FORM>
+    </td>
+   </tr> 
+  </table>
+ </td>
+  </tr>
+  <tr id="trResultados">
+	<td align="center">
+      <table summary=""  class="tabf sortable resizable">
+      <thead>
+      	<tr>
+          <td class="cf2">Tipo Documento</td>
+          <td class="cf1">N&uacute;mero Documento</td>
+          <td class="cf2">Primer Apellido</td>
+          <td class="cf1">Primer NOmbre</td>
+          <td class="cf2">Departamento</td>
+          <td class="cf1">Municipio</td>
+          <td class="cf2">Estado</td>
+       </tr>
+     </thead>
+       <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="7">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+      </table>
+ </td>
+  </tr>
+
+  <tr align="center" id="trCreacionRegistro">
+			<td>
+  <table summary="" class="tabf" border="0" cellspacing="2" cellpadding="0">
+   <tr>
+    <td align="center">
+          <FORM name="miForma" ACTION="RedPersonalAct.po" METHOD="get" onsubmit="limpieza();return Salvar()">
+           <table summary=""  border="0" >
+             <tr>
+             	<td colspan="4">
+        		<table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+         		<tr>
+          		<td class="ca" width="95%">FORMULARIO DE INSCRIPCI&Oacute;N DEL PERSONAL ADMINISTRATIVO </td>
+          		 <td class="ca" width="2%"><a href = "Javascript:show_help('SldServicioSucursalActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+         		</tr>
+        		</table>
+      		 </td>                                     
+             </tr>
+             
+             <tr>
+               <td class ="ca" COLSPAN="4"><STRONG>Lista de Chequeo Documentos portafolio de Servicios</STRONG></td>
+             </tr>
+               
+             <tr>
+		   <td class="tit">Carta de Presentacion</td>
+               <td class="dat">
+                <INPUT TYPE="CHECKBOX" NAME="documento1" id="CartaPresentacion" VALUE="1">
+               </td>
+               <td class="tit">Fotocopia del RUT</td>
+               <td class="dat">
+                <INPUT TYPE="CHECKBOX" NAME="documento2" id="CopiaRut" VALUE="2">
+               </td>
+             </tr>
+             
+             <tr>
+               <td class="tit">Propuesta Tecnica y Economica</td>
+               <td class="dat">
+                <INPUT TYPE="CHECKBOX" NAME="documento3" id="PropuestaTecnica" VALUE="3">
+               </td>
+               <td class="tit">Garantia de Seriedad de la Propuesta</td>
+               <td class="dat">
+                <INPUT TYPE="CHECKBOX" NAME="documento4" id="GarantiaSeriedad" VALUE="4">
+               </td>
+             </tr>
+             
+             <tr>
+               <td class="tit">Fotocopia Documento </td>
+               <td class="dat">
+                <INPUT TYPE="CHECKBOX" NAME="documento5" id="CopiaDocumento" VALUE="5">
+               </td>
+               <td class="tit">Fotocopia del Pasado Judicial</td>
+               <td class="dat">
+                <INPUT TYPE="CHECKBOX" NAME="documento6" id="CopiaPasadoJudicial" VALUE="6">
+               </td>
+             </tr>
+            
+             
+             <tr>
+               <td class="tit">Certificado de Contraloria</td>
+               <td class="dat">
+                <INPUT TYPE="CHECKBOX" NAME="documento7" id="CertificadoContraloria" VALUE="7">
+               </td>
+               <td class="tit">Certificado de Procuraduria</td>
+               <td class="dat">
+                <INPUT TYPE="CHECKBOX" NAME="documento8" id="CertificadoProcuraduria" VALUE="8">
+               </td>
+             </tr>
+             
+             <tr>
+               <td class="tit">Hoja de Vida</td>
+               <td class="dat" colspan="3">
+                <INPUT TYPE="CHECKBOX" NAME="documento9" id="HojaVida" VALUE="9">
+               </td>
+             </tr>
+             
+             <tr>
+               <td class ="ca" COLSPAN="4"><STRONG>IDENTIFICACION DEL PRESTADOR</STRONG></td>
+             </tr>
+             
+             <tr>
+              <td class="tit">Clase</td>
+              <td class="dat"><SELECT NAME="clasePrestador" class="INP" id="ClasePrestador" onkeyDown="f_salto()"></SELECT></td>
+               <td class="tit">Tipo Persona</td>
+              <td class="dat"><SELECT NAME="tipoPersona" class="INP" id="TipoPersona" onkeyDown="f_salto()"></SELECT></td>
+             </tr>
+             
+             <tr>
+              <td class="tit">Primer Apellido</td>
+              <td class="dat" ><INPUT TYPE="Text" class="INP" NAME="primerApellido" id="primerApellido" maxlength="50" size="50"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+              <td class="tit">Segundo Apellido</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="segundoApellido" id="segundoApellido" maxlength="50" size="50"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+             </tr>
+             
+             <tr>
+              <td class="tit">Primer Nombre </td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="primerNombre" id="primerNombre" maxlength="50" size="50"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+              <td class="tit">Segundo Nombre</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="segundoNombre" id="segundoNombre" maxlength="50" size="50"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+             </tr>
+             
+
+             <tr>
+              <td class="tit">Tipo Documento</td>
+              <td class="dat"><SELECT NAME="tipoIdentificacion" class="INP" id="TipoIdentificacion" onkeyDown="f_salto()"></SELECT></td>
+              <td class="tit">N&uacute;mero Documento</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="numeroIdentificacion" id="numeroIdentificacion" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+             </tr>
+             
+              <tr>
+              <td class="tit">Departamento Expedici&oacute;n</td>
+              <td class="dat"><SELECT class="INP" NAME="departamentoExpedicion" id="departamentoExpedicion" onkeyDown="f_salto()" onchange="consultarMunicipios(this.value,'municipioExpedicion');" ></SELECT></td>
+              <td class="tit">Municipio Expedici&oacute;n</td>
+              <td class="dat"><SELECT class="INP" NAME="municipioExpedicion" id="municipioExpedicion" onkeyDown="f_salto()" ></SELECT></td>
+             </tr>
+             
+             
+             <tr>
+              <td class="tit">Dv</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="dv" id="Dv" maxlength="1" size="15"  onkeypress="validarTecla(event, 'EN');" onkeyDown="f_salto()"></td>
+		  	  <td class="tit">Sitio Web</td>
+              <td class="dat" colspan="5"><INPUT TYPE="Text" class="INP" NAME="sitioWeb" id="SitioWeb" maxlength="50" size="50"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+		 	</tr>
+
+             <tr>
+              <td class="tit">Departamento</td>
+              <td class="dat"><SELECT class="INP" NAME="departamento" id="departamento" onkeyDown="f_salto()" onchange="consultarMunicipios(this.value,'Municipio');" ></SELECT></td>
+              <td class="tit">Municipio</td>
+              <td class="dat"><SELECT class="INP" NAME="municipio" id="Municipio" onkeyDown="f_salto()" ></SELECT></td>
+             </tr>
+
+             <tr>
+              <td class="tit">Direccion</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="direccion" id="Direccion" maxlength="50" size="30"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+              <td class="tit">Telefono</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="telefono" id="Telefono" maxlength="15" size="20"  onkeypress="validarTecla(event, 'EN');" onkeyDown="f_salto()"></td>
+             </tr>
+             
+             <tr>
+              <td class="tit">Fax</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="fax" id="Fax" maxlength="20" size="30"  onkeypress="validarTecla(event, 'EN');" onkeyDown="f_salto()"></td>
+              <td class="tit">Correo Electronico</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="eMail" id="EMail" maxlength="30" size="30"  onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()"></td>
+             </tr>
+             
+             <tr>
+                <td class="dat2" colspan="4">
+                 <INPUT TYPE="hidden" NAME="_operacion" ID="_operacion" value="C">
+                  <input type="Submit" class="BOT" value= "Salir"  name="salir" id="salir" onClick="Salir();">
+                 <INPUT TYPE="Submit" class="BOT" VALUE="Grabar"   name="miBotonG" id="miBotonG" onClick="Grabar();" accesskey="G">
+            	 <INPUT TYPE="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+                  <INPUT TYPE="Submit" class="BOT" VALUE="Modificar" name="miBotonM" id="miBotonM" accesskey="A" onClick="Modificar();">
+                 
+                </td>
+              </tr>
+            </table>
+           </FORM>
+    </td>
+   </tr> 
+  </table>
+ </td>
+    </tr>
+   </table>
+</div>    
+ </body>
+</html>

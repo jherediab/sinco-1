@@ -1,0 +1,225 @@
+<html>
+<head>
+<title>Captura Logros</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script type="text/javascript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function Salvar2(){
+   var rta;
+   Ocultar();
+   
+ if (document.miForma.ciclo.length==0){
+   mostrar_mensaje("No hay ciclos disponibles para realizar la operación"); 
+   Mostrar(); 
+   return false;
+ }
+ 
+ if (document.miForma.ciclo.value==0){
+    mostrar_mensaje("Debe seleccionar un ciclo"); 
+    Mostrar(); 
+    return false;
+ }
+
+ try {
+    if (document.miForma.area.length==0){
+      mostrar_mensaje("No hay areas disponibles para realizar la operación"); 
+      Mostrar(); 
+      return false;
+    }
+ }
+ catch(e){} 
+
+ try {
+    if (document.miForma.periodo.length==0){
+      mostrar_mensaje("No hay periodos disponibles para realizar la operación"); 
+      Mostrar(); 
+      return false;
+    }
+ }
+ catch(e){} 
+ 
+ return true;
+}
+
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   
+  if (document.miForma3.ciclo.value=="0"){
+     mostrar_mensaje("Debe seleccionar un ciclo"); 
+     Mostrar(); 
+     return false;
+  }
+
+  //len     =       document.miForma3.elements.length;
+  //var     index   =       0;
+  var noValidos=0;
+  
+  $$("input.logro").each(
+     function(elem){
+	  if (elem.value.length>0){
+        var valorMinimo=elem.getAttribute('minimo');
+	    var valorMaximo=elem.getAttribute('maximo');
+        rta=validar(elem,"Logro","DEC",2,"OBL",valorMinimo,valorMaximo);
+        if(!rta){
+           noValidos=noValidos+1;
+        }
+	 }
+    }
+  );
+  
+  if (noValidos>0){
+     Mostrar();
+     return false;
+  }
+   
+  /*
+  for( index=0; index < len; index++ ){
+   if( (document.miForma3.elements[index].name).substring(0,1)== "_" ){
+     if (document.miForma3.elements[index].value.length>0){
+        rta=validar(document.miForma3.elements[index],"Logro","DEC",2,"OBL","-300","5000");
+        if(!rta){
+           Mostrar();
+           return false;
+        }
+     }
+  }
+ }
+ */
+ return true;
+}
+
+
+function Recarga(){
+ if (document.miForma.ciclo.value>0){
+    document.miForma.operacion.value="RECARGA";
+    document.miForma.submit();
+ }
+ return true;
+}
+
+function RecargaP(){
+ document.miForma3.operacion.value="VER";
+ document.miForma3.submit();
+ return true;
+}
+
+</SCRIPT>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){}">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+<br>
+
+<div class="container">
+	<div id="trSeleccionar">
+	<FORM name="miForma" ACTION="CalCapturaLogros.po" METHOD="post" onsubmit="return Salvar2();">      
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Captura de logros</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat"><SELECT NAME="ciclo" class="INP" id="idCiclo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="Recarga();"></SELECT></td>
+        </tr>
+        
+        <tr id="trArea"> 
+           <td class="tit">Area</td>
+           <td class="dat"><SELECT NAME="area" class="INP" id="idArea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+        <tr> 
+           <td class="tit">Periodo</td>
+           <td class="dat"><SELECT NAME="periodo" class="INP" id="idPeriodo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+        
+        <tr>
+          <td class="dat2" colspan="2">
+          <INPUT TYPE="hidden" NAME="operacion" value="VER">
+          <INPUT class="BOT"  TYPE="Submit" VALUE="Siguiente" name="miBoton" accesskey="G"></td>
+        </tr>
+       </table>
+      </FORM>
+     </div>
+
+	 
+	<div id="trPlan">
+      <FORM name="miForma3" ACTION="CalCapturaLogros.po" METHOD="post"  onsubmit="return Salvar();">
+        <INPUT TYPE="hidden" NAME="ciclo"  id="cicloV">
+        <INPUT TYPE="hidden" NAME="plan"  id="planV">
+        <INPUT TYPE="hidden" NAME="area"  id="areaV">
+
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Captura de logros</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat"><span id="nombreCicloA">&nbsp;</span></td>
+           <td class="tit">Area</td>
+           <td class="dat"><span id="nombreAreaA">&nbsp;</span></td>
+        </tr>
+
+        <tr> 
+           <td class="tit">Periodo</td>
+           <td class="dat"><SELECT NAME="periodo" class="INP" id="periodoV" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="RecargaP();"></SELECT></td>
+           <td class="tit">Mensaje</td>
+           <td class="dat"><span id="ultimoMensaje">&nbsp;</span></td>
+        </tr>
+       </table> 
+       <br>
+       <table class="tabf"  summary=""  border="0" id="plan">
+            <caption class="CA">PLAN NUMERO &nbsp; <span id="numeroPlan">&nbsp;</span></caption>
+             <tr>
+              <td width="30%" class="CF2" title="Nombre completo del objetivo">Objetivo</td>
+              <td width="5%" class="cf1" title="Tipo de objetivo: G - General E-Especifico">T Obj</td>
+              <td width="65%" class="cf2">
+               <table class="tabw" summary="" border="0">
+                <tr>
+                   <td  class="cf2" width="55%" title="Nombre completo de la meta">Descripci&oacute;n Meta</td>
+                   <td  class="cf1" width="10%" title="Frecuencia">Frecuencia</td>
+                   <td  class="cf2" width="25%" title="Valor asignado a la meta">Valor</td>
+                   <td  class="cf1" width="10%" title="Unidad de Medida">Unidad</td>
+               </tr>
+              </table>
+             </td>
+            </tr>
+           </table>                     
+		  <br>
+          
+		  <div>
+			<table class="tabf"  summary=""  border="0">
+             <tr>
+				<td class="dat2">		  
+					 <INPUT TYPE="hidden" NAME="operacion" value="SALVAR">
+					 <INPUT class="BOT"  TYPE="Submit" VALUE="Grabar" name="miBoton" accesskey="G">
+				</td>		  
+               </tr>
+             </table>
+          </div>
+       </FORM>
+	</div>
+  </div>
+
+</body>
+</html>

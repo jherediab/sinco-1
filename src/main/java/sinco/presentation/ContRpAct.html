@@ -1,0 +1,349 @@
+ <html>
+ <head>
+ <title>ContRp</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+
+ 
+ <script type="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script type="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver="NO";
+ function Cargar(){
+  if(document.miForma._operacion.value=='M'){
+	document.miForma.Agregar.style.display="";	
+  }	  
+  if(document.getElementById('RegistrosAgregados').rows.length>2){
+	  document.miForma.Agregar.style.display="";
+	  //document.miForma.btnGrabar.style.display="none";	
+  }
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar(){
+   var rta;
+      document.miForma.anio.value = document.miForma.fechaExpedicion.value.substring(6,10);
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   agregarImputaciones();
+   rta=validar(document.miForma.imputacion,"Imputacion","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.numeroRegistro,"Número Registro","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+    rta=validar(document.miForma.fechaExpedicion, "fecha Expedicion","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+       rta=validar(document.miForma.valor, "valor","DEC",2,"OBL","0",document.miForma.valorPend.value);
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   sVolver="SI";
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+
+ function Salir(){
+   sVolver="SI";
+   var ad=document.miForma.numeroAdicion.value;
+   if(parseInt(ad)>0){
+   		document.miForma.consecutivoAdicion.value=ad;
+   		document.miForma.action="ContAdicionContratoAct.po";
+   }else{
+   		document.miForma.action="ContContratoAct.po";
+   }
+   document.miForma._operacion.value="P";
+   return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   document.miForma._operacion.value="Nuevo";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+ }
+ 
+ 
+function agregarImputaciones(){
+	var imputaciones='';
+	obj=document.getElementsByName('chkImputacion');
+	for(i=0;i<obj.length;i++){
+	   if(obj[i].checked){
+	    if(imputaciones==""){
+			imputaciones = obj[i].value;
+		}else{
+			imputaciones += ";"+obj[i].value;
+		}
+	   }
+	}
+	document.miForma.imputacion.value=imputaciones;
+}
+
+function agregar(){
+	if(document.miForma.numeroRegistro.value.length==0){
+      	alert("Por Favor Seleccione o Agregue un Registro Presupuestal");
+    }
+    else{
+        window.opener.agregarDatoRp(document.miForma.numeroRegistro.value);
+        cerrar();		
+    } 
+}
+
+function cerrar() { 
+    ventana=window.self; 
+    ventana.opener=window.self; 
+    ventana.close(); 
+} 
+
+function converToDate(string) {
+	var date = new Date();
+	var anio = parseInt(string.substring(6, 10));
+	var mes = eval(string.substring(3, 5)-1);
+	var dia = parseInt(string.substring(0, 2));
+	date.setYear(anio);
+	date.setMonth(mes);
+	date.setDate(dia);
+	return date;
+}
+
+function validarFecha(fecha){
+	var hoy = new Date();
+	var fechaHoy = converToDate(document.getElementById(fecha).value);
+	if(hoy.getTime()< fechaHoy.getTime()){
+		alert("La Fecha de Expedición debe ser anterior o igual a hoy");
+		document.getElementById(fecha).value="";
+	}
+}
+
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+ <br>
+ <br>
+ <div class="container">
+ 
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr id="trCreacionRegistro">
+   <td>
+    <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td align="center">
+        <form name="miForma" action="ContRpAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">REGISTRO PRESUPUESTAL</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContRpActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">N&uacute;mero Registro</td>
+           <td class="dat"> <input type="Text" class="INP" name="numeroRegistro" id="numeroRegistro" maxlength="25" size="25"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Expedici&oacute;n</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaExpedicion" id="fechaExpedicion" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="validarFecha('fechaExpedicion')">
+           <input type="button" id="bfechaExpedicion" class="btnCalendario">
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Valor</td>
+           <td class="dat" colspan="3"><input type="Text" class="INP" name="valor" id="valor" maxlength="15" size="20"  title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Dependencia</td>
+           <td class="dat" colspan="3"> <select class="INP" name="dependencia" id="dependencia" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+          </tr>
+          
+          <tr>
+           <td class="dat" colspan="4">
+            <table summary="" id="tbImputaciones" width="100%">
+             <tr>
+              <td class="cf1">&nbsp;</td>
+              <td class="cf2">Imputaci&oacute;n</td>
+             </tr>
+            </table>
+          </tr>
+          
+
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+          <tr>
+           <td class="tit" colspan="4">Si modific&oacute; alg&uacute;n dato recuerde grabar antes de agregar el RP. al contrato</td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4"><input type="hidden" name="_operacion" ID="_operacion" value="C">
+ 			<input type="hidden" name="origen" ID="origen">
+            <input type="hidden" name="anio" id="anio" value="">
+            <input type="hidden" name="valorPend" id="valorPend" value="">
+            <input type="hidden" name="imputacion" id="imputacion" value="">
+ 			<input type="hidden" name="consecutivoContrato" ID="consecutivoContrato">
+ 			<input type="hidden" name="numeroAdicion" ID="numeroAdicion">
+ 			<input type="hidden" name="consecutivoAdicion" ID="consecutivoAdicion">
+ 			<input type="hidden" name="valorContrato" ID="valorContrato">
+            <input type="Submit" class="BOT" value= "Volver" onClick="Salir();">
+ 			<input type="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+            <input type="Submit" class="BOT" value= "Nuevo" onClick="Nuevo();">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+        </td>
+       </tr> 
+      </table>
+     </td>
+    </tr>
+        <tr id="trResultados">
+     <td align="center">
+      <table summary=""  class="tabf sortable resizable">
+       <thead>
+        <tr>
+          <th class="cf2">C&oacute;digo RP</th>
+          <th class="cf1">Fecha Expedici&oacute;n</th>
+          <th class="cf2">Valor</th>
+          <th class="cf1">Imputacion</th>
+        </tr>
+       </thead>
+       <tbody id="detalle">
+       </tbody>
+       <tfoot>
+        <tr>
+         <td  class="PIE" colspan="5">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+        </tr>
+       </tfoot>
+      </table>
+     </td>
+    </tr>
+     
+   </table>
+ </div>
+
+<script type="text/javascript">
+      if(document.miForma.anio.value!=""){
+        var rango = new Array(2);
+        rango[0] = document.miForma.anio.value;
+        rango[1] = document.miForma.anio.value;
+     	Calendar.setup({
+       		inputField :  'fechaExpedicion',
+       		ifFormat   :  '%Y-%m-%d',
+       		range      :  rango,
+       		button     :  'bfechaExpedicion'
+      	});
+     }else{
+     	Calendar.setup({
+       		inputField :  'fechaExpedicion',
+       		ifFormat   :  '%Y-%m-%d',
+       		button     :  'bfechaExpedicion'
+      	});
+     }
+     Calendar.setup({
+       inputField :  'ffechaExpedicionDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaExpedicionDesde'
+      });
+     Calendar.setup({
+       inputField :  'ffechaExpedicionHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaExpedicionHasta'
+      });
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

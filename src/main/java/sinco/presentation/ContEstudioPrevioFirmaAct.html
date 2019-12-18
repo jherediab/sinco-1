@@ -1,0 +1,248 @@
+ <html>
+ <head>
+ <title>ContEstudioPrevioFirma</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" href="media/global.css" type="text/css"/>
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1"/>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script type="text/javascript" language="JavaScript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+<script type="text/javascript" src="media/moment.min.js"></script>
+<script type="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+<script type="text/javascript" src="media/tablekit.js"></script>
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar(document.miForma.numeroEstudio,"N&uacute;mero Estudio","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.tipoFirma,"Tipo Firma","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.funcionario,"Funcionario","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.descripcionFirma,"Descripci&oacute;n Firma","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    document.miForma._operacion.value="L";
+    return true;
+ }
+
+ function Creacion(){
+   sVolver="SI";
+   document.miForma._operacion.value="Nuevo";
+   return true;
+ }
+  
+ function Volver(){
+ 	if(document.miForma.tipoEstudio.value=="S"){
+ 		document.miForma.action="ContEstudioPrevioSaludAct.po";
+ 	}else{
+ 		document.miForma.action="ContEstudioPrevioAdminAct.po";
+ 	}
+	document.miForma._operacion.value="P";
+  	sVolver="SI";
+  	return true;
+}
+
+function cargarCargos(persona){
+	var url="ConsultasAjaxOld.po?_operacion=cargarCargos&persona="+persona;
+	new Ajax.Request(url,{
+	method:'get',  
+	onSuccess: function(transport) {
+		document.getElementById("descripcionFirma").value=transport.responseXML.getElementsByTagName('cargo')[0].firstChild.nodeValue;
+		},     
+		onFailure: function() {
+		
+		}    
+  	});
+}
+
+function cargarDirectivos(){
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.target="";
+	document.miForma.submit();
+	return true;
+}
+ </script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   <td align="right">
+     <script type="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+ <br>
+ <br>
+ <div class="container">
+
+  <div id="trCreacionRegistro">
+    <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td align="center">
+        <form name="miForma" action="ContEstudioPrevioFirmaAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">Firma Estudio Previo</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContEstudioPrevioFirmaActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">N&uacute;mero Estudio</td>
+           <td class="dat"><input type="Text" class="IND" name="numeroEstudio" id="numeroEstudio" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" readonly></td>
+           <td class="tit">Tipo Firma</td>
+           <td class="dat"> <select name="tipoFirma" class="INP" id="tipoFirma" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onChange="cargarDirectivos();"></select></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Funcionario</td>
+           <td class="dat" colspan="3"><select name="funcionario" class="INP" id="funcionario" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onChange="cargarCargos(this.value);"></select></td>
+          </tr>
+          
+          <tr>
+           <td class="tit">Descripci&oacute;n/Cargo</td>
+           <td class="dat" colspan="3"><input type="Text" class="INP" name="descripcionFirma" id="descripcionFirma" maxlength="200" size="70"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="20" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="20" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4"><input type="hidden" name="_operacion" ID="_operacion" value="C">
+           <input type="hidden" name="tipoEstudio" ID="tipoEstudio" value="A">
+		   <input type="hidden" name="dependencia" ID="dependencia" value="">
+            <input type="Submit" class="BOT" value="Volver" onclick="return Volver();" accesskey="V">
+            <input type="Submit" class="BOT" value="Nuevo" onclick="Creacion();" accesskey="V">
+            <input type="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+        </td>
+       </tr> 
+      </table>
+     </div>
+	 
+  <div id="trResultados">
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf2">Tipo Firma</th>
+        <th class="cf1">Funcionario</th>
+        <th class="cf2">Descripci&oacute;n/Cargo</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="3">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+   
+   </div>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

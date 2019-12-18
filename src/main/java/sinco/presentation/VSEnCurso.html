@@ -1,0 +1,425 @@
+<html>
+<head>
+<title> Ver solicitudes en curso </title>
+<link rel="stylesheet" href="media/global.css" type= "text/css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+
+<script type="text/javascript">
+
+function compruebaExtension(archivo) {
+    extensiones_permitidas = new Array(".mp3", ".wav", ".wma", ".mid", ".mpg");
+   //recupero la extensión de este nombre de archivo
+    extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
+   //compruebo si la extensión está entre las permitidas
+
+   permitida = true;
+   for (var i = 0; i < extensiones_permitidas.length; i++) {
+     if (extensiones_permitidas[i] == extension) {
+       permitida = false;
+       break;
+      }
+    }
+    return permitida;
+ }   
+   
+   function setFileName() {
+         var theForm = document.myForm;
+         theForm.theFileName.value = theForm.upload.value;
+   }
+
+   function Calificar(){
+    var rta;
+
+    Ocultar();
+    
+    if (document.fCalificar.confiabilidad.value=="X"){
+      alert('Debe seleccionar una calificación de la lista'); 
+      Mostrar(); 
+      return false;
+    }  
+    
+    if (document.fCalificar.confiabilidad.value=='R' || document.fCalificar.confiabilidad.value=='0') {
+      rta=validar(document.fCalificar.observacion,"Justificación","ALFA",0,"OBL","0","99");
+      if(!rta){
+         Mostrar(); 
+         return false;
+      }
+      var resp=confirm('Esta seguro de realizar esta operación'); 
+      if(!resp) {
+        Mostrar();
+        return false;
+      }
+    }
+    return true;
+   }
+   
+   function Salvar(){
+     Ocultar();
+   
+     var theForm = document.myForm;
+     if (compruebaExtension(theForm.theFileName.value)==false){
+       Mostrar();
+       alert("La extension del archivo que intensa subir no es permitida");
+       return false;
+     }
+    return true;
+   }
+
+   function SalvarAplazamiento(){
+      Ocultar();
+
+      var inputs = document.miFormaG.getElementsByTagName("select");
+      for (i = 0; i < inputs.length; i++) {
+         var obliga=inputs[i].value;
+         
+         if (obliga==""){
+            Mostrar();
+            alert ("Debe seleccionar un valor");
+            return  false;
+         }
+         
+         if (obliga=="N"){
+             var trozos = inputs[i].name.split ("_"); 
+             
+             rta=validar($('JUS_'+trozos[1]),"Justificacion","ALFA",0,"OBL","0","999999999999999999");
+             if(!rta){
+                Mostrar();
+                return false;
+             }
+         }
+     }
+     return true;
+   }
+   
+</script>
+</head>
+
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" id="miBody">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+<div class="container">
+ 
+      <table class="tabf" summary="" border="0">
+         <tr>
+          <td class ="ca" COLSPAN="4"><STRONG><span id= "titulosolicitud">SOLICITUD EN CURSO</span> # <span id= "numerosolicitud">&nbsp;</span> </STRONG></td>
+         </tr> 
+        <tr> 
+          <td class="tit">Servicio: </td>
+          <td class="dat" colspan="3"><span id="servicio">&nbsp;</span></td>
+        </tr>
+        <tr> 
+          <td class="tit">Area que hace la solicitud: </td>
+          <td class="dat"><span id= "areacliente">&nbsp;</span> </td>
+          <td class="tit">Persona que hace la solicitud: </td>
+          <td class="dat"><span id="cliente">&nbsp;</span> </td>
+        </tr>
+        <tr> 
+          <td class="tit">Area Proveedora: </td>
+          <td class="dat"><span id="areap">&nbsp;</span> </td>
+          <td class="tit">Persona Responsable: </td>
+          <td class="dat"><span id="proveedor">&nbsp;</span> </td>
+        </tr>
+		
+        <tr> 
+          <td class="tit">Fecha de generaci&oacute;n: </td>
+          <td class="dat"><span id="fechaGenerada">&nbsp;</span></td>
+          <td class="tit">Fecha de Vigencia: </td>
+          <td class="dat"><span id= "fechavigencia">&nbsp;</span> </td>
+        </tr>
+        <tr> 
+          <td class="tit">Fecha Estimada de Terminaci&oacute;n: </td>
+          <td class="dat"><span id= "fechaestimada">&nbsp;</span> </td>
+          <td class="tit">Fecha de escalamiento </td>
+          <td class="dat"><span id= "fechaEscalamientos">&nbsp;</span> </td>
+        </tr>
+        <tr> 
+          <td class="tit">Estado: </td>
+          <td class="dat"><span id= "estado">&nbsp;</span> </td>
+          <td class="tit">Fecha real de terminaci&oacute;n </td>
+          <td class="dat"><span id= "fechaRealTerminacion">&nbsp;</span>&nbsp;</td>
+        </tr>
+        <tr> 
+          <td class="tit">Oportunidad:</td>
+          <td class="dat"><span id= "oportunidad">No calificado aun</span> </td>
+          <td class="tit">Percepci&oacute;n del Servicio:</td>
+          <td class="dat"><span id= "confiabilidad">No calificado aun</span> </td>
+        </tr>
+        <tr> 
+          <td class="tit">Acuerdo de Servicio</td>
+          <td class="dat"><span id= "unidad">&nbsp;</span> </td>
+          <td class="tit">Tiempo total estimado de atenci&oacute;n</td>
+          <td class="dat"><span id= "tiempoServicio">&nbsp;</span> </td>
+        </tr>
+        <tr> 
+          <td class="tit">Nivel Escalamiento: </td>
+          <td class="dat" colspan="3"><span id= "escalamiento">&nbsp;</span> </td>
+        </tr>
+        <tr id="trContacto"> 
+          <td class="tit">El cliente ser&aacute; contactado antes de </td>
+          <td class="dat" colspan="3"><span id= "fechaContacto">&nbsp;</span> </td>
+        </tr>
+        <tr> 
+          <td class="tit">Mensaje</td>
+          <td class="dat" colspan="3"><span class="ne"  id= "mensaje">&nbsp;</span> </td>
+        </tr>
+      </table>
+      <div id="mostrarcaracteristicas">
+        <br>
+           <div class="ca">Caracter&iacute;sticas</div>
+            <table class="tabf" summary="" border="0" id="caracteristicas">
+               <tr>
+                <td class="cf2">Caracter&iacute;stica </td>
+                <td class="cf1">Descripci&oacute;n </td>
+                <td class="cf2" id="calificacion">Observaci&oacute;n </td>
+              </tr>
+            </table>
+         </div>          
+      
+      <br>
+      <div class="ca">Preguntas  y/o Respuestas</div>
+	  <table class="tabf" summary="" border="0" id="atencion">
+		<tr>
+		  <td class="cf2">Fecha </td>
+		  <td class="cf1">Autor </td>
+		  <td class="cf2">Observaci&oacute;n</td>
+		</tr>
+	  </table>
+	  
+      <div  id="nuevaatencion">
+      <br>
+		<form name="miForma" action="AnadirAtencion.po" method="get">
+		  <INPUT class="INP" TYPE="hidden" value="not_yet" id="solicitudatencion" name="solicitud"> 
+		  <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguienteAtencion" name="pagina_siguiente"><br>
+		  
+		  <TEXTAREA NAME="observacion" ROWS="4" COLS="80" WRAP="physical" onkeypress="validarTecla(event, 'AL');" onkeyDown="textCounter(this.form.observacion,this.form.txtContador,1024);return  f_salto(event);" onkeyup="textCounter(this.form.observacion,this.form.txtContador,1024);" onpaste="textCounter(this.form.observacion,this.form.txtContador,1024);"></TEXTAREA>
+		  <INPUT class="INP" TYPE="hidden" name="txtContador" value="0">              
+		  <br>
+		  <INPUT TYPE="Submit" class="BOT" value="Salvar Respuestas" name="miBoton" onClick="Ocultar();"><br>
+		</form>
+      </div>
+      
+      
+      <div id="solicitudesTramite">
+      <br>
+         <div class="ca">SOLICITUDES EN TRAMITE o Solicitudes del flujo de trabajo</div>
+		<table class="tabf" summary="" border="0" id="detalleTramite">
+		  <tr>
+		  <td class="cf2">Area Cliente</td>
+		  <td class="cf1">Cliente</td>
+		  <td class="cf2">Area Proveedor </td>
+		  <td class="cf1">Proveedor </td>
+		  <td class="cf2">Servicio</td>
+		  <td class="cf1">F. Estimada Terminaci&oacute;n </td>
+		  <td class="cf2">Estado </td>
+		  </tr>
+		</table>
+        </div>          
+      
+      <div id="auditorCompa">
+	  <br>
+      <div class="ca">Grupo auditor</div>
+	  <table class="tabf" summary="" border="0" id="compas">
+		<tr>
+		  <td class="cf1">Nombre </td>
+		  <td class="cf2">Area </td>
+		  <td class="cf1">Rol </td>
+		  <td class="cf2">Asistio</td>
+		</tr>
+	  </table>
+      </div>
+      
+      <div id="mostrarhistoria">
+      <br>
+      <div class="ca">Historia</div>
+		<table class="tabf" summary="" border="0"  id="historia">
+		  <tr>
+			<td class="cf2">Estado </td>
+			<td class="cf1">Fecha </td>
+			<td class="cf2">Observaci&oacute;n </td>
+		  </tr>
+		</table>
+      </div>          
+
+      <div id="idmostrararchivos">
+      <br>
+            <form action="ArchivosBorrar.po" method="post">
+              
+			  <div class="ca">Archivos anexos a la solicitud</div>
+              <table class="tabf" summary="" border="0" id="idArchivos">
+                <tr>
+                  <td class="cf2">Borrar</td>
+                  <td class="cf1">Archivo </td>
+                  <td class="cf2">Fecha de colocaci&oacute;n </td>
+                  <td class="cf1">Usuario Inserci&oacute;n</td>
+                </tr>
+              </table>
+              <br>
+			   <INPUT class="INP" TYPE="hidden" name="origen" value="C">
+               <INPUT class="INP" TYPE="hidden" name="solicitud" id="idsolicitudmail"> 
+              <br>
+               <INPUT TYPE="Submit" class="BOT" value="Eliminar Archivo">
+            </form>
+      </div>
+      <div id="calificar">
+      <br>
+		  <form name="fCalificar" action="Calificar.po" method="post" onsubmit="return Calificar();">
+		   <table class="tabf" summary="" border="0" cellspacing="0" cellpadding= "3">
+			<tr>
+			 <td class ="ca" COLSPAN="2"><STRONG>Calificar</STRONG></td>
+			</tr> 
+			<tr>
+				<td class="tit">Percepci&oacute;n del Servicio : </td>
+				<td class="dat"><SELECT class="INP" NAME="confiabilidad" id= "confiabilidades"> </select></td>
+			</tr>
+			<tr>
+				<td class="tit">Justificaci&oacute;n :</td> 
+				<td class="dat"><INPUT class="INP" TYPE="Text" name="observacion" maxlength="200" size="100" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"></td>
+			</tr>
+			<tr>
+			<td  class="dat2" colspan="2"><INPUT class="INP" TYPE="hidden" name="solicitud" id="idsolicitudcal"> 
+			   <INPUT TYPE="Submit" class="BOT" value="Calificar o Devolver" name="miBoton"></td>
+			</tr>
+		  </table>
+		</form>
+      </div>
+      
+      <div id="idAplazamientos">
+      <br>
+		<form name="miFormaG" action="CF.po" method="post" onsubmit="return SalvarAplazamiento();">
+		<INPUT class="INP" TYPE="hidden" name="solicitud" id="solicitudApla"> 
+	    <div class="ca">Aplazamientos solicitados </div>		
+		<table class="tabf" summary="" border="0" cellspacing="0" cellpadding= "0">
+		<thead>
+		<tr>
+		   <td class="cf1">Justificaci&oacute;n </td>
+		   <td class="cf2">Nueva fecha Solicitada </td>
+		   <td class="cf1">Estado </td>
+		   <td class="cf2">Fecha Acept&oacute; o Neg&oacute; </td>
+		   <td class="cf1">Acción </td>
+		   <td class="cf2">Justificacion Negaci&oacute;n</td>
+		 </tr>
+		</thead>
+		<tbody id="tblAplazamientos">
+		</tbody>
+		<tfoot>
+		 <tr id="trPie">
+		  <td colspan="6" align="right">
+		   <INPUT TYPE="Submit" class="BOT" value="Salvar Aplazamientos"><br>
+		  </td>
+		 </tr>
+		</tfoot>
+	   </table>
+	   </form>
+      </div>
+
+      
+      <div id="cambiarestado">
+      <br>
+		<form enctype="multipart/form-data" name="myForm" action="CambiarEstadoCliente.po" method="post"  onsubmit="return Salvar();">
+		 <table class="tabf" summary="" border="0" >
+			 <tr>
+			  <td class ="ca" COLSPAN="2"><STRONG>Cambiar de Estado</STRONG></td>
+			 </tr> 
+			 <tr>
+			 <td class="tit">Observaci&oacute;n </td>
+			 <td class="dat"><INPUT class="INP" TYPE="text" name="observacion" maxlength="200" size="100" onkeyDown="if (event.keyCode==13) document.myForm.miBoton.focus()" onkeypress="validarTecla(event, 'AL');"></td>
+
+			 <tr>
+			 <td class="tit">Archivo a anexar </td>
+			 <td class="dat"><INPUT class="INP" TYPE="hidden" name="theFileName"><INPUT class="INP" TYPE="file" name="upload" size="80"></td>
+			 </tr>
+			 
+			 <tr>
+			   <td class="tit">Nuevo Estado</td>
+			   <td class="dat"><SELECT class="INP" NAME="nuevoestado" id="estados" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select></td>
+			  </tr>
+			 <tr>
+			   <td  class="dat2" colspan="2">
+			   <INPUT class="INP" TYPE="hidden" name="solicitud" id="idsolicitud"> 
+			   <INPUT TYPE="Submit" class="BOT" name="miBoton" value="Cambiar de Estado" onClick="setFileName();">
+			   </td>
+			  </tr>
+		   </table>
+		  </form>
+      </div>
+
+		<br>
+		<div align="center">
+         <table summary="">
+            <tr>
+            <td  id="divSolicitudPadre">
+                  <form name="fsolpadre" id="formaPadre" action="VSEnCurso.po" method="get">
+                    <INPUT class="INP" TYPE="hidden" name="solicitud" id="idSolicitudPadre"> 
+                    <INPUT class="INP" TYPE="hidden" name="lectura" value="1"> 
+                    <INPUT TYPE="Submit" class="BOT" value="Ver Solicitud Principal"  name="miBoton" onClick="Ocultar();"><br>
+                  </form>
+              </td>
+
+              <td id="idModCaracteristica">
+                  <form name="fmodcar" action="ModificarCaracteristica.po" method="get">
+                    <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguiente" name="pagina_siguiente"> 
+                    <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitudModificar" name="solicitud"> 
+                    <INPUT TYPE="Submit" class="BOT" value="Modificar Caracteristica"  name="miBoton" onClick="Ocultar();">
+                  </form>
+              </td>
+              
+              <td id="idAceptarFortalezas">
+                  <form name="fforta" id="fFortalezas" action="PreModificarHallazgos.po" method="get">
+                    <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguienteF" name="pagina_siguiente"> 
+                    <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitudFortelezas" name="solicitud"> 
+                    <INPUT TYPE="Submit" class="BOT" value="Aceptar Hallazgos"  name="miBoton" onClick="Ocultar();">
+                  </form>
+              </td>
+
+              <td id="copiar">
+                  <form name="fcopiar" action="CopiarSolicitud.po" method="GET">
+                    <INPUT class="INP" TYPE="hidden" name="servicio" id="serviciocp"> 
+                    <INPUT class="INP" TYPE="hidden" name="area" id="areacp"> 
+                    <INPUT class="INP" TYPE="hidden" name="persona" id="personaProv"> 
+                    <INPUT class="INP" TYPE="hidden" name="padre" id="padre"> 
+                    <INPUT TYPE="Submit" class="BOT" value="Copiar Solicitud"  name="miBoton" onClick="Ocultar();">
+                  </form>
+              </td>
+             <td id="idMasArchivos">
+               <form action="PreArchivos.po" method="get">
+                 <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguienteArc" name="pagina_siguiente">
+                 <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitudArchivos" name="solicitud"> 
+                 <INPUT TYPE="Submit" class="BOT" value="Anexar Archivos" onClick="Ocultar();">
+                </form>
+             </td>
+              <td id="tdAcciones">
+                <form action="ListarAcciones.po" method="get" TARGET="_blank">
+                  <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitudMejora" name="solicitud"> 
+	 	      <INPUT TYPE="Submit" class="BOT" value="Ver Documentos Para Auditoria">
+                </form>
+              </td>
+             <td id="trBitacora">
+              <FORM name="miForma8" target="_blank" ACTION="BitacoraListar.po" METHOD="get">
+               <INPUT TYPE="hidden" name="tabla" value="SOLICITUDES">
+               <INPUT TYPE="hidden" name="llave" id="llave">
+              <!-- <INPUT class="BOT" TYPE="Submit" name="miBoton" VALUE="Ver Bit&aacute;cora">-->
+              </FORM>
+             </td>             
+            </tr>            
+          </table>
+		 </DIV>
+  </div>
+ </body>
+</html>

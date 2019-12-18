@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>index.htm</title>
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  onLoad="document.miForma.servicio.focus()">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+ <div class="container">
+
+            <FORM name="miForma" ACTION="SolicitudesDeArea.po" METHOD="get" id="forma">
+             <table summary="" border="0"  class="tabf">
+                <tr>
+                  <td class ="ca" COLSPAN="2"><STRONG>SOLICITAR SERVICIO</STRONG></td>
+                 </tr> 
+               
+                 <tr> 
+                   <td class="tit">Servicio</td>
+                   <td class="dat"><SELECT class="INP" NAME="servicio" id="servicio" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+                 </tr>
+               <tr> 
+                 <td class="dat2" colspan="2">
+                   <INPUT class="INP" TYPE="hidden" NAME="area" id="idArea">
+                   <INPUT class="INP" TYPE="hidden" NAME="fechaInicio" id="idFechaInicio">
+                   <INPUT class="INP" TYPE="hidden" NAME="fechaFin" id="idFechaFin">
+                   <INPUT class="INP" TYPE="hidden" NAME="rol" id="idRol">
+                   <INPUT class="INP" TYPE="hidden" NAME="tipo" id="idTipo" value="4">
+                 <INPUT TYPE="Submit" class="BOT" VALUE="Listar" name="miBoton" onClick="Ocultar();"></td>
+               </tr>
+             </table>
+            </FORM>
+
+          </div>
+          
+</body>
+</html>
+

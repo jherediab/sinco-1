@@ -1,0 +1,203 @@
+<html>
+<head>
+<title>Plantillas Objetivos</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript">
+  function add_member( proceso,subproceso,nombre) {
+    this.proceso=proceso;
+    this.subproceso=subproceso;
+    this.nombre=nombre;
+ }
+ function add_area(codigo,nombre) {
+    this.codigo=codigo;
+    this.nombre=nombre;
+ }
+
+</SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript"  id="elScript">
+</SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript">
+function cambioProceso(proceso){
+var i=0;
+var j=0;
+
+objeto=document.getElementById('subproceso');
+objeto.length=0;
+
+var optionObj = new Option(" ","X");
+objeto.options[j] = optionObj;
+j++;
+
+for (i=0; i<matriz.length; i++){
+   var elItem=matriz[i];
+   if (elItem.proceso==proceso){
+      var optionObj = new Option( elItem.nombre,elItem.subproceso);
+      objeto.options[j] = optionObj;
+      j++;
+    }
+ } // for
+}
+</SCRIPT>
+
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function ContarElementos(my_form, field_name ){
+   len     =       my_form.elements.length;
+   var     index   =       0;
+   var    cuantos=0;
+    for( index=0; index < len; index++ ){
+        if( (my_form.elements[index].name).substring(0,field_name.length)== field_name ){
+            if (my_form.elements[index].checked==true){
+              cuantos++;
+            }
+        }
+    }
+   return cuantos;
+}
+
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+  if (document.miForma.plantilla.length==0){
+     mostrar_mensaje("No hay plantillas disponibles para realizar la operación"); 
+     Mostrar(); 
+     return false;
+  }
+  
+   if (document.miForma._operacion.value=="L"){
+     return true;
+   }
+   
+   var cuantos=ContarElementos(document.miForma,"_X")
+   if (cuantos==0){
+      var resp = confirm('Al realizar esta operacion, en la plantilla no quedará ningun elemento. Esta seguro'); 
+      if(!resp)  {
+          Mostrar(); 
+          return false;
+      }
+   }
+   
+   var resp = confirm("Quedan " + cuantos + " Elementos. Esta seguro de realizar esta operación?"); 
+   if(!resp)  Mostrar(); 
+      return resp;
+}
+
+function Grabar(){
+   document.miForma._operacion.value="C";
+   return true;
+}
+
+function Consultar(){
+ document.miForma._operacion.value="L";
+ return true;
+}
+
+
+function Recarga(){
+ document.miForma._operacion.value="L";
+ document.miForma.submit();
+ return true;
+}
+
+function Carga(){
+  objeto=document.miForma.subproceso;
+  if (objeto.length==0){
+     if (document.miForma.proceso.value!="X"){
+        cambioProceso(document.miForma.proceso.value);
+     }
+  }
+}
+
+</SCRIPT>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  onLoad="Carga();">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<br> 
+
+<div class="container">
+	<div id="idCreacionRegistro">
+      <FORM name="miForma" ACTION="CalPlantillasObjAct.po" METHOD="get" onsubmit="return Salvar()">
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Asignacion de objetivos a plantilla</STRONG></td>
+        </tr> 
+        
+        
+        <tr>
+          <td class="tit" colspan="2">
+             <table class="tabw" summary=""  border="0">
+               <tr>
+                 <td class="tit">Proceso</td>
+                 <td class="dat"><SELECT NAME="proceso" class="INP" id="proceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"  onchange="cambioProceso(this.options[this.selectedIndex].value);"></SELECT></td>
+                 <td class="tit">SubProceso</td>
+                 <td class="dat"><SELECT NAME="subproceso" class="INP" id="subproceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+               </tr>
+               <tr>
+                 <td class="tit">Tipo Objetivo</td>
+                 <td class="dat"><SELECT NAME="tipoObjetivo" class="INP" id="tipoObjetivo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+                 <td  class="dat2" colspan="2"><INPUT class="BOT"  TYPE="Submit"  VALUE="Consultar"  name="miBotonC" onClick="Consultar();" accesskey="C"></td>
+               </tr>
+             </table>
+             <br>
+          </td>
+        </tr>
+
+        <tr>
+           <td class="tit">Plantilla</td>
+           <td class="dat"><SELECT NAME="plantilla" class="INP" id="idPlantilla" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onChange="Recarga()"></SELECT></td>
+        </tr>
+
+        
+        <tr>
+           <td class="dat" colspan="2">
+             <table class="tabw" summary=""  border="0" id="detalle">
+               <caption class="NE">Objetivos asignadas</caption>
+               <tr>
+                 <td class="cf2">Incluir Todos &nbsp; 
+                   <INPUT class="INP" TYPE='checkbox' name= 'clickcontrol' onclick= "fMarcar(this.checked,self.document.miForma,'_X')">
+                 </td>
+                 <td class="CF1">C&oacute;digo</td>
+                 <td class="CF2">Objetivo</td>
+                 <td class="CF1">Tipo Objetivo</td>
+                 <td class="CF2">Proceso</td>
+                 <td class="CF1">Subproceso</td>
+               </tr>
+               </table>                     
+           </td>
+        </tr>
+		
+        <tr>        
+          <td class="dat2" colspan="2">
+          <INPUT TYPE="hidden" NAME="_operacion" value="C">
+          <INPUT class="BOT"  TYPE="Submit"  VALUE="Grabar"  id="idBoton" name="miBotonG" onClick="Grabar();" accesskey="G"></td>
+        </tr>
+       </table>
+      </FORM>
+     </div>
+	</div>
+
+</body>
+</html>

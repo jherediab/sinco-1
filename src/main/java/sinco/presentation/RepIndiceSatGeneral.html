@@ -1,0 +1,213 @@
+<html>
+<head>
+<title>index.htm</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script type="text/javascript" src="media/tablekit.js"></script>
+<link type="text/css" rel="stylesheet" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   rta=validar(document.miForma.fechaInicio,"Fecha Inicio","FECH",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaFin,"Fecha Fin","FECH",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }   
+   
+   if (document.miForma.exportar.checked==true||document.miForma.graficar.checked==true){
+      Mostrar();
+   }
+   
+   return true;   
+}
+
+
+function Cargar(){
+
+  try {
+     document.forms[0].fechaInicio.focus()
+  } 
+  catch(e){}
+   
+  try {
+    document.miForma.fechaInicio.value=getCookie("EscSujFechaInicio");
+    document.miForma.fechaFin.value=getCookie("EscSujFechaFin");
+  }
+  catch(e){
+  }
+  
+  document.miForma.fechaInicio.focus();
+}
+
+function Consultar(){
+   setCookie("EscSujFechaInicio",document.miForma.fechaInicio.value,360);
+   setCookie("EscSujFechaFin",document.miForma.fechaFin.value,360);
+   
+   document.miForma.target="";
+   if (document.miForma.graficar.checked==true){
+      document.miForma.target="_blank";
+   }
+   
+   return true;
+}
+</SCRIPT>
+
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+ <div class="container">
+  <div id="trFiltros">
+       <form method="post" id="forma" name="miForma" action="RepIndiceSatGeneral.po" onSubmit="return Salvar();">
+         <INPUT TYPE="hidden" NAME="_operacion" id="_operacion" value="L">
+         <table summary="" border="0" class="tabf">
+           <tr>
+            <td class ="ca" COLSPAN="4">Indice de satisfacci&oacute;n General</td>
+           </tr> 
+
+           <tr>
+             <td class="tit">A&ntilde;o:</td>
+             <td class="dat" colspan="3"><SELECT class="INP" NAME="anno" id="IdAnno" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+           </tr>
+           <tr> 
+             <td class="tit">Mes Inicial:</td>
+             <td class="dat"><SELECT class="INP" NAME="mes1" id="IdMes1" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+             <td class="tit">Mes Final:</td>
+             <td class="dat"><SELECT class="INP" NAME="mes2" id="IdMes2" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+           </tr>
+
+           <tr> 
+             <td class="tit">Generar Gr&aacute;fica</td>
+             <td class="dat"><INPUT class="INP" TYPE="checkbox" NAME="graficar" id="graficar" value="S"></td>
+             <td class="tit">Exportar &nbsp; <INPUT class="INP" TYPE="checkbox" NAME="exportar" id="exportar" value="S"></td>
+             <td class="dat2"><INPUT TYPE="Submit" class="BOT" value="Listar" onClick="Consultar()">
+             </td>
+           </tr>
+             
+           <tr> 
+             <td class="tit" colspan="4">
+              <table summary="" id="detAreas" width="100%">
+               <tr>
+                <td class="cf2" align="center"> Marca <INPUT class="INP" TYPE='checkbox' onclick= "fMarcar(this.checked,self.document.miForma,'A_')"></td>
+                <td class="cf1">Area Proveedor</td>
+               </tr>
+              </table>
+             </td>
+           </tr>
+           
+           <tr> 
+             <td class="dat2" colspan="4"> 
+               <INPUT TYPE="Submit" class="BOT" value="Listar" onClick="Consultar()">
+             </td>
+           </tr>
+         </table>
+        </form>
+  </div>
+
+  <div  id="tblResultados">
+      <table summary="" class="tabf sortable resizable">
+       <caption class="ca">Periodo: 
+      <span id="parMes1">&nbsp;</span> - <span id="parMes2">&nbsp;</span> de A&ntilde;o <span id="parAnno">&nbsp;</span>
+      </caption> 
+
+       <thead>
+        <tr>
+           <th class="cf2">Area</th>
+           <th class="cf1">Oport Excede</th>
+           <th class="cf2">Oport Cumple</th>
+           <th class="cf1">Oport No Cumple</th>
+           <th class="cf1">Perc. Serv. Excede</th>
+           <th class="cf2">Perc. Serv. Cumple</th>
+           <th class="cf1">Perc. Serv. No Cumple</th>
+           <th class="cf2">Ind Oportunidad</th>
+           <th class="cf1">Ind Perc. Serv.</th>
+           <th class="cf2">Ind Satisfacci&oacute;n</th>
+       </tr>
+       </thead>
+       <tbody id="detalle">
+       </tbody>
+       <tfoot>
+        <tr>
+          <th class="PIE">Totales</th>
+          <th class="PIE"><span id="OE">&nbsp;</span></th>
+          <th class="PIE"><span id="OB">&nbsp;</span></th>
+          <th class="PIE"><span id="OR">&nbsp;</span></th>
+          <th class="PIE"><span id="PE">&nbsp;</span></th>
+          <th class="PIE"><span id="PB">&nbsp;</span></th>
+          <th class="PIE"><span id="PR">&nbsp;</span></th>
+          <th class="PIE"><span id="IO">&nbsp;</span></th>
+          <th class="PIE"><span id="IP">&nbsp;</span></th>
+          <th class="PIE"><span id="IS">&nbsp;</span></th>       
+        </tr>
+       </tfoot>
+      </table>
+     </div>
+  </div>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+
+  <!-- script que define y configura el calendario-->
+  <script type="text/javascript">
+     Calendar.setup({
+      inputField :  "fechaInicio",  // id del campo de texto
+      ifFormat   :  "%Y-%m-%d",     // formato de la fecha que se escriba en el campo de texto
+      button     :  "bFechaInicio"  // el id del botón que lanzará el calendario
+      });
+      
+     Calendar.setup({
+      inputField :  "fechaFin",  // id del campo de texto
+      ifFormat   :  "%Y-%m-%d",         // formato de la fecha que se escriba en el campo de texto
+      button     :  "bFechaFin"          // el id del botón que lanzará el calendario
+      });
+      
+  </script>
+
+
+</body>
+</html>
+
+

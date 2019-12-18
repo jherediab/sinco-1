@@ -1,0 +1,1744 @@
+<html>
+ <head>
+ <title>Niveles Plan de Desarrollo</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+  <SCRIPT TYPE="text/javascript"  language="JavaScript">
+ function add_area(codigo,nombre) {
+    this.codigo=codigo;
+    this.nombre=nombre;
+ }
+ </SCRIPT>
+ <SCRIPT TYPE="text/javascript"  language="JavaScript"  id="responsables">
+</SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript"  id="scriptAreas">
+</SCRIPT>
+ <SCRIPT TYPE="text/javascript">
+ var sVolver2="NO";
+ var sVolver="NO";
+  function Cargar(){
+  var i=0;
+  try {
+		for (i=0; i<mResponsables.length; i++){
+		 var elItem=mResponsables[i];
+		 InsertarArea('tablaResponsables','',elItem.codigo);
+		}
+   }
+   catch(e){
+   }
+}
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+     Mostrar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('idNivel'),"Id Nivel","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoNivel'),"Código Nivel","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('idPlanDesarrollo'),"Id Plan Desarrollo","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('nivelSuperior'),"Nivel Superior","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('nombreNivel'),"Nombre Nivel","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('tipoNivel'),"Tipo Nivel","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('objetivoGeneral'),"Objetivo General","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('objetivoEspecifico'),"Objetivo Especifico","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('metasGeneral'),"Metas General","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('metasEspecifico'),"Metas Especifico","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(idNivel){
+
+   $('_operacion').value="E";
+   document.ff.onsubmit = salvar3(idNivel);
+ }
+ 
+ function salvar3(idNivel){
+ 
+    var resp = confirm('Esta seguro de eliminar el nivel?'); 
+	if(!resp){
+		return false;
+	}else{
+	
+	
+	  var criterio1 = document.ff.criterio1.value;
+	  var criterio1Todo = document.ff.criterio1Todo.value;
+	  var criterio2 = document.ff.criterio2.value;
+	  var criterio2Todo = document.ff.criterio2Todo.value;
+	  var criterio3Todo = document.ff.criterio3Todo.value;
+	  var criterio4Todo = document.ff.criterio4Todo.value;
+	  
+	  var criterio3 = document.ff.criterio3.value;
+	  var criterio4 = document.ff.criterio4.value;
+
+ 
+	  var idPlanDesarrollo = document.ff.idPlanHidden.value;
+	  
+	 document.ff.action="PdeNivelPlan.po?_operacion=LL&idPlanDesarrollo="+idPlanDesarrollo+"&criterio1="+criterio1+"&criterio1Todo="+criterio1Todo+"&criterio2="+criterio2+"&criterio2Todo="+criterio2Todo+"&criterio3="+criterio3+"&criterio3Todo="+criterio3Todo+"&criterio4="+criterio4+"&criterio4Todo="+criterio4Todo+"&idNivel="+idNivel;
+	
+	 document.ff.submit();
+	}  
+     
+
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   
+      sVolver2="SI";
+   sVolver="SI";
+  var criterio1 = document.ff.criterio1.value;
+  var criterio1Todo = document.ff.criterio1Todo.value;
+  var criterio2 = document.ff.criterio2.value;
+  var criterio2Todo = document.ff.criterio2Todo.value;
+  var criterio3Todo = document.ff.criterio3Todo.value;
+  var criterio4Todo = document.ff.criterio4Todo.value;
+  
+  var criterio3 = document.ff.criterio3.value;
+  var criterio4 = document.ff.criterio4.value;
+
+ 
+  
+  var idPlanDesarrollo = document.ff.idPlanHidden.value;
+  
+  
+  
+  if(document.ff.criterio1.value==""){
+	alert("seleccione un criterio de Busqueda");
+  }else{
+  
+   document.ff.action="PdeNivelPlan.po?_operacion=LL&idPlanDesarrollo="+idPlanDesarrollo+"&criterio1="+criterio1+"&criterio1Todo="+criterio1Todo+"&criterio2="+criterio2+"&criterio2Todo="+criterio2Todo+"&criterio3="+criterio3+"&criterio3Todo="+criterio3Todo+"&criterio4="+criterio4+"&criterio4Todo="+criterio4Todo;
+   document.ff.submit();
+  }
+	
+  
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="X";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+ 
+   function PreparaVolver(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="A";
+   document.ff.action="PdePlanDesarrollo.po";
+   return true;
+ }
+ 
+ function guardarPlan(){
+	
+	var plan=document.getElementById('idPlanHidden').value;
+	var url='ConsultasAjaxOld.po?_operacion=consultarPlan&idPlan='+plan;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+		var resultado=getNodeValue(transport.responseXML.getElementsByTagName('respuesta')[0],'existe');
+           	if(resultado=='true'){
+					alert("Ya se encuentra cargado el Plan de Desarrollo");
+           	}else{
+			   var resp = confirm('Esta seguro de finalizar el cargue de informaci\xf3n del plan?\nSi confirma la finalizaci\xf3n, no podr\xe1 hacer modificaciones o adiciones'); 
+			   if(!resp){
+				
+			   }else{
+			   
+				var plan=document.getElementById('idPlanHidden').value;
+				var url='ConsultasAjaxOld.po?_operacion=guardarPlan&idPlan='+plan;
+				new Ajax.Request(url,{
+					method:'get',  
+					onSuccess: function(transport) {
+					alert('Se ha guardado el cargue del plan');
+					},     
+					onFailure: function() {
+					alert("Ups... Error obteniendo respuesta Ajax");
+					}    
+				} );  
+			   }
+			
+			}
+		},     
+        onFailure: function() {
+        alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    } );  
+ }
+ 
+ function descargarPlan(){
+ 
+
+   sVolver2="SI";
+   sVolver="SI";
+   document.ff.action="CalVerDocumento.po?numeroDocumento=planDesarrollo.xlsx&tipoDocumento=W&_operacion=VDC";
+   document.ff.submit();
+ 
+   return true;
+ 
+ 
+ }
+ 
+ function descargarPlanIndicativo(){
+ 
+    sVolver2="SI";
+   sVolver="SI";
+   document.ff.action="CalVerDocumento.po?numeroDocumento=planIndicativo.xlsx&tipoDocumento=W&_operacion=VDC";
+     document.ff.submit();
+   return true;
+ 
+ 
+ }
+ 
+ 
+  function descargarPoa(){
+ 
+    sVolver2="SI";
+   sVolver="SI";
+   document.ff.action="CalVerDocumento.po?numeroDocumento=poa.xlsx&tipoDocumento=W&_operacion=VDC";
+     document.ff.submit();
+   return true;
+ 
+ 
+ }
+ 
+   function descargarPlanAccion(){
+ 
+    sVolver2="SI";
+   sVolver="SI";
+   document.ff.action="CalVerDocumento.po?numeroDocumento=planAccion.xlsx&tipoDocumento=W&_operacion=VDC";
+     document.ff.submit();
+   return true;
+ 
+ 
+ }
+ 
+ function mostrarNivelesUno(nivel, criterio1Todo){
+
+	var url='ConsultasAjaxOld.po?_operacion=buscarNiveles&tipoNivel=S&nivel='+nivel;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+
+		if(nivel=="" || nivel=="-1"){
+		 document.getElementById(criterio1Todo).options.length = 0;
+		}else{	
+		 llenarComboBlanco(document.getElementById(criterio1Todo), transport.responseXML.getElementsByTagName('nivel'),'codigo','nombre');	
+		}
+		
+		 document.getElementById("criterio2").options.length = 0;
+		 document.getElementById("criterio2Todo").options.length = 0;
+		 document.getElementById("criterio3").options.length = 0;
+		 document.getElementById("criterio3Todo").options.length = 0;
+		 document.getElementById("criterio4").options.length = 0;
+		 document.getElementById("criterio4Todo").options.length = 0;
+		 document.getElementById("tr2").style.display = "none";
+		 document.getElementById("tr3").style.display = "none";
+		 document.getElementById("tr4").style.display = "none";
+       
+		
+		
+		},     
+        onFailure: function() {
+        alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    } ); 
+  
+ }
+ 
+ 
+ function mostrarNivelesDos(criterio1Todo,criterio2,criterio2Todo){
+	
+	var url='ConsultasAjaxOld.po?_operacion=buscarNiveles&tipoNivel=I&nivel='+criterio1Todo;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+		
+		if(criterio1Todo=="" || criterio1Todo=="-1"){
+		 document.getElementById("tr2").style.display = "none";
+		  document.getElementById("criterio2").options.length = 0;
+		 document.getElementById("criterio2Todo").options.length = 0;
+		}else{
+		
+			var resultado=getNodeValue(transport.responseXML.getElementsByTagName('respuesta')[0],'existe');
+			if(resultado=='false'){
+				document.getElementById("tr2").style.display = "table-row";
+				llenarCombo(document.getElementById(criterio2), transport.responseXML.getElementsByTagName('nivelGenerico'),'codigoGenerico','nombreGenerico');	
+				llenarComboBlanco(document.getElementById(criterio2Todo), transport.responseXML.getElementsByTagName('nivel'),'codigo','nombre');	
+				} 	 
+		}
+       
+	     document.getElementById("tr3").style.display = "none";
+		 document.getElementById("tr4").style.display = "none";
+		 document.getElementById("criterio3").options.length = 0;
+		 document.getElementById("criterio3Todo").options.length = 0;
+		 document.getElementById("criterio4").options.length = 0;
+		 document.getElementById("criterio4Todo").options.length = 0;
+		
+		
+		},     
+        onFailure: function() {
+        }    
+    } ); 
+ 
+ 
+ }
+ 
+  function mostrarNivelesTres(criterio2Todo,criterio3,criterio3Todo){
+	
+	var url='ConsultasAjaxOld.po?_operacion=buscarNiveles&tipoNivel=I&nivel='+criterio2Todo;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+
+		
+		if(criterio2Todo=="" || criterio2Todo=="-1"){
+		 document.getElementById("tr3").style.display = "none";
+		 document.getElementById("criterio3").options.length = 0;
+		 document.getElementById("criterio3Todo").options.length = 0;
+		}else{
+		
+		 var resultado=getNodeValue(transport.responseXML.getElementsByTagName('respuesta')[0],'existe');
+		 if(resultado=='false'){
+		    document.getElementById("tr3").style.display = "table-row";
+			llenarCombo(document.getElementById(criterio3), transport.responseXML.getElementsByTagName('nivelGenerico'),'codigoGenerico','nombreGenerico');	
+			llenarComboBlanco(document.getElementById(criterio3Todo), transport.responseXML.getElementsByTagName('nivel'),'codigo','nombre');	
+		 }
+		
+		}
+       
+		 document.getElementById("tr4").style.display = "none";
+	     document.getElementById("criterio4").options.length = 0;
+		 document.getElementById("criterio4Todo").options.length = 0;
+		},     
+        onFailure: function() {
+        }    
+    } ); 
+ 
+ 
+ }
+ 
+ 
+ 
+  function mostrarNivelesCuatro(criterio3Todo,criterio4,criterio4Todo){
+	
+	var url='ConsultasAjaxOld.po?_operacion=buscarNiveles&tipoNivel=I&nivel='+criterio3Todo;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+
+		
+		if(criterio3Todo=="" || criterio3Todo=="-1"){
+		 document.getElementById("tr4").style.display = "none";
+		 document.getElementById("criterio4").options.length = 0;
+		 document.getElementById("criterio4Todo").options.length = 0;
+		}else{
+		 var resultado=getNodeValue(transport.responseXML.getElementsByTagName('respuesta')[0],'existe');
+			 if(resultado=='false'){
+			 document.getElementById("tr4").style.display = "table-row";
+			 llenarCombo(document.getElementById(criterio4), transport.responseXML.getElementsByTagName('nivelGenerico'),'codigoGenerico','nombreGenerico');	
+			 llenarComboBlanco(document.getElementById(criterio4Todo), transport.responseXML.getElementsByTagName('nivel'),'codigo','nombre');	
+			}
+		}
+       
+		
+		
+		},     
+        onFailure: function() {
+        }    
+    } ); 
+ 
+ 
+ }
+ 
+ function consultarNivelPrimero(idNivel){
+ 
+    document.getElementById("idUnidadNivelKeyModal").value = idNivel;
+	$('_operacion').value="LL";
+	document.ff.action="PdeNivelPlan.po";
+	document.ff.submit();
+	
+ }
+ 
+ function consultarNivel(idNivel, nombreGenericoNivel, nombreNivel,codigoNivel,objetivoGeneral,fechaInsercion,fechaModificacion,usuarioInsercion,usuarioModificacion){
+ 
+ 
+	document.getElementById("consultaModal").style.display = "block";
+	
+	document.getElementById("nombreNivelConsultaModal").textContent = nombreGenericoNivel;
+	document.getElementById("nombreUnidadEdModal").textContent = nombreNivel;
+	document.getElementById("codigoUnidadEdModal").textContent = codigoNivel;
+	document.getElementById("objetivoGeneralEdModal").textContent = objetivoGeneral;
+	document.getElementById("fechaInsercionEdModal").textContent = fechaInsercion;
+	document.getElementById("fechaModificacionEdModal").textContent = fechaModificacion;
+	document.getElementById("usuarioInsercionEdModal").textContent = usuarioInsercion;
+	document.getElementById("usuarioModificacionEdModal").textContent = usuarioModificacion;
+	
+	document.getElementById("idUnidadNivelKeyModal").value = idNivel;
+ 
+ 
+ }
+ 
+  function mostrarUnidades(unidad){
+	document.getElementById("nomUnidad").innerHTML = unidad.innerHTML;
+	document.getElementById("nomUnidad2").innerHTML = unidad.innerHTML;
+ }
+ 
+  
+ function editarNivel(idRegistro, nombreNivelGenerico, nombreNivel,codigoNivel,objetivoGeneral,fechaInsercion,fechaModificacion,usuarioInsercion,usuarioModificacion){
+ 
+ 
+	document.getElementById("edicionModal").style.display = "block";
+	
+	document.getElementById("nombreNivelCreacionModal").textContent = nombreNivelGenerico;
+	
+	document.getElementById("idUnidadNivelModal").value = idRegistro;
+	document.getElementById("nombreUnidadModal").value = nombreNivel;
+	document.getElementById("codigoUnidadModal").value = codigoNivel;
+	document.getElementById("objetivoGeneralModal").value = objetivoGeneral;
+	document.getElementById("fechaInsercionModal").value = fechaInsercion;
+	document.getElementById("fechaModificacionModal").value = fechaModificacion;
+	document.getElementById("usuarioInsercionModal").value = usuarioInsercion;
+	document.getElementById("usuarioModificacionModal").value = usuarioModificacion;
+ 
+ 
+ }
+ 
+ 
+ function CerrarModal(){
+ 
+ 
+	document.getElementById("consultaModal").style.display = "none";
+	document.getElementById("edicionModal").style.display = "none";
+	document.getElementById("creacionModal").style.display = "none";
+	
+	document.getElementById("idUnidadNivelKeyModal").value = "";
+	
+ 
+ 
+ }
+ 
+ function GrabarModal(){
+ 
+	var rta;
+ 
+	rta=validar($('codigoUnidadModal'),"Código Unidad","ALFA",0,"OBL","0","999999999999999");
+	   if(!rta){
+		  Mostrar();
+		  return false;
+	   }
+	rta=validar($('nombreUnidadModal'),"Nombre Nivel","ALFA",0,"OBL","0","999999999999999");
+	   if(!rta){
+		  Mostrar();
+		  return false;
+	   }
+ 
+    var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+	if(!resp){
+		return false;
+	}else{
+	
+   
+
+	 $('_operacion').value="M";
+	 document.ff.action="PdeUnidadNivel.po";
+	
+	 document.ff.submit();
+	}
+ 
+ }
+ 
+ 
+ 
+ function CrearNivel(){
+  
+  document.getElementById("codigoUnidadModalCreacion").value="";
+  document.getElementById("nombreUnidadModalCreacion").value="";
+  document.getElementById("objetivoGeneralModalCreacion").value="";
+  
+  
+	var text;
+	var sel;
+	var url;
+	var valor;
+  if(document.ff.criterio1.value=="" || document.ff.criterio1.value==-1){
+	alert("seleccione un nivel de creacion valido");
+  }else{
+  
+	document.getElementById("creacionModal").style.display = "block";
+	
+	if(document.ff.criterio4.value==''){
+		if(document.ff.criterio3.value==''){
+			if(document.ff.criterio2.value==''){
+				if(document.ff.criterio1.value==''){
+				
+				}else{
+					sel = document.getElementById("criterio1");
+				}			
+			}else{
+				sel = document.getElementById("criterio2");
+			}
+		}else{		
+			sel = document.getElementById("criterio3");
+		}	
+	}else{
+		sel = document.getElementById("criterio4");
+	}
+	text= sel.options[sel.selectedIndex].text;
+	valor=sel.options[sel.selectedIndex].value;
+	document.getElementById("nombreNivelCreacionModalC").textContent = text;
+  }
+	
+	
+	url='ConsultasAjaxOld.po?_operacion=buscarNivelesSuperiores&nivel='+valor;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+			var resultado=getNodeValue(transport.responseXML.getElementsByTagName('respuesta')[0],'existe');
+			if(resultado=="false"){
+				llenarComboBlanco(document.getElementById("nivelSuperiorModalCreacion"), transport.responseXML.getElementsByTagName('nivel'),'codigo','nombre');document.getElementById("trSeleccionNivel").style.display = "none";
+				document.getElementById("trSeleccionNivel").style.display = "table-row";				
+			}else{
+				document.getElementById("trSeleccionNivel").style.display = "none";
+				
+			}
+	
+		},     
+        onFailure: function() {
+        alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    } ); 
+  
+   return true;
+ }
+ 
+ function GrabarModalCreacion(){
+ 
+	var rta;
+	if(document.getElementById("trSeleccionNivel").style.display =="none"){
+					
+	}else{
+		
+			rta=validar($('nivelSuperiorModalCreacion'),"Nivel Superior","ALFA",0,"OBL","0","999999999999999");
+				   if(!rta){
+					  Mostrar();
+					  return false;
+				   } 
+		
+		
+	}	   
+			rta=validar($('codigoUnidadModalCreacion'),"Código Unidad","ALFA",0,"OBL","0","999999999999999");
+				   if(!rta){
+					  Mostrar();
+					  return false;
+				   }
+			rta=validar($('nombreUnidadModalCreacion'),"Nombre Nivel","ALFA",0,"OBL","0","999999999999999");
+				   if(!rta){
+					  Mostrar();
+					  return false;
+				   } 
+	
+				 
+		var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+		if(!resp){
+			return false;
+		}else{
+
+		 $('_operacion').value="C";
+		 document.ff.action="PdeUnidadNivel.po";			
+		 document.ff.submit();
+		}
+ }
+ 
+  function GrabarModalCreacionMetas(){
+ 
+	var rta;
+ 
+   rta=validar($('idMeta'),"Id Meta","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+	  Mostrar();
+      return false;
+   }
+   rta=validar($('codigoMeta'),"Codigo Meta","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   rta=validar($('nombreMeta'),"Meta","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar($('tipoMeta'),"Tipo Meta","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+  rta=validar($('tipoUnidad'),"Tipo Unidad","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoUnidad'),"Unidad","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('cantidad'),"Cantidad","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('lineaBase'),"Linea Base","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }  
+   rta=validar($('indicador'),"Indicador","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   
+   
+   if(!resp) {
+	return false;
+   }else{
+   
+     $('_operacion').value="C";
+	 document.ff.action="PdeMetas.po";			
+	 document.ff.submit();
+   } 
+ }
+ 
+   function GrabarModalModificacionMetas(){
+ 
+	var rta;
+ 
+   rta=validar($('idMeta'),"Id Meta","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+	  Mostrar();
+      return false;
+   }
+   rta=validar($('codigoMeta'),"Codigo Meta","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   rta=validar($('nombreMeta'),"Meta","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar($('tipoMeta'),"Tipo Meta","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+  rta=validar($('tipoUnidad'),"Tipo Unidad","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoUnidad'),"Unidad","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('cantidad'),"Cantidad","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('lineaBase'),"Linea Base","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }  
+   rta=validar($('indicador'),"Indicador","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   
+   
+   if(!resp) {
+	return false;
+   }else{
+   
+     $('_operacion').value="M";
+	 document.ff.action="PdeMetas.po";			
+	 document.ff.submit();
+   } 
+ }
+ 
+ function CerrarModalMetas(){
+ 
+	document.getElementById("creacionModalMetas").style.display = "none";
+	document.getElementById("consultaModalMetas").style.display = "none";
+ }
+ 
+ function NuevasMetas(){
+ 
+	/*document.getElementById("creacionModalMetas").style.display = "block";*/
+	
+    $('_operacion').value="LL";
+	document.ff.action="PdeNivelPlan.po?metaCreada=1";			
+	document.ff.submit();
+	
+	
+ }
+ 
+  function cargarUnidades(GrupoUnidad, codigoUnidad){
+	var url='ConsultasAjaxOld.po?_operacion=buscarUnidades&codigo_grupo='+GrupoUnidad;
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+        llenarComboBlanco(document.getElementById(codigoUnidad), transport.responseXML.getElementsByTagName('unidad'),'codigo_unidad','nombre_unidad');
+		},     
+        onFailure: function() {
+        alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    } );  
+ }
+ 
+ 
+ function ConsultarMeta(idMeta){
+ 
+	$('_operacion').value="LL";
+	document.ff.action='PdeNivelPlan.po?metaCreada=2&idMeta='+idMeta;			
+	document.ff.submit();
+ 
+ }
+  
+ function EditarMeta(idMeta){
+ 
+	
+    $('_operacion').value="LL";
+	document.ff.action='PdeNivelPlan.po?metaCreada=3&idMeta='+idMeta;			
+	document.ff.submit();
+	
+ }
+
+ function EliminarMeta(idMeta){
+ 
+ 
+    $('_operacion').value="E";
+     var resp = confirm('Esta seguro de eliminar el nivel?'); 
+	if(!resp){
+		return false;
+	}else{
+	  
+	 document.ff.action="PdeMetas.po?idMeta="+idMeta;
+	 document.ff.submit();
+	}  
+ } 
+ 
+
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" class="tabw" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<div class="container">
+ <FORM name="ff" ACTION="PdeNivelPlan.po" METHOD="post" onsubmit="return Salvar()">
+  <input type="hidden" name="_operacion" id="_operacion" value="X">
+  
+   <input type="hidden" name="nitEntidad" id="nitEntidadHidden">
+   <input type="hidden" name="idPlan" id="idPlanHidden">
+  <table   class="tabf" summary="" border="0">
+   <tr>
+ 	  <td class="dat">Niveles Plan de Desarrollo</td>
+    <td class="datc">
+     <label id="labelNombre" name="labelNombre" align="center"></label>
+    </td>
+ 	  <td class="dat2">
+	   <input type="submit" class="BOB"  value= "Regresar" id="btnVolver"  onClick="PreparaVolver();">
+       <input type="submit" class="BOB"  value= "Consultar" id="btnConsultar"  onClick="PreparaConsulta();">
+       <input type="submit" class="BOB"  value= "Nuevo" id="btnCrear" onClick="Nuevo();">
+       <input type="Button" class="BOB"  value= "Ayuda" id="btnAyuda" onClick="show_help('PdeNivelPlan');">
+    </td>
+   </tr>
+  </table>
+  <div id="divConsulta">
+  <br>
+   <table class="tabf" summary="" border="0">
+    <tr>
+      <td colspan="4" class="ca">CONSULTA</td>
+    </tr>
+        <tr id="tr1">
+         <td class="tit" style="width:10%">Criterio 1</td>
+         <td class="dat"> <select class="INP" NAME="criterio1" id="criterio1" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onchange="mostrarNivelesUno(this.value, 'criterio1Todo')"></select> 
+			<select class="INP" NAME="criterio1Todo" id="criterio1Todo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="mostrarNivelesDos(this.value, 'criterio2', 'criterio2Todo')"></select>
+		 </td>
+        </tr>
+
+        <tr id="tr2">
+         <td class="tit" style="width:10%">Criterio 2</td>
+         <td class="dat"> <select class="INP" NAME="criterio2" id="criterio2" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" ></select>
+			<select class="INP" NAME="criterio2Todo" id="criterio2Todo" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onchange="mostrarNivelesTres(this.value, 'criterio3', 'criterio3Todo')" ></select>
+		 </td>
+        </tr>
+		
+		<tr id="tr3">
+         <td class="tit" style="width:10%">Criterio 3</td>
+         <td class="dat"> <select class="INP" NAME="criterio3" id="criterio3" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);"></select>
+			<select class="INP" NAME="criterio3Todo" id="criterio3Todo" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onchange="mostrarNivelesCuatro(this.value, 'criterio4', 'criterio4Todo')" ></select>
+		 </td>
+        </tr>
+		
+	    <tr id="tr4">
+         <td class="tit" style="width:10%">Criterio 4</td>
+         <td class="dat"> <select class="INP" NAME="criterio4" id="criterio4" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);"></select>
+			<select class="INP" NAME="criterio4Todo" id="criterio4Todo" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" ></select>
+		 </td>
+        </tr>
+		
+		<tr id="tr5">
+         <td class="tit" style="width:10%">Criterio 5</td>
+         <td class="dat"> <select class="INP" NAME="criterio5" id="criterio5" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);"></select>
+			<select class="INP" NAME="criterio5Todo" id="criterio5Todo" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" ></select>
+		 </td>
+        </tr>
+		
+		<tr id="tr6">
+         <td class="tit" style="width:10%">Criterio 6</td>
+         <td class="dat"> <select class="INP" NAME="criterio6" id="criterio6" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);"></select>
+			<select class="INP" NAME="criterio6Todo" id="criterio6Todo" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" ></select>
+		 </td>
+        </tr>
+
+      <tr>
+       <td class="dat2" id="botonConsultar" colspan="4">
+	   <img height="36" onclick="CrearNivel()" src="media/Nuevo.png" width="150" style="cursor:pointer">
+        <img height="36" onclick="Consultar()" src="media/Consultar.png" width="150" style="cursor:pointer">
+       </td>
+      </tr>
+      </table>
+     </div>
+  <div id="divResultados">
+   <br>
+   <table summary=""  class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2">Nivel</th>
+        <th class="cf2">Nombre Nivel</th>
+		<th class="cf2">Consulta</th>
+     </tr>
+    </thead>
+	
+   <tbody id="detalle">
+   	 <!-- <tr>
+        <td class="ctdNuevo">Nivel</th>
+        <td class="ctdNuevo">Nombre Nivel</th>
+     </tr>
+	  <tr>
+        <td class="ctdNuevo">Nivel</th>
+        <td class="ctdNuevo">Nombre Nivel</th>
+     </tr>-->
+   </tbody>
+  <tfoot>
+    <tr>
+     <td  class="PIE" colspan="10" style="height:20px">
+	 <input TYPE="button" class="BOT" id="btnGuardaPlan" value="FINALIZAR" onClick="guardarPlan()">
+	 <input TYPE="submit" class="BOT" id="btnDescargarPlan" value="Reporte Plan Desarrollo" onClick="descargarPlan()">
+	 <input TYPE="submit" class="BOT" id="btnDescargarPlanIndicativo" value="Reporte Plan Indicativo" onClick="descargarPlanIndicativo()">
+	 <input TYPE="submit" class="BOT" id="btnDescargarPoa" value="Reporte Poa" onClick="descargarPoa()">
+	 <input TYPE="submit" class="BOT" id="btnDescargarPlanAccion" value="Reporte Plan Accion" onClick="descargarPlanAccion()">
+	 
+	 
+	 </td>
+	 
+    </tr>
+   </tfoot>
+  </table>
+ </div>
+ 
+ 
+  <div id="divResultados2">
+   <br>
+   <table summary=""  class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2" width="5%">Codigo</th>
+        <th class="cf2" width="47%" id="trResultNombre">Nombre Nivel</th>
+		<th class="cf2" width="47%" id="trResultTareas">Tareas</th>
+     </tr>
+    </thead>
+	
+   <tbody id="detalle2">
+
+   </tbody>
+  <tfoot>
+    <tr>
+     <td  class="PIE" colspan="10" style="height:20px">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span>
+	 
+	 
+	 </td>
+	 
+    </tr>
+   </tfoot>
+  </table>
+ </div>
+ 
+ 
+ 
+ <div id="divCreacionRegistro">
+  <br>
+  <table  class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td colspan="4" class="ca">Creaci&oacute;n / Modificaci&oacute;n</td>
+   </tr>
+   <tr>
+    <td class="tit">Id Nivel</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="idNivel" id="idNivel" maxlength="4" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">C&oacute;digo Nivel</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="codigoNivel" id="codigoNivel" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Id Plan Desarrollo</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="idPlanDesarrollo" id="idPlanDesarrollo" maxlength="2" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Nivel Superior</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nivelSuperior" id="nivelSuperior" maxlength="15" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Nombre Nivel</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="nombreNivel" id="nombreNivel" maxlength="30" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Tipo Nivel</td>
+    <td class="dat"><INPUT TYPE="Text" class="INP" NAME="tipoNivel" id="tipoNivel" maxlength="1" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Objetivo General</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="objetivoGeneral" id="objetivoGeneral" value="S"/></td>
+    <td class="tit">Objetivo Especifico</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="objetivoEspecifico" id="objetivoEspecifico" value="S"/></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Metas General</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="metasGeneral" id="metasGeneral" value="S"/></td>
+    <td class="tit">Metas Especifico</td>
+    <td class="dat"><INPUT TYPE="CHECKBOX" NAME="metasEspecifico" id="metasEspecifico" value="S"/></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="fechaInsercion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="fechaModificacion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+     <tr>
+      <td class="dat2" colspan="4">
+      <input type="submit" class="BOT" value="Grabar"   id="btnGrabar" onclick="Grabar();">
+      <input type="submit" class="BOT" value="Eliminar" id="btnEliminar" onclick="Eliminar();">
+      <input type="submit" class="BOT" value="Salir"   id="btnSalir" onclick="Salir();">
+     </td>
+    </tr>
+   </table>
+  </div>
+  <div id="divEdicion">
+  
+  
+  
+  
+  <br>
+    <table class="tabf" summary="">
+     <tr>
+      <td colspan="4" class="ca">Edici&oacute;n</td>
+     </tr>
+     <tr>
+      <td class="tit">Id Nivel</td>
+      <td class="dat"><span id="idNivelEd">&nbsp;</span></td>
+      <td class="tit">C&oacute;digo Nivel</td>
+      <td class="dat"><span id="codigoNivelEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Id Plan Desarrollo</td>
+      <td class="dat"><span id="idPlanDesarrolloEd">&nbsp;</span></td>
+      <td class="tit">Nivel Superior</td>
+      <td class="dat"><span id="nivelSuperiorEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Nombre Nivel</td>
+      <td class="dat"><span id="nombreNivelEd">&nbsp;</span></td>
+      <td class="tit">Tipo Nivel</td>
+      <td class="dat"><span id="tipoNivelEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Objetivo General</td>
+      <td class="dat"><span id="objetivoGeneralEd">&nbsp;</span></td>
+      <td class="tit">Objetivo Especifico</td>
+      <td class="dat"><span id="objetivoEspecificoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Metas General</td>
+      <td class="dat"><span id="metasGeneralEd">&nbsp;</span></td>
+      <td class="tit">Metas Especifico</td>
+      <td class="dat"><span id="metasEspecificoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Inserci&oacute;n</td>
+      <td class="dat"><span id="fechaInsercionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Inserci&oacute;n</td>
+      <td class="dat"><span id="usuarioInsercionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Modificaci&oacute;n</td>
+      <td class="dat"><span id="fechaModificacionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Modificaci&oacute;n</td>
+      <td class="dat"><span id="usuarioModificacionEd">&nbsp;</span></td>
+     </tr>
+
+      <tr>
+       <td class="dat2" colspan="4">
+ 	        <input type="hidden" name="idNivel" id="idNivelKey">
+ 	        <input type="hidden" name="idPlanDesarrollo" id="idPlanDesarrolloKey">
+ 	        <input type="hidden" name="nivelSuperior" id="nivelSuperiorKey">
+       <input type="submit" class="BOT" value="Editar"   id="btnModificar" onClick="Modificar();">
+    </td>
+   </tr>
+  </table>
+ </div>
+ 
+ 
+   <!-- The Modal -->
+<div id="consultaModal" class="modal">
+
+<div class="modal-content">
+    <br>
+    <table class="tabf" summary="">
+	
+	  <tr>
+		<td class="dat" colspan="3"><span>E.S.E Hospital Regional de Chiquinquir&aacute;</span></td> 
+	    <td class="dat2">
+		   <input type="button" class="BOB"  value= "Regresar" onClick="CerrarModal();">
+		 </td>
+	  </tr>
+      <tr>
+		<td class="dat" colspan="4"><span id="nombrePlanModal">&nbsp;</span></td> 
+      </tr>
+   
+     <tr>
+      <td colspan="4" class="ca">Consulta</td>
+     </tr>
+	 
+     <tr>
+      <td class="tit">C&oacute;digo Nivel</td>
+      <td class="dat"><span id="codigoUnidadEdModal">&nbsp;</span></td>
+	  <td class="tit"><span id="nombreNivelConsultaModal">&nbsp;</span></td>
+      <td class="dat"><span id="nombreUnidadEdModal">&nbsp;</span></td>
+     </tr>
+
+     <tr id="objGeneralEd">     
+      <td class="tit">Objetivo General</td>
+      <td class="dat" colspan="3"><span id="objetivoGeneralEdModal">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Inserci&oacute;n</td>
+      <td class="dat"><span id="fechaInsercionEdModal">&nbsp;</span></td>
+      <td class="tit">Usuario Inserci&oacute;n</td>
+      <td class="dat"><span id="usuarioInsercionEdModal">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Modificaci&oacute;n</td>
+      <td class="dat"><span id="fechaModificacionEdModal">&nbsp;</span></td>
+      <td class="tit">Usuario Modificaci&oacute;n</td>
+      <td class="dat"><span id="usuarioModificacionEdModal">&nbsp;</span></td>
+     </tr>
+
+      <tr>
+       <td class="dat2" colspan="4">
+ 	        <input type="hidden" name="idUnidadNivel" id="idUnidadNivelKeyModal">
+ 	        <input type="hidden" name="idNivel" id="idNivelKeyModal">
+ 	        <input type="hidden" name="idUnidadSuperior" id="idUnidadSuperiorKeyModal">
+			
+       <!--<input type="submit" class="BOT" value="Editar"   id="btnModificarModal" onClick="Modificar();">
+		<INPUT class="BOT"  TYPE="Submit" VALUE="Metas" id="metasModal" onClick="DigitarMetas();">
+		<INPUT class="BOT"  TYPE="Submit" VALUE="Objetivos Especificos" id="objEspecificosModal" onClick="ObjetivosEspecificos();">-->
+  
+
+    </td>
+   </tr>
+  </table>
+  <br>
+  
+  <div id="divResultadosNiveles">
+		<table class="tabf" summary="" border="0">
+		   <tr>
+				<td class="tit" id="nombreSiguienteNivel">&nbsp;</td>
+				<td class="dat2" colspan="3"></td>
+			</tr>
+		</table>
+	   <table summary=""  class="tabf sortable resizable">
+		<thead>
+		 <tr>
+			<th class="cf2" width="8%">Codigo</th>
+			<th class="cf2" width="46%">Nombre</th>
+		 </tr>
+		</thead>
+		
+	   <tbody id="detalleNiveles">
+
+	   </tbody>
+	  <tfoot>
+		<tr>
+		 <td  class="PIE" colspan="10" style="height:20px">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistrosNiveles">&nbsp;</span>
+		 
+		 
+		 </td>
+		 
+		</tr>
+	   </tfoot>
+	  </table>
+</div>
+
+<br>
+  
+  
+  
+<div id="divResultadosMetas">
+		<table class="tabf" summary="" border="0">
+		   <tr>
+				<td class="tit">Metas</td>
+				<td class="dat2" colspan="3">
+			     <img height="30" onclick="NuevasMetas()" src="media/Nuevo.png" width="130" style="cursor:pointer">
+				</td>
+			</tr>
+		</table>
+	   <table summary=""  class="tabf sortable resizable">
+		<thead>
+		 <tr>
+			<th class="cf2" width="8%">Codigo Meta</th>
+			<th class="cf2" width="46%">Meta</th>
+			<th class="cf2" width="46%">Tareas</th>
+
+		 </tr>
+		</thead>
+		
+	   <tbody id="detalleMetas">
+
+	   </tbody>
+	  <tfoot>
+		<tr>
+		 <td  class="PIE" colspan="10" style="height:20px">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistrosMetas">&nbsp;</span>
+		 
+		 
+		 </td>
+		 
+		</tr>
+	   </tfoot>
+	  </table>
+</div>
+  
+  
+  
+  
+  
+  
+  </div>
+</div>
+  
+  
+<div id="edicionModal" class="modal">
+  <div class="modal-content">
+  <br>
+  <table  class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+ 
+	<tr>
+		<td class="dat" colspan="3"><span>E.S.E Hospital Regional de Chiquinquir&aacute;</span></td> 
+	    <td class="dat2">
+		   <input type="button" class="BOB"  value= "Regresar" onClick="CerrarModal();">
+		 </td>
+	</tr>
+      <tr>
+		<td class="dat" colspan="4"><span id="nombrePlanModalEdicion">&nbsp;</span></td> 
+      </tr>
+   <tr>
+    <td colspan="4" class="ca">Modificaci&oacute;n</td>
+   </tr>
+   <tr>
+    <td class="tit">Id Registro</td>
+    <td class="dat" colspan="3"><INPUT TYPE="Text" class="IND" NAME="idUnidadNivelModal" id="idUnidadNivelModal" maxlength="4" size="20" readonly onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+   
+   
+   <tr>
+    <td class="tit">C&oacute;digo Nivel</td>
+    <td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="codigoUnidadModal" id="codigoUnidadModal" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit"><span id="nombreNivelCreacionModal">&nbsp;</span></td>
+    <td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="nombreUnidadModal" id="nombreUnidadModal" maxlength="100" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  
+   </tr>
+   
+   <tr id="objGeneral">
+    <td class="tit">Objetivo General</td>
+    <td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="objetivoGeneralModal" id="objetivoGeneralModal" maxlength="255" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercionModal" id="fechaInsercionModal" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercionModal" id="usuarioInsercionModal" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacionModal" id="fechaModificacionModal" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacionModal" id="usuarioModificacionModal" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+     <tr>
+      <td class="dat2" colspan="4">
+      <input type="button" class="BOT" value="Grabar" id="btnGrabarModal" onclick="GrabarModal();">
+     </td>
+    </tr>
+   </table>
+   </div>
+ </div>
+ 
+ 
+
+ 
+ <div id="creacionModal" class="modal">
+  <div class="modal-content">
+  <br>
+  <table  class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+ 
+	<tr>
+		<td class="dat" colspan="3"><span>E.S.E Hospital Regional de Chiquinquir&aacute;</span></td> 
+	    <td class="dat2">
+		   <input type="button" class="BOB"  value= "Regresar" onClick="CerrarModal();">
+		 </td>
+	</tr>
+   <tr>
+    <td colspan="4" class="ca">Creaci&oacute;n</td>
+   </tr>
+   
+   
+    <tr id="trSeleccionNivel">
+      <td class="tit" style="width:10%">Seleccione Nivel Superior</td>
+      <td class="dat" colspan="3"> <select class="INP" NAME="nivelSuperiorModalCreacion" id="nivelSuperiorModalCreacion" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);"></select>
+	  </td>
+    </tr>
+		
+   <tr>
+    <td class="tit">Id Registro</td>
+    <td class="dat" colspan="3"><INPUT TYPE="Text" class="IND" NAME="idUnidadNivelModalCreacion" id="idUnidadNivelModalCreacion" maxlength="4" size="20" readonly onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+   
+   
+   <tr>
+    <td class="tit">C&oacute;digo Nivel</td>
+    <td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="codigoUnidadModalCreacion" id="codigoUnidadModalCreacion" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit"><span id="nombreNivelCreacionModalC">&nbsp;</span></td>
+    <td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="nombreUnidadModalCreacion" id="nombreUnidadModalCreacion" maxlength="100" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  
+   </tr>
+   
+   <tr id="objGeneralCreacion">
+    <td class="tit">Objetivo General</td>
+    <td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="objetivoGeneralModalCreacion" id="objetivoGeneralModalCreacion" maxlength="255" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercionModalCreacion" id="fechaInsercionModalCreacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercionModalCreacion" id="usuarioInsercionModalCreacion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacionModalCreacion" id="fechaModificacionModalCreacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacionModalCreacion" id="usuarioModificacionModalCreacion" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+     <tr>
+      <td class="dat2" colspan="4">
+      <input type="button" class="BOT" value="Grabar" id="btnGrabarModalCreacion" onclick="GrabarModalCreacion();">
+     </td>
+    </tr>
+   </table>
+   </div>
+ </div>
+ 
+  <div id="creacionModalMetas" class="modal">
+   <div class="modal-content-metas">
+	  <br>
+	  <table  class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+	  	<tr>
+			<td class="dat" colspan="3"><span>E.S.E Hospital Regional de Chiquinquir&aacute;</span></td> 
+			<td class="dat2">
+			   <input type="button" class="BOB"  value= "Regresar" onClick="CerrarModalMetas();">
+			 </td>
+		</tr>
+	   <tr>
+		<td colspan="4" class="ca">Creaci&oacute;n / Modificaci&oacute;n</td>
+	   </tr>
+	   <tr>
+		<td class="tit">Id Registro</td>
+		<td class="dat" colspan="3"><INPUT TYPE="Text" class="IND" NAME="idMeta" id="idMeta" maxlength="5" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+	   </tr>
+	   
+	   <tr>
+		<td class="tit">C&oacute;digo Meta</td>
+		<td class="dat"> <INPUT TYPE="Text" class="INP" NAME="codigoMeta" id="codigoMeta" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		<td class="tit">Meta</td>
+		<td class="dat"> <INPUT TYPE="Text" class="INP" NAME="nombreMeta" id="nombreMeta" maxlength="200" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+	   </tr>
+	   
+	   
+	   <tr>
+		<td class="tit">Tipo Meta</td>
+		<td class="dat" colspan="3"> <SELECT NAME="tipoMeta" class="INP" id="tipoMeta" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+	   </tr>
+	   
+	   <tr>
+		<td class="tit">Tipo Unidad</td>
+		<td class="dat"> <SELECT NAME="tipoUnidad" class="INP" id="tipoUnidad" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cargarUnidades(this.value, 'codigoUnidad')"></SELECT></td>
+		<td class="tit">Unidad</td>
+		<td class="dat"> <SELECT NAME="codigoUnidad" class="INP" id="codigoUnidad" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="mostrarUnidades(this.options[this.selectedIndex])"></SELECT><a href="http://190.14.255.23:8080/sinco/WelcomeLdap.po" target="_blank">&nbsp;&nbsp;&nbsp;Ir a la configuración de Unidades</a></td>
+	   </tr>
+
+	   <tr>
+		<td class="tit">Cantidad</td>
+		<td class="dat"><INPUT TYPE="Text" class="INP" NAME="cantidad" id="cantidad" maxlength="12" size="20" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"><span>&nbsp;&nbsp;</span><span id="nomUnidad">&nbsp;</span></td>
+		<td class="tit">Linea Base</td>
+		<td class="dat"><INPUT TYPE="Text" class="INP" NAME="lineaBase" id="lineaBase" maxlength="15" size="20" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"><span>&nbsp;&nbsp;</span><span id="nomUnidad2">&nbsp;</span></td>
+	   </tr>
+	   
+	   <tr id="trProceso">
+		<td class="tit">Proceso</td>
+		<td class="dat" colspan="3"> <SELECT NAME="proceso" class="INP" id="proceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+	   </tr>
+	   
+	 
+	   
+		<tr id="trResponsable">
+			<td class="tit">Responsable</td>
+				<td class="dat" colspan="3">
+					<table summary=""  border="0" id="tablaResponsables">
+					   <tr>
+						  <th class="cf2" align="center">C&oacute;digo Cargo</th>
+						  <th class="cf1" align="center">Eliminar</th>
+					   </tr>
+					 </table>
+					 <input name="filtroResp" type="input" maxlength="15" size="10"> 
+					 <input name="AgregarLinea" TYPE="button" class="BOT" value="Agregar Responsable" onclick="InsertarArea('tablaResponsables',document.ff.filtroResp.value,0);"> 
+			</td>
+		 </tr>
+	   
+	   
+		<tr>
+		   <td class="tit" colspan="4">
+			<table summary="" border="0" cellpadding="1" cellspacing="1" class="tabf" id="tblAnios">
+			 <caption class="ca">A&ntilde;os del Plan de Desarrollo</caption>
+			  <thead>
+			   <tr>
+				<th rowspan="4" id="anio" class="cf1">A&ntilde;o</th>
+				<th id="trimestre" class="cf1">Trimestre</th>
+				<th id="programado" class="cf2">Programado</th>
+				<th id="ejecutado" class="cf1">Ejecutado</th>
+				<th id="porcentaje" class="cf2">%</th>
+			   </tr>   
+			  </thead>
+			<tbody id="idDetalleAnio">
+			 </tbody>
+			  </table>
+		   </td>
+		</tr>
+		
+
+		
+	   <tr>
+		<td class="tit">Indicador</td>
+		<td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="indicador" id="indicador" maxlength="200" size="150"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+	   </tr>
+
+	   <tr>
+		<td class="tit">Fecha Inserci&oacute;n</td>
+		<td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercionMetas" id="fechaInsercionMetas" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		<td class="tit">Usuario Inserci&oacute;n</td>
+		<td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercionMetas" id="usuarioInsercionMetas" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+	   </tr>
+
+	   <tr>
+		<td class="tit">Fecha Modificaci&oacute;n</td>
+		<td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacionMetas" id="fechaModificacionMetas" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		<td class="tit">Usuario Modificaci&oacute;n</td>
+		<td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacionMetas" id="usuarioModificacionMetas" maxlength="60" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+	   </tr>
+
+		 <tr>
+		  <td class="dat2" colspan="4">
+		  <input type="hidden" name="idPlanDesarrollo" id="idPlanDesarrolloKeyMetas">
+		  <input type="button" class="BOT" value="Grabar"   id="btnGrabarMetas" onclick="GrabarModalCreacionMetas();">
+		 </td>
+		</tr>
+	   </table>
+	   </div>
+  </div>
+  
+ <div id="consultaModalMetas" class="modal">
+ <div class="modal-content">
+  <br>
+    <table class="tabf" summary="">
+		  	<tr>
+			<td class="dat" colspan="3"><span>E.S.E Hospital Regional de Chiquinquir&aacute;</span></td> 
+			<td class="dat2">
+			   <input type="button" class="BOB"  value= "Regresar" onClick="CerrarModalMetas();">
+			 </td>
+		</tr>
+     <tr>
+      <td colspan="4" class="ca">Consulta</td>
+     </tr>
+	 
+     <tr>
+      <td class="tit">C&oacute;digo Meta</td>
+      <td class="dat" colspan="3"><span id="codigoMetaEd">&nbsp;</span></td>
+     </tr>
+	 
+	 <tr>
+	  <td class="tit">Nombre Meta</td>
+      <td class="dat" colspan="3"><span id="nombreMetaEd">&nbsp;</span></td>	
+	 </tr>
+	 
+	 <tr>
+	  <td class="tit">Tipo Meta</td>
+      <td class="dat" colspan="3"><span id="tipoMetaEd">&nbsp;</span></td>	
+	 </tr>
+	 
+     <tr>
+      <td class="tit">Unidad</td>
+      <td class="dat" colspan="3"><span id="codigoUnidadEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Cantidad</td>
+      <td class="dat"><span id="cantidadEd">&nbsp;</span></td>
+      <td class="tit">Linea Base</td>
+      <td class="dat"><span id="lineaBaseEd">&nbsp;</span></td>
+     </tr>
+	 
+	 <tr id="trProcesoEd">
+	  <td class="tit">Proceso</td>
+      <td class="dat" colspan="3"><span id="procesoEd">&nbsp;</span></td>	
+	 </tr>
+	 
+	 <tr>
+	  <td class="tit">Indicador</td>
+      <td class="dat" colspan="3"><span id="indicadorEd">&nbsp;</span></td>	
+	 </tr>
+	 
+	<tr>
+	   <td class="tit" colspan="4">
+		<table summary="" border="0" cellpadding="1" cellspacing="1" class="tabf" id="tblAniosEd">
+		 <caption class="ca">A&ntilde;os del Plan de Desarrollo</caption>
+		  <thead>
+		   <tr>
+			<th id="anioEd" class="cf1">A&ntilde;o</th>
+			<th id="trimestreEd" class="cf2">Trimestre</th>
+			<th id="programadoEd" class="cf1">Programado</th>
+			<th id="ejecutadoEd" class="cf2">Ejecutado</th>
+			<th id="porcentajeEd" class="cf1">%</th>
+		   </tr>   
+		  </thead>
+		  <tbody id="detalleEd">  
+		  </tbody>	  
+		  </table>
+	   </td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Inserci&oacute;n</td>
+      <td class="dat"><span id="fechaInsercionEdMetas">&nbsp;</span></td>
+      <td class="tit">Usuario Inserci&oacute;n</td>
+      <td class="dat"><span id="usuarioInsercionEdMetas">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Modificaci&oacute;n</td>
+      <td class="dat"><span id="fechaModificacionEdMetas">&nbsp;</span></td>
+      <td class="tit">Usuario Modificaci&oacute;n</td>
+      <td class="dat"><span id="usuarioModificacionEdMetas">&nbsp;</span></td>
+     </tr>
+
+      <tr>
+       <td class="dat2" colspan="4">
+    </td>
+   </tr>
+  </table>
+  </div>
+ </div>
+ 
+ 
+ 
+ 
+  </FORM>
+ </DIV>
+
+ 
+ 
+ <script TYPE="text/javascript" language="JavaScript" id="scriptModal">
+ 
+
+ </SCRIPT>
+ 
+ 
+ 
+ 
+ 
+ <script TYPE="text/javascript" language="JavaScript">
+	var iFilaLineas=0;
+	function InsertarArea(miTabla,filtro,codigoArea){
+
+	   //console.log("paso 1. subproceso="+$('subproceso').value);	
+
+		var Tabla = document.getElementById(miTabla);
+
+		var tr = document.createElement("tr");
+		tr.id = "FilaLineas" + iFilaLineas;
+		
+		td = document.createElement("td");
+		select = document.createElement("select");
+		select.id = "areaAsignada";
+		if (miTabla=='tablaResponsables') {
+		   select.name = "ar_"+iFilaLineas;
+		}
+		else {
+		   select.name = "aa_"+iFilaLineas;
+		}
+		//select.disabled = "true";
+		select.numero = iFilaLineas;
+		select.size = "1";
+		select.className = "INP";
+		var j=0;
+		
+		var optionObj = new Option(" ",0);
+		select.options[j] = optionObj;    
+		
+		var i=0;
+		for (j=0; j<mAreas.length; j++){
+		   var elItem=mAreas[i];
+		   var bValido=1;
+		   if (filtro.length>0){
+		   
+			  if (elItem.nombre.substring(0,filtro.length).toLowerCase()!=filtro.toLowerCase()) {
+				  bValido=0;
+			   }
+		   }
+		   if (bValido==1){
+			  var option = document.createElement("option");
+			  
+			  option.setAttribute("value",elItem.codigo);
+			  option.appendChild(document.createTextNode(elItem.nombre));
+			  
+			  if (codigoArea==elItem.codigo){
+				 option.setAttribute("selected","true");
+			  }       
+			  select.appendChild(option);
+		   }
+		   i++;
+		}
+		
+		td.appendChild(select);
+		tr.appendChild(td);
+		
+		// EliminarLinea
+		td = document.createElement("td");
+		input = document.createElement("input");
+		input.id = "FilaLineas"+ iFilaLineas;
+		input.idfila = "FilaLineas" + iFilaLineas;
+		input.name = "EliminarLinea";
+		input.type = "button";
+		input.value = "Eliminar";
+		input.className="submitLink";
+		if (miTabla=='tablaResponsables') {
+		   input.onclick = BorrarResponsables;
+		}
+		else {
+		   input.onclick = BorrarArea;
+		}
+		td.appendChild(input);
+		tr.appendChild(td);
+
+		Tabla.tBodies[0].appendChild(tr);
+		iFilaLineas=iFilaLineas+1;
+		return;
+	}
+
+	function BorrarResponsables(e){
+		var Tabla = document.getElementById("tablaResponsables");
+		
+		var obj;
+		if (Rutinas.Browser.IE){     
+			obj=window.event.srcElement;
+		}       
+		else {
+		   obj=e.target;
+		}
+		Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		return;
+	}
+
+	function BorrarArea(e){
+		var Tabla = document.getElementById("tablaLineas");
+		
+		var obj;
+		if (Rutinas.Browser.IE){     
+			obj=window.event.srcElement;
+		}       
+		else {
+		   obj=e.target;
+		}
+		Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		return;
+	}
+
+
+</SCRIPT>
+ 
+ 
+ 
+ </body>
+</html>

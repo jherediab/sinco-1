@@ -1,0 +1,1432 @@
+<html>
+ <head>
+ <title>POA</title>
+  <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+ 
+  <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1"/>
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+ <SCRIPT TYPE="text/javascript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+	  carga();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+/*
+   rta=validar($('codigoPoaActividad'),"Código Poa Actividad","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+*/   
+   /*
+   rta=validar($('valorMes1'),"Valor Mes1","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }*/
+ 
+   rta=validar($('estado'),"Estado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   rta=validarValorMeses();
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   if(!totalizarVariables()){
+	      Mostrar();
+	      return false;
+	   }
+	   
+	if(!totalizarMedios()){
+	      Mostrar();
+	      return false;
+	   }
+	   
+	if(!totalizarResponsables()){
+	      Mostrar();
+	      return false;
+	   }
+	if(!totalizarInsumos()){
+	      Mostrar();
+	      return false;
+	}
+	   
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  {
+   Mostrar(); 
+      return resp;
+	}
+ }
+
+ function Eliminar(){
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="X";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+ 
+ function totalizarVariables(){
+	var texto="";
+      	for(var i=1;i<document.getElementById('tablaVariableMedicion').rows.length;i++){
+        	if(texto!=""){
+            	texto=texto+";";
+            }
+        	texto=texto+
+        	document.getElementById('tablaVariableMedicion').rows[i].cells[0].innerHTML;
+        }
+
+        if(texto.length==0){
+        	//alert("Debe agregar por lo menos una Variable de medición");
+        	return true;
+        }else{
+        	document.getElementById('totalVariables').value = texto;
+        	return true;
+        }
+ }
+ 
+ 
+  function totalizarMedios(){
+	var texto="";
+      	for(var i=1;i<document.getElementById('tablaMediosVerificacion').rows.length;i++){
+        	if(texto!=""){
+            	texto=texto+";";
+            }
+        	texto=texto+
+        	document.getElementById('tablaMediosVerificacion').rows[i].cells[0].innerHTML;
+        }
+        if(texto.length==0){
+        	//alert("Debe agregar por lo menos un medio de verificación");
+        	return true;
+        }else{
+        	document.getElementById('totalMedios').value = texto;
+        	return true;
+        }
+ }
+
+  function totalizarResponsables(){
+	var texto="";
+      	for(var i=1;i<document.getElementById('tablaResponsables').rows.length;i++){
+        	if(texto!=""){
+            	texto=texto+";";
+            }
+        	texto=texto+
+        	document.getElementById('tablaResponsables').rows[i].cells[0].innerHTML;
+        }
+        if(texto.length==0){
+        	//alert("Debe agregar por lo menos un responsable para la actividad");
+        	return true;
+        }else{
+        	document.getElementById('totalResponsables').value = texto;
+        	return true;
+        }
+ }
+   
+  function totalizarInsumos(){
+	var texto="";
+      	for(var i=1;i<document.getElementById('tablaInsumos').rows.length;i++){
+        	if(texto!=""){
+            	texto=texto+";";
+            }
+        	texto=texto+
+        	document.getElementById('tablaInsumos').rows[i].cells[0].innerHTML+","+
+        	document.getElementById('tablaInsumos').rows[i].cells[2].innerHTML+","+
+			document.getElementById('tablaInsumos').rows[i].cells[4].innerHTML+","+
+			document.getElementById('tablaInsumos').rows[i].cells[5].innerHTML;
+        }
+        if(texto.length==0){
+        	//alert("Debe agregar por lo menos un insumo");
+        	return true;
+        }else{
+        	document.getElementById('totalInsumos').value = texto;
+        	return true;
+        }
+ }
+ 
+ 
+
+ function filtroTipoActividad() {
+
+		$('tipoActividad').value = 0;
+		if ($('actividad').value.length > 0) {
+			var url = 'ConsultasAjax.po?_operacion=tipoActividad&actividad=' + $('actividad').value;
+			new Ajax.Request(url, {
+				method: 'get',
+				onSuccess: function (transport) {
+				var anchors = transport.responseXML.getElementsByTagName('tipo');
+				for (var i=0; i<anchors.length; i++) {
+				 var anchor = anchors[i];							
+                 document.getElementById('tipoActividad').innerHTML =anchor.getAttribute("nombre");
+				}
+				
+				},
+				onFailure: function () {
+					alert("Error obteniendo respuesta Ajax");
+				}
+			}
+			);
+		}
+	}
+	
+			
+
+
+	function filtroMetaProyecto() {
+
+		$('metaProyecto').value = 0;
+		if ($('metaPlanDeDesarrollo').value.length > 0) {
+			var url = 'ConsultasAjax.po?_operacion=metaProyecto&metaPlan=' + $('metaPlanDeDesarrollo').value;
+			new Ajax.Request(url, {
+				method: 'get',
+				onSuccess: function (transport) {
+					llenarBlancoAtr(metaProyecto, transport.responseXML.getElementsByTagName('meta'), 'codigo', 'descripcion');
+				},
+				onFailure: function () {
+					alert("Error obteniendo respuesta Ajax");
+				}
+			}
+			);
+		}
+	}
+
+	function validarValorMeses(){
+		for(i = 1; i<=12; i++){
+			var checkBox = document.getElementById('mes'+i);
+			var text = document.getElementById('valorMes'+i);
+			if(checkBox.checked){
+				if(text.value == "" || text.value == 0){
+					alert("El campo valor para "+verMes(i)+" debe ser diligenciado");
+					text.focus();
+					return false;
+				}
+			}else if (text.value != "" && text.value != 0){
+				alert("El mes "+verMes(i)+" debe ser seleccionado");
+				checkBox.focus();
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+
+
+	function verMes(mes){
+		switch(mes) {
+			case 1:
+				return "Enero";
+				break;
+			case 2:
+				return "Febrero";
+				break;
+			case 3:
+				return "Marzo";
+				break;
+			case 4:
+				return "Abril";
+				break;
+			case 5:
+				return "Mayo";
+				break;
+			case 6:
+				return "Junio";
+				break;
+			case 7:
+				return "Julio";
+				break;
+			case 8:
+				return "Agosto";
+				break;
+			case 9:
+				return "Septiembre";
+				break;
+			case 10:
+				return "Octubre";
+				break;
+			case 11:
+				return "Noviembre";
+				break;
+			case 12:
+				return "Diciembre";
+				break;
+		}
+	}
+
+	
+	function cambiarMetas(plan) {
+
+		var url="ConsultasAjax.po?_operacion=metaProyecto&metaPlan="+plan;
+		
+		 	new Ajax.Request(url,{
+	     	method:'get',  
+	     	onSuccess: function(transport) {
+				llenarBlancoAtr(metaProyecto, transport.responseXML.getElementsByTagName('meta'), 'codigo', 'descripcion');
+	     	},     
+	     	onFailure: function() {
+	      		alert("No fue posible cargar la información");
+	     	}    
+	 	}); 
+	}
+
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<div class="container">
+ <FORM name="ff" ACTION="PoaMaestroActividades.po" METHOD="post" onsubmit="return Salvar()">
+  <input type="hidden" name="_operacion" id="_operacion" value="X">
+  <input type="hidden" name="codigoPoa" id="codigoPoaHidden">
+  <input type="hidden" name="codigoAreaHidden" id="codigoAreaHidden">
+
+  <table   class="tabf" summary="" width="100%" border="0">
+   <tr>
+	<td class="dat">Actividades del POA Nro <span id="codigoPoaSP">&nbsp;</span> </td>
+    <td class="datc">
+     <label id="labelNombre" name="labelNombre" align="center"></label>
+    </td>
+ 	  <td class="dat2">
+       <input type="submit" class="BOB"  value= "Consultar" id="btnConsultar"  onClick="PreparaConsulta();">
+       <input type="submit" class="BOB"  value= "Nuevo" id="btnCrear" onClick="Nuevo();">
+       <input type="Button" class="BOB"  value= "Ayuda" id="btnAyuda" onClick="show_help('PoaMaestroActividades');">
+    </td>
+   </tr>
+  </table>
+  <div id="divConsulta">
+  <br>
+   <table width="100%" class="tabf" summary="" border="0">
+    <tr>
+      <td colspan="4" class="ca" width="95%">CONSULTA</td>
+    </tr>
+       
+
+        <tr>
+         <td class="tit">Actividad</td>
+         <td class="dat"><SELECT NAME="actividad" class="INP" id="factividad" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+
+      <tr>
+       <td class="dat2" colspan="4">
+        <input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+       </td>
+      </tr>
+      </table>
+     </div>
+  <div id="divResultados">
+   <br>
+   <table summary=""  width="100%" class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2">C&oacute;digo Poa</th>
+        <th class="cf1">C&oacute;digo Poa Actividad</th>
+        <th class="cf2">Objetivo Estrategico</th>
+        <th class="cf1">Actividad</th>    
+		
+        
+     </tr>
+    </thead>
+   <tbody id="detalle">
+   </tbody>
+   <tfoot>
+    <tr>
+     <td  class="PIE" colspan="40">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+    </tr>
+   </tfoot>
+  </table>
+ </div>
+ <div id="divCreacionRegistro">
+  <br>
+  <table width="100%" class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td colspan="4" class="ca" width="98%">Creaci&oacute;n / Modificaci&oacute;n</td>
+   </tr>
+
+   <tr>
+    <td class="tit">Objetivo Estrategico</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="objetivoEstrategico" class="INP" onchange="filtroResponsableActividad();" id="objetivoEstrategico" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+    <td class="tit">Actividad</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="actividad" class="INP" id="actividad"  onchange="filtroTipoActividad()" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Tipo Actividad</td>
+    <td class="dat" colspan="3"><span id="tipoActividad">&nbsp;</span></td>
+   </tr>
+   <tr>
+		<td class="tit">Variables De Medici&oacute;n</td>
+		<td class="dat"> <SELECT style="width:500px" NAME="variablesMedicion" class="INP" id="variablesMedicion" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        <td class="dat"></td>
+        <td class="dat"><input type="button" value="Agregar Variable >>" onclick="validarVariableM()"/></td>
+    </tr>
+	<tr> 
+		<td class="dat" colspan="4">
+			<table summary="" width="100%" border="1" cellpadding="0" cellspacing="0" id="tablaVariableMedicion">
+				<tbody>
+					<tr>
+						<td class="cf1">Código</td>
+                        <td class="cf1">Variable Medici&oacute;n</td>
+                        <td class="cf1">Eliminar</td>
+                        </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+
+
+    <tr>
+		<td class="tit">Medio De Verificaci&oacute;n</td>
+		<td class="dat"> <SELECT style="width:500px" NAME="mediosDeVerificacion" class="INP" id="mediosDeVerificacion" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        <td class="dat"></td>
+        <td class="dat"><input type="button" value="Agregar Medio>>" onclick="validarMedioV()"/></td>
+    </tr>
+    <tr> 
+		<td class="dat" colspan="4">
+			<table summary="" width="100%" border="1" cellpadding="0" cellspacing="0" id="tablaMediosVerificacion">
+				<tbody>
+					<tr>
+						<td class="cf1">Código</td>
+                        <td class="cf1">Medio de verificación</td>
+                        <td class="cf1">Eliminar</td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+	<tr>
+		<td class="tit">Responsable</td>
+        <td class="dat"> <SELECT style="width:500px" NAME="responsableActividad" class="INP" id="responsableActividad" onkeydown="return f_salto2(event); onkeyup="return f_salto(event);" "></SELECT></td>
+		<td class="dat"></td>
+        <td class="dat"><input type="button" value="Agregar Responsable >>" onclick="validarResponsable()"/></td>
+	</tr>
+	<tr> 
+		<td class="dat" colspan="4">
+			<table summary="" width="100%" border="1" cellpadding="0" cellspacing="0" id="tablaResponsables">
+				<tbody>
+					<tr>
+						<td class="cf1">Código</td>
+						<td class="cf1">Nombres</td>
+						<td class="cf1">Eliminar</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	   <tr>    
+	<td class="tit">Proyecto Inversi&oacute;n</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="proyectoInversion" class="INP" id="proyectoInversion" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+	 <td class="tit">Producto Proceso</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="productoProceso" class="INP" id="productoProceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+    
+   </tr>
+
+   <tr>
+   <td class="tit">Meta Plan De Desarrollo</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="metaPlanDeDesarrollo" class="INP" id="metaPlanDeDesarrollo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onChange="cambiarMetas(this.value);"></SELECT></td>
+     <td class="tit">Objetivo Subsistema</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="objetivoSubsistema" class="INP" id="objetivoSubsistema" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+  
+   </tr>
+
+   
+   <tr>
+    <td class="tit">Meta Proyecto</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="metaProyecto" class="INP" id="metaProyecto" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+    <td class="tit">Tipo Recurso</td>
+    <td class="dat"> <SELECT NAME="tipoRecurso" class="INP" id="tipoRecurso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Prioridad En Producto</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="prioridadEnProducto" class="INP" id="prioridadEnProducto" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+    <td class="tit">Prioridad Objetivo</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="prioridadObjetivo" class="INP" id="prioridadObjetivo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   
+  </tr>
+
+   
+   
+      <tr>
+	<td class="cf1" colspan="4">INSUMOS</td>
+   </tr>
+   <tr>
+    <td class="tit">Insumo</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="insumo" class="INP" id="insumo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+    <td class="tit">Proveedor</td>
+    <td class="dat"> <SELECT style="width:500px" NAME="proveedor" class="INP" id="proveedor" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   </tr>
+   
+   <tr>
+    <td class="tit">Fecha programada entrega</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="fechaProgramada" id="fechaProgramada" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+		<input type="button" id="bfecha" value="...">
+    </td>
+	<td class="tit">Fecha real entrega</td>
+    <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="fechaReal" id="fechaReal" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+		<input type="button" id="b2fecha" value="...">
+    </td>
+   </tr>
+
+   <tr>
+	<td class="dat"><input type="button" value="Agregar Insumo >>" onclick="validarInsumo()"/></td>
+   </tr>
+   
+   <tr> 
+		<td class="dat" colspan="4">
+			<table summary="" width="100%" border="1" cellpadding="0" cellspacing="0" id="tablaInsumos">
+				<tbody>
+					<tr>
+						<td class="cf1">Código</td>
+						<td class="cf1">Insumo</td>
+						<td class="cf1">Código proveedor</td>
+						<td class="cf1">Proveedor</td>
+						<td class="cf1">Fecha entrega programada</td>
+						<td class="cf1">Fecha entrega real</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+    <tr>
+	<td class="cf1" colspan="4">MEDICIÓN</td>
+   </tr>
+   
+  <tr> 
+		<td class="dat" colspan="4">
+			<table summary="" width="100%" border="1" cellpadding="0" cellspacing="0" id="tablaMedicionCr">
+				<tbody>
+					<tr>
+						<td class="cf1"></td>
+						<td class="cf1">Enero</td>
+						<td class="cf1">Febrero</td>
+						<td class="cf1">Marzo</td>
+						<td class="cf1">Abril</td>
+						<td class="cf1">Mayo</td>
+						<td class="cf1">Junio</td>
+						<td class="cf1">Julio</td>
+						<td class="cf1">Agosto</td>
+						<td class="cf1">Septiembre</td>
+						<td class="cf1">Octubre</td>
+						<td class="cf1">Noviembre</td>
+						<td class="cf1">Diciembre</td>
+					</tr>
+					<tr>
+						<td class="cf1">Medir</td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes1" id="mes1" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes2" id="mes2" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes3" id="mes3" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes4" id="mes4" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes5" id="mes5" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes6" id="mes6" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes7" id="mes7" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes8" id="mes8" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes9" id="mes9" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes10" id="mes10" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes11" id="mes11" value="S"/></td>
+						<td class="dat"><INPUT TYPE="CHECKBOX" NAME="mes12" id="mes12" value="S"/></td>
+					</tr>
+					
+					<tr>
+						<td class="cf1">Valor esperado</td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes1" id="valorMes1" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes2" id="valorMes2" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes3" id="valorMes3" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes4" id="valorMes4" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes5" id="valorMes5" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes6" id="valorMes6" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes7" id="valorMes7" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes8" id="valorMes8" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes9" id="valorMes9" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes10" id="valorMes10" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes11" id="valorMes11" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+						<td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMes12" id="valorMes12" maxlength="4" size="4"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+   <tr> 
+	<td class="tit">Estado</td>
+     <td class="dat"><SELECT NAME="estado" class="INP" id="estado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="fechaInsercion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Inserci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="usuarioInsercion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+
+   <tr>
+    <td class="tit">Fecha Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="fechaModificacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+    <td class="tit">Usuario Modificaci&oacute;n</td>
+    <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="usuarioModificacion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+   </tr>
+  
+
+     <tr>
+      <td class="dat2" colspan="4">
+      <INPUT TYPE="hidden" class="INP" NAME="codigoPoaActividad" id="codigoPoaActividad"  value="0">
+	  <input type="hidden" name="totalVariables" id="totalVariables" value=""/>
+	  <input type="hidden" name="totalMedios" id="totalMedios" value=""/>
+	  <input type="hidden" name="totalResponsables" id="totalResponsables" value=""/>
+	  <input type="hidden" name="totalInsumos" id="totalInsumos" value=""/>
+      <input type="submit" class="BOT" value="Grabar"   id="btnGrabar" onclick="Grabar();">
+      <input type="submit" class="BOT" value="Eliminar" id="btnEliminar" onclick="Eliminar();">
+      <input type="submit" class="BOT" value="Salir"   id="btnSalir" onclick="Salir();">
+     </td>
+    </tr>
+   </table>
+  </div>
+  <div id="divEdicion">
+  <br>
+    <table width="100%" class="tabf" summary="">
+     <tr>
+      <td colspan="4" class="ca">Edici&oacute;n</td>
+     </tr>
+     <tr>
+      <td class="tit">C&oacute;digo Poa</td>
+      <td class="dat"><span id="codigoPoaEd">&nbsp;</span></td>
+      <td class="tit">C&oacute;digo Poa Actividad</td>
+      <td class="dat"><span id="codigoPoaActividadEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Objetivo Estrategico</td>
+      <td class="dat"><span id="objetivoEstrategicoEd">&nbsp;</span></td>
+      <td class="tit">Actividad</td>
+      <td class="dat"><span id="actividadEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Tipo Actividad</td>
+      <td class="dat"><span id="tipoActividadEd">&nbsp;</span></td>
+      <td class="tit">Variables Medici&oacute;n</td>
+      <td class="dat"><span id="variablesMedicionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Medios De Verificaci&oacute;n</td>
+      <td class="dat"><span id="mediosDeVerificacionEd">&nbsp;</span></td>
+      <td class="tit">Proyecto Inversi&oacute;n</td>
+      <td class="dat"><span id="proyectoInversionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Producto Proceso</td>
+      <td class="dat"><span id="productoProcesoEd">&nbsp;</span></td>
+      <td class="tit">Meta Plan De Desarrollo</td>
+      <td class="dat"><span id="metaPlanDeDesarrolloEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Objetivo Subsistema</td>
+      <td class="dat"><span id="objetivoSubsistemaEd">&nbsp;</span></td>
+      <td class="tit">Meta Proyecto</td>
+      <td class="dat"><span id="metaProyectoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Tipo Recurso</td>
+      <td class="dat"><span id="tipoRecursoEd">&nbsp;</span></td>
+      <td class="tit">Prioridad En Producto</td>
+      <td class="dat"><span id="prioridadEnProductoEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Prioridad Objetivo</td>
+      <td class="dat"><span id="prioridadObjetivoEd">&nbsp;</span></td>
+      <td class="tit">Estado</td>
+      <td class="dat"><span id="estadoEd">&nbsp;</span></td>
+     </tr>
+	 <tr>
+	   <td class="cf1" colspan="4">MEDICIÓN</td>
+     </tr>
+  <tr> 
+		<td class="dat" colspan="4">
+			<table summary="" width="100%" border="1" cellpadding="0" cellspacing="0" id="tablaMedicion">
+				<tbody>
+					<tr>
+						<td class="cf1"></td>
+						<td class="cf1">Enero</td>
+						<td class="cf1">Febrero</td>
+						<td class="cf1">Marzo</td>
+						<td class="cf1">Abril</td>
+						<td class="cf1">Mayo</td>
+						<td class="cf1">Junio</td>
+						<td class="cf1">Julio</td>
+						<td class="cf1">Agosto</td>
+						<td class="cf1">Septiembre</td>
+						<td class="cf1">Octubre</td>
+						<td class="cf1">Noviembre</td>
+						<td class="cf1">Diciembre</td>
+						<td class="cf1">Total</td>
+						<td class="cf1">% Ejecución</td>
+					</tr>
+					
+					<tr>
+						<td>Medición</td>
+						<td class="dat"><span id="mes1Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes2Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes3Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes4Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes5Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes6Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes7Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes8Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes9Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes10Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes11Ed">&nbsp;</span></td>
+						<td class="dat"><span id="mes12Ed">&nbsp;</span></td>
+						<td class="dat"></td>
+						<td class="dat" rowspan="6"><span id="porcentajeEjecucion">&nbsp;</span></td>
+						
+					</tr>
+					<tr>
+						<td>Valor esperado</td>
+						<td class="dat"><span id="valorMes1Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes2Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes3Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes4Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes5Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes6Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes7Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes8Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes9Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes10Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes11Ed">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes12Ed">&nbsp;</span></td>
+						<td class="dat"><span id="totalEsperado">&nbsp;</span></td>
+					</tr>
+					<tr>
+						<td>Valor Ejecutado</td>
+						<td class="dat"><span id="valorMes1RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes2RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes3RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes4RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes5RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes6RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes7RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes8RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes9RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes10RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes11RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="valorMes12RealEd">&nbsp;</span></td>
+						<td class="dat"><span id="totalEjecutado">&nbsp;</span></td>
+					</tr>
+					<tr>
+						<td>Avances</td>
+						<td class="dat"><span id="avanceMes1Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes2Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes3Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes4Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes5Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes6Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes7Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes8Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes9Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes10Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes11Ed">&nbsp;</span></td>
+						<td class="dat"><span id="avanceMes12Ed">&nbsp;</span></td>
+						<td class="dat"></td>
+					</tr>
+					<tr>
+						<td>Logros y resultados</td>
+						<td class="dat"><span id="logroMes1Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes2Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes3Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes4Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes5Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes6Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes7Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes8Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes9Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes10Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes11Ed">&nbsp;</span></td>
+						<td class="dat"><span id="logroMes12Ed">&nbsp;</span></td>
+						<td class="dat"></td>
+					</tr>
+					
+					<tr>
+						<td>Retrasos y dificultades</td>
+						<td class="dat"><span id="retrasoMes1Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes2Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes3Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes4Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes5Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes6Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes7Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes8Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes9Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes10Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes11Ed">&nbsp;</span></td>
+						<td class="dat"><span id="retrasoMes12Ed">&nbsp;</span></td>
+						<td class="dat"></td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+
+     <tr>
+      <td class="tit">Fecha Inserci&oacute;n</td>
+      <td class="dat"><span id="fechaInsercionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Inserci&oacute;n</td>
+      <td class="dat"><span id="usuarioInsercionEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Fecha Modificaci&oacute;n</td>
+      <td class="dat"><span id="fechaModificacionEd">&nbsp;</span></td>
+      <td class="tit">Usuario Modificaci&oacute;n</td>
+      <td class="dat"><span id="usuarioModificacionEd">&nbsp;</span></td>
+     </tr>
+
+      <tr>
+       <td class="dat2" colspan="4">
+ 	        <input type="hidden" name="codigoPoaActividad" id="codigoPoaActividadKey">
+       <input type="submit" class="BOT" value="Editar"   id="btnModificar" onClick="Modificar();">
+	   
+    </td>
+   </tr>
+  </table>
+ </div>
+  </FORM>
+ </DIV>
+  <script type="text/javascript">
+            Calendar.setup({
+                inputField: 'fechaProgramada',
+                ifFormat: '%Y-%m-%d',
+                button: 'bfecha'
+            });
+			Calendar.setup({
+                inputField: 'fechaReal',
+                ifFormat: '%Y-%m-%d',
+                button: 'b2fecha'
+            });
+        </script>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+	<script type="text/javascript" language="JavaScript">
+            var totalMediosDeVerificacion = 0;
+            function validarMedioV() {
+                var combo = document.getElementById('mediosDeVerificacion');
+                if (combo.options[combo.selectedIndex].innerHTML == "") {
+                    alert("Debe seleccionar un Medio de verificación");
+                    combo.focus();
+                    return false;
+                }
+              agregarMedio();
+            }
+
+            function agregarMedio(codMedio, medioVerificacion) {
+                var codigoMedio = codMedio;
+                var medioVerif = medioVerificacion;
+                var combo = document.getElementById('mediosDeVerificacion');
+                if (codigoMedio == null) {
+                    codigoMedio = combo.options[combo.selectedIndex].value;
+                }
+                if (medioVerif == null) {
+                    medioVerif = combo.options[combo.selectedIndex].innerHTML;
+                }
+
+                var tabla = document.getElementById('tablaMediosVerificacion').getElementsByTagName("tbody")[0];
+                if (!existeMedioVerificacion(codigoMedio, medioVerificacion)) {
+                    var fila = document.createElement("tr");
+                    fila.id = "FilaMedios" + totalMediosDeVerificacion;
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+
+                    var td = document.createElement("td");
+                    input = document.createElement("input");
+                    input.id = "FilaMedios" + totalMediosDeVerificacion;
+                    input.idfila = "FilaMedios" + totalMediosDeVerificacion;
+                    input.name = "EliminarLinea";
+                    input.type = "button";
+                    input.value = "Eliminar";
+                    input.className = "submitLink";
+                    input.onclick = eliminarMedio;
+
+                    td.appendChild(input);
+
+                    td1.appendChild(document.createTextNode(codigoMedio));
+                    td2.appendChild(document.createTextNode(medioVerif));
+                    fila.appendChild(td1);
+                    fila.appendChild(td2);
+                    fila.appendChild(td);
+                    tabla.appendChild(fila);
+                    totalMediosDeVerificacion = totalMediosDeVerificacion + 1;
+                } else {
+                    alert("El Medio de verificación ya se encuentra agregado");
+                }
+            }
+
+            function existeMedioVerificacion(codigoDx, tipoDx) {
+                var existe = false;
+                var i = 1;
+
+                while (existe == false && i < document.getElementById('tablaMediosVerificacion').rows.length) {
+                    if (document.getElementById('tablaMediosVerificacion').rows[i].cells[0].innerHTML == codigoDx) {
+                        existe = true;
+                    }
+                    i++;
+                }
+
+                return existe;
+            }
+
+            function eliminarMedio(e) {
+                var Tabla = document.getElementById("tablaMediosVerificacion");
+                var obj;
+                if (navigator.appVersion.indexOf("MSIE") != -1) {
+                    obj = window.event.srcElement;
+                }
+                else if (navigator.userAgent.indexOf("Firefox") != -1) {
+                    obj = e.target;
+                }
+				else if(navigator.userAgent.indexOf("Chrome")!=-1){
+					 obj=e.target;
+				}
+
+                Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+                totalMediosDeVerificacion = totalMediosDeVerificacion - 1;
+                return;
+            }
+        </script>
+		
+		<script type="text/javascript" language="JavaScript">
+            var totalResponsables = 0;
+            function validarResponsable() {
+                var combo = document.getElementById('responsableActividad');
+                if (combo.options[combo.selectedIndex].innerHTML == "") {
+                    alert("Debe seleccionar un responsable");
+                    combo.focus();
+                    return false;
+                }
+              agregarResponsable();
+            }
+
+            function agregarResponsable(cod, nombre) {
+                var codigo = cod;
+                var nombres = nombre;
+                var combo = document.getElementById('responsableActividad');
+                if (codigo == null) {
+                    codigo = combo.options[combo.selectedIndex].value;
+                }
+                if (nombres == null) {
+                    nombres = combo.options[combo.selectedIndex].innerHTML;
+                }
+
+                var tabla = document.getElementById('tablaResponsables').getElementsByTagName("tbody")[0];
+                if (!existeResponsable(codigo, nombres)) {
+                    var fila = document.createElement("tr");
+                    fila.id = "FilaResponsables" + totalResponsables;
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+
+                    var td = document.createElement("td");
+                    input = document.createElement("input");
+                    input.id = "FilaResponsables" + totalResponsables;
+                    input.idfila = "FilaResponsables" + totalResponsables;
+                    input.name = "EliminarLinea";
+                    input.type = "button";
+                    input.value = "Eliminar";
+                    input.className = "submitLink";
+                    input.onclick = eliminarResponsable;
+
+                    td.appendChild(input);
+
+                    td1.appendChild(document.createTextNode(codigo));
+                    td2.appendChild(document.createTextNode(nombres));
+                    fila.appendChild(td1);
+                    fila.appendChild(td2);
+                    fila.appendChild(td);
+                    tabla.appendChild(fila);
+                    totalResponsables = totalResponsables + 1;
+                } else {
+                    alert("El usuario ya se encuentra agregado");
+                }
+            }
+
+            function existeResponsable(codigoDx, tipoDx) {
+                var existe = false;
+                var i = 1;
+
+                while (existe == false && i < document.getElementById('tablaResponsables').rows.length) {
+                    if (document.getElementById('tablaResponsables').rows[i].cells[0].innerHTML == codigoDx) {
+                        existe = true;
+                    }
+                    i++;
+                }
+
+                return existe;
+            }
+
+            function eliminarResponsable(e) {
+                var Tabla = document.getElementById("tablaResponsables");
+                var obj;
+                if (navigator.appVersion.indexOf("MSIE") != -1) {
+                    obj = window.event.srcElement;
+                }
+                else if (navigator.userAgent.indexOf("Firefox") != -1) {
+                    obj = e.target;
+                }
+				else if(navigator.userAgent.indexOf("Chrome")!=-1){
+					 obj=e.target;
+				}
+
+                Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+                totalResponsables = totalResponsables - 1;
+                return;
+            }
+        </script>
+        
+        <script type="text/javascript" language="JavaScript">
+            var totalVariablesMedicion = 0;
+            function validarVariableM() {
+                var combo = document.getElementById('variablesMedicion');
+                if (combo.options[combo.selectedIndex].innerHTML == "") {
+                    alert("Debe seleccionar una Variable de medición");
+                    combo.focus();
+                    return false;
+                }
+              agregarVariable();
+            }
+
+            function agregarVariable(codigoVariable, variableMedicion) {
+                var codigoVariable = codigoVariable;
+                var variableMedicion = variableMedicion;
+                var combo = document.getElementById('variablesMedicion');
+                if (codigoVariable == null) {
+                    codigoVariable = combo.options[combo.selectedIndex].value;
+                }
+                if (variableMedicion == null) {
+                    variableMedicion = combo.options[combo.selectedIndex].innerHTML;
+                }
+
+                var tabla = document.getElementById('tablaVariableMedicion').getElementsByTagName("tbody")[0];
+                if (!existeVariableMedicion(codigoVariable, variableMedicion)) {
+                    var fila = document.createElement("tr");
+                    fila.id = "FilaVariables" + totalVariablesMedicion;
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+
+                    var td = document.createElement("td");
+                    input = document.createElement("input");
+                    input.id = "FilaVariables" + totalVariablesMedicion;
+                    input.idfila = "FilaVariables" + totalVariablesMedicion;
+                    input.name = "EliminarVariable";
+                    input.type = "button";
+                    input.value = "Eliminar";
+                    input.className = "submitLink";
+                    input.onclick = eliminarVariable;
+
+                    td.appendChild(input);
+
+                    td1.appendChild(document.createTextNode(codigoVariable));
+                    td2.appendChild(document.createTextNode(variableMedicion));
+                    fila.appendChild(td1);
+                    fila.appendChild(td2);
+                    fila.appendChild(td);
+                    tabla.appendChild(fila);
+                    totalVariablesMedicion = totalVariablesMedicion + 1;
+                } else {
+                    alert("La variable de medición ya se encuentra agregada");
+                }
+            }
+
+            function existeVariableMedicion(codigoVariable, variableMedicion) {
+                var existe = false;
+                var i = 1;
+                while (existe == false && i < document.getElementById('tablaVariableMedicion').rows.length) {
+                    if (document.getElementById('tablaVariableMedicion').rows[i].cells[0].innerHTML == codigoVariable) {
+                        existe = true;
+                    }
+                    i++;
+                }
+
+                return existe;
+            }
+
+            function eliminarVariable(e) {
+                var Tabla = document.getElementById("tablaVariableMedicion");
+                var obj;
+                if (navigator.appVersion.indexOf("MSIE") != -1) {
+                    obj = window.event.srcElement;
+                }
+                else if (navigator.userAgent.indexOf("Firefox") != -1) {
+                    obj = e.target;
+                }
+				else if(navigator.userAgent.indexOf("Chrome")!=-1){
+					 obj=e.target;
+				}
+
+                Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+                totalVariablesMedicion = totalVariablesMedicion - 1;
+                return;
+            }
+        </script>
+		
+		<script type="text/javascript" language="JavaScript">
+            var totalInsumos = 0;
+            function validarInsumo() {
+                var comboInsumo = document.getElementById('insumo');
+				var comboProveedor = document.getElementById('proveedor');
+				var fecha = document.getElementById('fechaProgramada');
+				var fechaReal = document.getElementById('fechaReal');
+                if (comboInsumo.options[comboInsumo.selectedIndex].innerHTML == "") {
+                    alert("Debe seleccionar un insumo");
+                    comboInsumo.focus();
+                    return false;
+                }
+				if (comboProveedor.options[comboProveedor.selectedIndex].innerHTML == "") {
+					alert("Debe seleccionar un proveedor");
+					comboProveedor.focus();
+					return false;
+				}
+				if (fecha.value == "") {
+					alert("Debe seleccionar una fecha de entrega programada");
+					fecha.focus();
+					return false;
+				}
+              agregarInsumo();
+            }
+
+            function agregarInsumo(codigoInsumo, insumo, codigoProveedor, proveedor, fechaProgramada, fechaReal) {
+                var codigoInsumo = codigoInsumo;
+                var insumo = insumo;
+				var codigoProveedor = codigoProveedor;
+				var proveedor = proveedor;
+				var fechaProgramada = fechaProgramada;
+				var fechaReal = fechaReal;
+                var comboInsumo = document.getElementById('insumo');
+				var comboProveedor = document.getElementById('proveedor');
+				var fecha = document.getElementById('fechaProgramada');
+				var fechaR = document.getElementById('fechaReal');
+                if (codigoInsumo == null) {
+                    codigoInsumo = comboInsumo.options[comboInsumo.selectedIndex].value;
+                }
+                if (insumo == null) {
+                    insumo = comboInsumo.options[comboInsumo.selectedIndex].innerHTML;
+                }
+				if (codigoProveedor == null) {
+                    codigoProveedor = comboProveedor.options[comboProveedor.selectedIndex].value;
+                }
+                if (proveedor == null) {
+                    proveedor = comboProveedor.options[comboProveedor.selectedIndex].innerHTML;
+                }
+				if (fechaProgramada == null) {
+                    fechaProgramada = fecha.value;
+                }
+				if (fechaReal == null) {
+                    fechaReal = fechaR.value;
+                }
+
+                var tabla = document.getElementById('tablaInsumos').getElementsByTagName("tbody")[0];
+                if (!existeInsumo(codigoInsumo, codigoProveedor)) {
+                    var fila = document.createElement("tr");
+                    fila.id = "FilaInsumos" + totalInsumos;
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+					var td3 = document.createElement("td");
+					var td4 = document.createElement("td");
+					var td5 = document.createElement("td");
+					var td6 = document.createElement("td");
+
+                    var td = document.createElement("td");
+                    input = document.createElement("input");
+                    input.id = "FilaInsumos" + totalInsumos;
+                    input.idfila = "FilaInsumos" + totalInsumos;
+                    input.name = "EliminarInsumo";
+                    input.type = "button";
+                    input.value = "Eliminar";
+                    input.className = "submitLink";
+                    input.onclick = eliminarInsumo;
+					
+					fReal = document.createElement("input");
+					fReal.id = "FechaReal" + totalInsumos;
+					fReal.type = "text";
+					bFReal = document.createElement("input");
+					bFReal.id = "bRFecha" + totalInsumos;
+					bFReal.type = "button";
+					bFReal.value = "...";	
+					
+					
+                    td.appendChild(input);
+
+                    td1.appendChild(document.createTextNode(codigoInsumo));
+                    td2.appendChild(document.createTextNode(insumo));
+					td3.appendChild(document.createTextNode(codigoProveedor));
+					td4.appendChild(document.createTextNode(proveedor));
+					td5.appendChild(document.createTextNode(fechaProgramada));
+					td6.appendChild(document.createTextNode(fechaReal));
+					//td6.appendChild(bFReal);
+                    fila.appendChild(td1);
+                    fila.appendChild(td2);
+					fila.appendChild(td3);
+					fila.appendChild(td4);
+					fila.appendChild(td5);
+					fila.appendChild(td6);
+                    fila.appendChild(td);
+                    tabla.appendChild(fila);
+                    totalInsumos = totalInsumos + 1;
+                } else {
+				 var Tabla = document.getElementById("tablaInsumos");
+				 var i = 1;
+				 var fi = 0;
+				 while (i < document.getElementById('tablaInsumos').rows.length) {
+                    if (document.getElementById('tablaInsumos').rows[i].cells[0].innerHTML == codigoInsumo
+					&& document.getElementById('tablaInsumos').rows[i].cells[2].innerHTML == codigoProveedor) {
+                     //  alert(i);
+						Tabla.tBodies[0].removeChild(document.getElementById("FilaInsumos"+fi));
+						totalInsumos = totalInsumos - 1;
+						}
+						fi++;
+						i++;
+					}
+					
+					var fila = document.createElement("tr");
+                    fila.id = "FilaInsumos" + totalInsumos;
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+					var td3 = document.createElement("td");
+					var td4 = document.createElement("td");
+					var td5 = document.createElement("td");
+					var td6 = document.createElement("td");
+
+                    var td = document.createElement("td");
+                    input = document.createElement("input");
+                    input.id = "FilaInsumos" + totalInsumos;
+                    input.idfila = "FilaInsumos" + totalInsumos;
+                    input.name = "EliminarInsumo";
+                    input.type = "button";
+                    input.value = "Eliminar";
+                    input.className = "submitLink";
+                    input.onclick = eliminarInsumo;
+					
+					fReal = document.createElement("input");
+					fReal.id = "FechaReal" + totalInsumos;
+					fReal.type = "text";
+					bFReal = document.createElement("input");
+					bFReal.id = "bRFecha" + totalInsumos;
+					bFReal.type = "button";
+					bFReal.value = "...";	
+					
+					
+                    td.appendChild(input);
+
+                    td1.appendChild(document.createTextNode(codigoInsumo));
+                    td2.appendChild(document.createTextNode(insumo));
+					td3.appendChild(document.createTextNode(codigoProveedor));
+					td4.appendChild(document.createTextNode(proveedor));
+					td5.appendChild(document.createTextNode(fechaProgramada));
+					td6.appendChild(document.createTextNode(fechaReal));
+					//td6.appendChild(bFReal);
+                    fila.appendChild(td1);
+                    fila.appendChild(td2);
+					fila.appendChild(td3);
+					fila.appendChild(td4);
+					fila.appendChild(td5);
+					fila.appendChild(td6);
+                    fila.appendChild(td);
+                    tabla.appendChild(fila);
+					 totalInsumos = totalInsumos + 1;
+	
+                }
+            }
+
+            function existeInsumo(codigoInsumo, codigoProveedor) {
+                var existe = false;
+                var i = 1;
+                while (existe == false && i < document.getElementById('tablaInsumos').rows.length) {
+                    if (document.getElementById('tablaInsumos').rows[i].cells[0].innerHTML == codigoInsumo
+					&& document.getElementById('tablaInsumos').rows[i].cells[2].innerHTML == codigoProveedor) {
+                        existe = true;
+                    }
+                    i++;
+                }
+
+                return existe;
+            }
+
+            function eliminarInsumo(e) {
+                var Tabla = document.getElementById("tablaInsumos");
+                var obj;
+                if (navigator.appVersion.indexOf("MSIE") != -1) {
+                    obj = window.event.srcElement;
+                }
+                else if (navigator.userAgent.indexOf("Firefox") != -1) {
+                    obj = e.target;
+                }
+				else if(navigator.userAgent.indexOf("Chrome")!=-1){
+					 obj=e.target;
+				}
+                Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+				//alert(obj.idfila);
+                totalInsumos = totalInsumos - 1;
+                return;
+            }
+			
+			
+			function variable(valor,descripcion){
+				this.valor=valor;
+				this.descripcion=descripcion;
+			  }
+			  
+			function medio(codigo,descripcion){
+				this.codigo=codigo;
+				this.descripcion=descripcion;
+			  }
+			  
+		   function responsableAct(codigo,nombres){
+				this.codigo=codigo;
+				this.nombres=nombres;
+			  }
+		   function insumo(codigo,nombreInsumo,codigoProveedor,proveedor, fechaProgramada, fechaReal){
+				this.codigo=codigo;
+				this.nombreInsumo=nombreInsumo;
+				this.codigoProveedor=codigoProveedor;
+				this.proveedor=proveedor;
+				this.fechaProgramada=fechaProgramada;
+				this.fechaReal=fechaReal;
+			  }
+			  
+			function carga(){
+				var i=0;
+				for (i=0; i<variables.length; i++){
+					var item=variables[i];
+					agregarVariable(item.valor,item.descripcion);
+				}
+				for (i=0; i<medios.length; i++){
+					var item=medios[i];
+					agregarMedio(item.codigo,item.descripcion);
+				}
+				
+				for (i=0; i<responsables.length; i++){
+					var item=responsables[i];
+					agregarResponsable(item.codigo,item.nombres);
+				}
+				for (i=0; i<insumos.length; i++){
+					var item=insumos[i];
+					agregarInsumo(item.codigo, item.nombreInsumo, item.codigoProveedor, item.proveedor, item.fechaProgramada, item.fechaReal);
+				}
+			 }
+        </script>
+		<script type="text/javascript"  language="JavaScript"  id="ScriptVariablesMedicion"></script>
+		<script type="text/javascript"  language="JavaScript"  id="ScriptMediosVerificacion"></script>
+		<script type="text/javascript"  language="JavaScript"  id="ScriptResponsables"></script>
+		<script type="text/javascript"  language="JavaScript"  id="ScriptInsumos"></script>
+ </body>
+</html>

@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>Sistema de Solicitud de Servicios</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link rel="stylesheet" href="media/capas.css" type="text/css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+
+function vervideo(){
+	var videlem = document.createElement("video");
+	var sourceMP4 = document.createElement("source"); 
+	sourceMP4.type = "video/mp4";
+	sourceMP4.src = "VerArchivo.po?archivo=MOV06892.MPG&fecha=2014-05-12";
+	videlem.setAttribute("controls","true");
+	videlem.appendChild(sourceMP4);
+	$('elvideo').appendChild(videlem);
+}
+</SCRIPT>	
+</head>
+
+<body background="media/hospitalFondo.jpg">
+
+ <SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+ 	new menu (MENU_ITEMS0, MENU_POS0);
+ </script>
+ <br>
+ <div id="borde">
+  <div id="contenedor">
+  <!-- <div class="cabecera">
+  <span class="nombre" id="nombre"><font color="#2a3193" face="Lucida Handwriting">LUIS ALFONSO CA&Ntilde;AS</font></span>
+
+ 
+   </div>-->
+   
+ <div id="agenda">
+                         
+             <table summary="" class="reference" border="0">
+               <tr>
+                 <th width="100%" colspan="2" id="">Agenda de servicios</th>
+               </tr>
+
+             
+               <tr>
+                 <th align="left" width="15%">&nbsp;</th>
+                 <td width="85%"><a id="porAtender">&nbsp;</a></td>
+               </tr>
+
+               <tr>
+                 <th align="left" width="15%">&nbsp;</th>
+                 <td width="85%"><a id="escalanHoy">&nbsp;</a></td>
+               </tr>
+
+               <tr>
+                 <th align="left" width="15%">&nbsp;</th>
+                 <td width="85%"><a id="porCalificar">&nbsp;</a></td>
+               </tr>
+
+               <tr>
+                 <th align="left" width="15%">&nbsp;</th>
+                 <td width="85%"><a id="enCurso">&nbsp;</a></td>
+               </tr>
+               <tr>
+                 <th align="left" width="15%">&nbsp;</th>
+                 <td width="85%"><a id="noEnviadas">&nbsp;</a></td>
+               </tr>
+			   
+               <tr>
+                 <th align="left" width="15%">&nbsp;</th>
+                 <td width="85%"><a id="noEscalamientos">&nbsp;</a></td>
+               </tr>
+               
+               <tr>
+                 <th align="left" width="15%">&nbsp;</th>
+                 <td width="85%"><a id="cPorAtender">&nbsp;</a></td>
+               </tr>
+               <tr>
+                 <th align="left" width="15%">&nbsp;</th>
+                 <td width="85%"><a id="cPorAsignar">&nbsp;</a></td>
+               </tr>
+           	</table>
+           	</div>   
+   
+   </div>
+  </div>
+ </body>
+</html>

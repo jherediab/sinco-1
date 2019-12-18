@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>Ver solicitudes no califida</title>
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT type="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+</head>
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+<div class="container">
+ 
+            <table summary="" border="0" class="tabf" cellspacing="0" cellpadding="0">
+              <tr>
+               <td class ="ca" COLSPAN="2"><STRONG>SOLICITUD NO CALIFICADA &nbsp;#<span id="numerosolicitud">&nbsp;</span> </STRONG></td>
+              </tr> 
+              <tr> 
+                <td class="tit" width="20%">Servicio:</td>
+                <td class="dat" width="80%"><span  id="servicio">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Area Proveedora:</td>
+                <td class="dat" width="80%"><span id="areap">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Persona Responsable:</td>
+                <td class="dat" width="80%"><span  id="proveedor">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Persona que hace la solicitud:</td>
+                <td class="dat" width="80%"><span  id="cliente">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Area que hace la solicitud:</td>
+                <td class="dat" width="80%"><span id="areacliente">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Fecha Generada:</td>
+                <td class="dat" width="80%"><span  id="fechagenerada">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Fecha de Vigencia:</td>
+                <td class="dat" width="80%"><span  id="fechavigencia">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Fecha Estimada de Terminaci&oacute;n:</td>
+                <td class="dat" width="80%"><span  id="fechaestimada">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Estado:</td>
+                <td class="dat" width="80%"><span  id="estado">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Nivel Escalamiento:</td>
+                <td class="dat" width="80%"><span  id="escalamiento">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Oportunidad:</td>
+                <td class="dat" width="80%"><span  id="oportunidad">No calificada aun</span></td>
+              </tr>
+              <tr> 
+                <td class="tit" width="20%">Percepci&oacute;n del Servicio:</td>
+                <td class="dat" width="80%"><span  id="confiabilidad">No calificada aun</span></td>
+              </tr>
+            </table>
+			<br>
+
+            <div id="mostrarcaracteristicas">
+              <table summary=""  class="tabf" border="0" id="caracteristicas" cellspacing="0" cellpadding="0">
+               <caption  class="ca">Caracter&iacute;sticas</caption>
+                <tr>
+                  <td class="cf1">Caracteristica</td>
+                  <td class="cf2">Descripci&oacute;n</td>
+                </tr>
+              </table>
+           </div>
+
+          <div id="mostraratencion"><br>
+              <table class="tabf"  summary="" border="0" id="atencion" cellspacing="0" cellpadding="0">
+               <caption  class="ca">Atenciones Realizadas</caption>
+                <tr>
+                  <td class="cf1">Fecha</td>
+                  <td class="cf2">Observaci&oacute;n</td>
+                </tr>
+              </table>
+         </div>
+         
+            <div id="nuevaatencion">
+              <form name="miForma3" action="AnadirAtencion.po" method="post">
+                <INPUT class="INP" TYPE="hidden" value="not_yet" id="solicitudatencion" name="solicitud"> 
+		        <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguienteAtencion" name="pagina_siguiente"><br>
+                <INPUT class="INP" TYPE="hidden" name="txtContador" value="0">              
+                <TEXTAREA NAME="observacion" ROWS="4" COLS="80" WRAP="physical" onkeypress="validarTecla(event, 'AL');" onkeyDown="textCounter(this.form.observacion,this.form.txtContador,200);return  f_salto(event);" onkeyup="textCounter(this.form.observacion,this.form.txtContador,200);" onpaste="textCounter(this.form.observacion,this.form.txtContador,200);"></TEXTAREA>
+                <br>
+                <INPUT TYPE="Submit" class="BOT" value="Salvar Respuestas"  name="miBoton" onClick="document.miForma3.miBoton.style.display='none'"><br>
+              </form>
+            </div>
+            
+          <div id="mostrarhistoria" align="center"><br>
+              <table class="tabf" summary="" border="0" id="historia" cellspacing="0" cellpadding="0">
+               <caption class="ca">Historia </caption>
+                <tr>
+                  <td class="cf1">Estado</td>
+                  <td class="cf2">Fecha</td>
+                  <td class="cf1">Observaci&oacute;n</td>
+                </tr>
+              </table>
+          </div>
+          <br>
+         <div id="idRecordarCalificacion" align="center">
+          <form action="RecordarCalificacion.po" name="miForma2" method="GET">
+           <INPUT class="INP" TYPE="hidden" name="solicitud" id="idSolicitud"> 
+           <INPUT TYPE="Submit" class="BOT" value="Recordar Calificaci&oacute;n"  name="miBoton" onClick="document.miForma2.miBoton.style.display='none'">
+           </center>
+          </form>
+          </div>
+  </div>    
+ </body>
+</html>

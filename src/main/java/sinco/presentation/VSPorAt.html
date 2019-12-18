@@ -1,0 +1,677 @@
+<html>
+<head>
+<title> Ver solicitudes en curso </title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<script type="text/javascript" src="media/prototype.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script type="text/javascript">
+  function setFileName() {
+     var theForm = document.myForm;
+     theForm.theFileName.value = theForm.upload.value;
+  }
+
+      function compruebaExtension(archivo) {
+        extensiones_permitidas = new Array(".mp3", ".wav", ".wma", ".mid", ".mpg");
+       //recupero la extensión de este nombre de archivo
+        extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
+       //compruebo si la extensión está entre las permitidas
+
+       permitida = true;
+       for (var i = 0; i < extensiones_permitidas.length; i++) {
+         if (extensiones_permitidas[i] == extension) {
+           permitida = false;
+           break;
+          }
+        }
+        return permitida;
+     }   
+
+   function Salvar(){
+    var rta;
+    Ocultar();
+    rta=validar(document.myForm.nuevoestado,"Estado","ENT",0,"OBL","0","999");
+    if(!rta){
+         Mostrar(); 
+         return false;
+    } 
+        
+    var theForm = document.myForm;
+    if (compruebaExtension(theForm.theFileName.value)==false){
+      Mostrar();
+      alert("La extension del archivo que intensa subir no es permitida");
+      return false;
+    }
+    
+    setFileName();
+    
+    if (theForm.theFileName.value!=""){
+       document.myForm.anexosHechos.value=parseInt(document.myForm.anexosHechos.value)+1;
+    }
+    
+    if (document.myForm.nuevoestado.value=="6"){ /* Terminado para cierre y calificacion*/
+	
+		if (parseInt(document.myForm.anexosHechos.value)< parseInt(document.myForm.numeroAnexos.value)){
+		  Mostrar();
+		  alert("Debe como minimo anexar "+ document.myForm.numeroAnexos.value +" Archivo(s)");
+		  return false;
+		}
+		
+		if (parseInt(document.myForm.tareasPendiente.value)>0){
+		  Mostrar();
+		  alert("Debe Cerrar las tareas de la solicitud antes de finalizar la solicitud");
+		  return false;
+		}
+    
+        return true;
+    }
+    
+    //if (document.myForm.nuevoestado.value=="1"||document.myForm.nuevoestado.value=="4"||document.myForm.nuevoestado.value=="11"){/* Devuelto*/
+    rta=validar(document.myForm.observacion,"Observacion","ALFA",0,"OBL","0","99");
+    if(!rta){
+        Mostrar(); 
+        return false;
+    } 
+    //}
+    return true;
+   }
+
+   function MostrarMensaje(){
+     $('mensajeR').innerHTML = $('mensaje').innerHTML;
+     $('mensajeR').show();
+   } 
+
+   function SalvarCacao(){
+    var rta;
+    Ocultar();
+    rta=validar(document.miForma5.observacion,"Observacion","ALFA",0,"OBL","0","99");
+    if(!rta){
+       Mostrar();
+      return false;
+    }
+    
+    rta=validar(document.miForma5.fecha,"Fecha","FEC",0,"OBL","0","99");
+    if(!rta){
+       Mostrar();
+      return false;
+    }
+    
+    var fechaCacao = crearDate(document.miForma5.fechaEstCacao.value);
+    var nuevaFecha = crearDate(document.miForma5.fecha.value);
+
+    if (nuevaFecha.getTime() <= fechaCacao.getTime())  {
+       alert("La nueva fecha debe ser posterior a la fecha estimada de terminación");
+       Mostrar();
+       return false; 
+    } 
+    
+    return true;
+   }
+
+	  
+  function buscarAnidadas(nombreCar,valorCar,carAnidada){
+	   var combo= document.getElementById(carAnidada);  
+	   combo.length=0
+	   
+	   if (valorCar.length==0){
+		 return true;
+	   }
+	   var url="ConsultasAjax.po?_operacion=caracteristicasAnidadas&caracteristica="+nombreCar+"&valor="+valorCar;
+	   new Ajax.Request(url,{
+		   method:'get',  
+			onSuccess: function(transport) {
+			 llenarBlancoAtr(combo,transport.responseXML.getElementsByTagName('caracteristica'),'codigo','nombre');
+			},     
+			onFailure: function() {
+			 alert("Ups... Error obteniendo respuesta Ajax");
+			}    
+		}
+	   );  
+  }
+  
+  function mostrarPendientes(nombreCar,valorCar){
+	 
+      $$('tr.car').each (
+	   function (elem) {	   
+	    if (elem.readAttribute('depende')==nombreCar && valorCar==elem.readAttribute('valorDepende')){
+	      elem.show();
+		}
+		else if(elem.readAttribute('depende')==nombreCar){
+	      elem.hide();
+		  mostrarPendientes(elem.readAttribute('codigo'),"")
+		}
+	   }
+	  ); 
+   }  
+   
+   function SalvarCar(){
+	 var rta;
+	 
+	 Ocultar(); 
+	 var form = $('frmCar'); 
+	 var arr = form.getElements(); 
+	 var noValidos =0;
+	 arr.each(function(item) {
+	 var obliga=item.getAttribute("obliga");
+	 if (obliga=="S" && item.value.length>0){
+		   
+		   var tipocampo=item.getAttribute("tipo");
+		   var asociado=item.name;
+		   if (tipocampo=="3"){
+			   rta=validar(item,asociado,"DEC",2,"OBL","0","999999999999999999");
+		   }
+		   else if (tipocampo=="4"){
+			   rta=validar(item,asociado,"FEC",0,"OBL","0","999999999999999999");
+		   }
+		   else {
+			   rta=validar(item,asociado,"ALFA",0,"OBL","0","999999999999999999");
+		   }
+		   if (!rta){
+			 noValidos++;
+		   }
+		   else if (tipocampo=="4"){
+				 var tipoVal=item.getAttribute("tipoVal");
+				 var carVal=item.getAttribute("carVal");
+				 
+				 var fechaHoy = getFechaActual();
+				 var fechaCampo= crearDate(item.value);
+				 
+				 if (tipoVal=="01"){
+				   if (fechaCampo.getTime() <fechaHoy.getTime()){
+					 alert ("La fecha "+ item.value +" no puede ser anterior a la fecha del dia");
+					 noValidos++;
+				   }
+				 }
+				 else if (tipoVal=="02"){
+				   
+				   var fechaDepende = $(carVal).value;
+				   var ffechaDepende = crearDate(fechaDepende);
+				   
+				   if (fechaCampo.getTime() <ffechaDepende.getTime()){
+					 alert ("La fecha "+ item.value +" no puede ser anterior a " + fechaDepende);
+					 noValidos++;
+				   }
+				 }
+				 else  if (tipoVal=="03"){
+				   if (fechaCampo.getTime() > fechaHoy.getTime()){
+					 alert ("La fecha "+ item.value +" no puede ser posterior a la fecha del dia");
+					 noValidos++;
+				   }
+				 }
+				 else if (tipoVal=="04"){
+				   
+				   var fechaDepende = $(carVal).value;
+				   var ffechaDepende = crearDate(fechaDepende);
+				   
+				   if (fechaCampo.getTime() > ffechaDepende.getTime()){
+					 alert ("La fecha "+ item.value +" no puede ser posteror a " + fechaDepende);
+					 noValidos++;
+				   }
+				 }
+		   }
+   		   else if (tipocampo=="3"){
+		     var Nrodecimales=item.getAttribute("decimales");
+			 if (Nrodecimales>0){
+				 var intPos = item.value.indexOf(".");
+				 if (intPos==-1){
+				   alert ("Debe digitar "+Nrodecimales +" Decimales");
+				   noValidos++;
+				 } else {
+					 var valorDecimales = item.value.substring(intPos + 1, item.value.length);
+					 if (valorDecimales.length <Nrodecimales){
+					   alert ("Debe digitar "+Nrodecimales +" Decimales");
+					   noValidos++;
+					 }
+				 }
+			 }
+		   }
+		}
+	  }
+	 );
+
+	 if(noValidos>0){
+		 Mostrar();
+		 return false;
+	 }  
+
+	 return true;
+	}
+ 
+
+   function ejecutarProcedimiento(nombreCar,valorCar,proceso,carAnidada){
+       if (valorCar.length==0){
+         return true;
+       }
+	   var combo;
+	   var existeCombo=false;
+	   if (parseInt(carAnidada)>0){
+         combo= document.getElementById(carAnidada);  
+	     combo.length=0
+		 existeCombo=true;
+	   }	   
+	   var labelmsg='msg'+nombreCar;
+	   $(labelmsg).innerHTML="";
+	   
+       var url="ConsultasAjax.po?_operacion=ejecutarProcedimiento"+
+	                        "&solicitud="+$('idSolicitudCaracter').value+
+	                        "&caracteristica="+nombreCar+
+							"&valor="+valorCar+
+							"&proceso="+proceso+
+							"&anidada="+carAnidada;
+       new Ajax.Request(url,{
+           method:'get',  
+            onSuccess: function(transport) {
+			if (existeCombo!=false){
+               llenarBlancoAtr(combo,transport.responseXML.getElementsByTagName('caracteristica'),'codigo','nombre');
+		    }
+            var anchors = transport.responseXML.getElementsByTagName('reg');
+             for (var i=0; i<anchors.length; i++) {
+                var anchor = anchors[i];
+				
+				$(labelmsg).innerHTML= " " + anchor.getAttribute("msg");
+				
+				if  (anchor.getAttribute("estado")=="N"){
+		           $(nombreCar).value="";
+				}
+				
+             }
+            },     
+            onFailure: function() {
+             alert("Ups... Error obteniendo respuesta Ajax");
+            }    
+        }
+       );  
+   }
+   
+   
+
+</script>
+</head>
+
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" id="miBody">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+<div class="container">
+  <table class="tabf" summary="" border="0"  align="center">
+	<tr>
+	 <td class ="ca" COLSPAN="4"><STRONG>SOLICITUD POR ATENDER &nbsp; #<span id= "numerosolicitud">&nbsp;</span> </STRONG></td>
+	</tr> 
+	<tr>
+	  <td class="tit">Servicio: </td>
+	  <td class="dat" colspan="3"><span id="servicio">&nbsp;</span> </td>
+	</tr>
+	
+	<tr> 
+	  <td class="tit">Area que hace la solicitud: </td>
+	  <td class="dat"><span id="areacliente">&nbsp;</span> </td>
+	  <td class="tit">Persona que hace la solicitud: </td>
+	  <td class="dat"><span id="cliente">&nbsp;</span> </td>
+	</tr>
+	
+	<tr> 
+	  <td class="tit">Area Proveedora: </td>
+	  <td class="dat"><span id="areap">&nbsp;</span> </td>
+	  <td class="tit">Persona Responsable: </td>
+	  <td class="dat"><span id="proveedor">&nbsp;</span> </td>
+	</tr>
+	
+	<tr> 
+	  <td class="tit">Fecha de generaci&oacute;n: </td>
+	  <td class="dat"><span id="fechaGenerada">&nbsp;</span></td>
+	  <td class="tit">Fecha de Vigencia: </td>
+	  <td class="dat"><span id="fechavigencia">&nbsp;</span></td>
+	</tr>
+	<tr> 
+	  <td class="tit">Fecha Estimada de Terminaci&oacute;n: </td>
+	  <td class="dat"><span id="fechaestimada">&nbsp;</span> </td>
+	  <td class="tit">Fecha de escalamiento </td>
+	  <td class="dat"><span id= "fechaEscalamientos">&nbsp;</span> </td>
+	</tr>
+	<tr> 
+	  <td class="tit">Estado: </td>
+	  <td class="dat"><span id="estado">&nbsp;</span> </td>
+	  <td class="tit">Fecha real de terminaci&oacute;n </td>
+	  <td class="dat"><span id= "fechaRealTerminacion">&nbsp;</span>&nbsp;</td>
+	</tr>
+	<tr> 
+	  <td class="tit">Oportunidad: </td>
+	  <td class="dat"><span id="oportunidad">No calificado aun</span> </td>
+	  <td class="tit">Percepci&oacute;n del Servicio: </td>
+	  <td class="dat"><span id="confiabilidad">No calificado aun</span> </td>
+	</tr>
+	<tr> 
+	  <td class="tit">Acuerdo de Servicio</td>
+	  <td class="dat"><span id= "unidad">&nbsp;</span> </td>
+	  <td class="tit">Tiempo total estimado de atenci&oacute;n</td>
+	  <td class="dat"><span id= "tiempoServicio">&nbsp;</span> </td>
+	</tr>
+	<tr> 
+	  <td class="tit">Nivel Escalamiento: </td>
+	  <td class="dat" colspan="3"><span id= "escalamiento">&nbsp;</span> </td>
+	</tr>
+	
+	<tr> 
+	  <td class="tit">Mensaje</td>
+	  <td class="dat" colspan="3"><span class="ne" id= "mensaje">&nbsp;</span> </td>
+	</tr>
+   </table>
+
+   
+  <div align="center">
+   <form name="miForma" id="frmCar" action="AnadirCaracteristica.po" method="post" onsubmit="return SalvarCar();">
+    <div id="mostrarcaracteristicas">
+     
+      <small> Los campos marcados con * son obligatorios</small><br>
+       
+ 	  <div class="ca">Caracter&iacute;sticas</div>		
+      <table class="tabf" summary="" border="0" id="caracteristicas">
+        <tr>
+         <td class="cf1">Caracteristica</td>
+         <td class="cf2">Descripci&oacute;n</td>
+        </tr>
+       </table>
+       
+      </div>
+      <div id="nueva"> 
+	    <div class="ca">Caracter&iacute;sticas</div>		
+		<br>	    
+       <INPUT class="INP" TYPE="hidden" value="VSPorAt.po" name= "pagina">
+       <INPUT class="INP" TYPE="hidden" value="prv" name= "origen">       
+       <INPUT class="INP" TYPE="hidden" value="0" id="idSolicitudCaracter" name="solicitud">
+       <INPUT TYPE="Submit" class="BOT" value="Guardar Caracter&iacute;sticas"><br>
+     </div>
+   </form>
+  </div>
+  
+   <div id="extender" align="center"> Extender Caracter&iacute;sticas<br>
+    <form name="miForma2" action="ExtenderCaracteristica.po" method="post">
+     <INPUT class="INP" TYPE="hidden" value="VSPorAt.po" name="pagina"> 
+  	 <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitudExtender" name="solicitud">
+      <SELECT class="INP" NAME="extensiones" id="extensiones"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select><br>
+      <TEXTAREA class="INP" NAME="observacion" ROWS="2" COLS="100" WRAP="physical" onkeypress="validarTecla(event, 'AL');" onkeyDown="textCounter(this.form.observacion,this.form.txtContador,200);return f_salto(event);" onkeyup="textCounter(this.form.observacion,this.form.txtContador,200);" onpaste="textCounter(this.form.observacion,this.form.txtContador,200);"></TEXTAREA>
+      <INPUT  TYPE="hidden" name="txtContador" value="0">              
+      <br>
+      <INPUT TYPE="Submit" class="BOT" value="Extender Caracteristica"  name="miBoton" onClick="document.miForma2.miBoton.style.display='none'">
+     </form>
+	 <br>
+   </div>
+   
+
+   <div class="ca">Preguntas  y/o Respuestas</div>		
+   <table align="center" class="tabf" summary="" border="0" id="atencion" cellpadding="1" cellspacing="1">
+          <tr>
+            <td class="cf1">Fecha</td>
+            <td class="cf2">Autor</td>
+            <td class="cf1">Observaci&oacute;n</td>
+          </tr>
+   </table>
+  
+   <div id="nuevaatencion" align="center">
+	  <form name="miForma3" action="AnadirAtencion.po" method="post">
+		<INPUT class="INP" TYPE="hidden" value="not_yet" id="solicitudatencion" name="solicitud"> 
+    	<INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguienteAtencion" name="pagina_siguiente"><br>
+		 <TEXTAREA class="INP"  NAME="observacion" ROWS="5" COLS="80" WRAP="physical" 
+			onkeypress="validarTecla(event, 'AL');" 
+			onkeyDown="textCounter(this.form.observacion,this.form.txtContador,1024);return  f_salto(event);" onkeyup="textCounter(this.form.observacion,this.form.txtContador,1024);" onpaste="textCounter(this.form.observacion,this.form.txtContador,1024);"></TEXTAREA>
+		 <INPUT TYPE="hidden" name="txtContador" value="0">              
+		 <br>
+		 
+		 <INPUT TYPE="Submit" class="BOT" value="Salvar Respuestas"  name="miBoton" onClick="document.miForma3.miBoton.style.display='none'"><br>
+	  </form>
+	 <br>
+    </div>
+      
+    <div id="solicitudesTramite">
+     <div class="ca">SOLICITUDES EN TRAMITE o Solicitudes del flujo de trabajo</div>		
+	  <table class="tabf" summary="" border="0" id="detalleTramite">
+		<tr>
+		  <td class="cf2">Area Cliente</td>
+		  <td class="cf1">Cliente</td>
+		  <td class="cf2">Area Proveedor </td>
+		  <td class="cf1">Proveedor </td>
+		  <td class="cf2">Servicio</td>
+		  <td class="cf1">F. Estimada Terminaci&oacute;n </td>
+		  <td class="cf2">Estado </td>
+		</tr>
+	  </table>
+	 <br>
+     </div>
+      
+    <div id="auditorCompa" align="center">
+	  <form name="miFormaG" action="AudActualizar.po" method="post">
+     <div class="ca">Grupo auditor </div>		
+	  <table class="tabf" summary="" border="0">
+		<thead>
+		<tr>
+		  <th class="cf1">Nombre </th>
+		  <th class="cf2">Area </th>
+		  <th class="cf1">Rol </th>
+		  <th class="cf2">Asistio</th>
+		</tr>
+	   </thead>
+	   <tbody id="compas">
+	   </tbody>
+	   <tfoot>
+		<tr>
+		 <td colspan="4" align="right">
+		  <INPUT TYPE="Submit" class="BOT" value="Salvar Asistentes"><br>
+		 </td>
+		</tr>
+	   </tfoot>
+		
+		 
+	  </table>
+	 </form>
+	 <br>
+    </div>
+      
+	<div align="center">              
+     <div class="ca">Historia </div>		
+	  <table class="tabf" summary="" border="0" id="historia">
+		<tr>
+		  <td class="cf1">Estado</td>
+		  <td class="cf2">Fecha</td>
+		  <td class="cf1">Observacion</td>
+		</tr>
+	  </table>
+	  <br>
+    </div>
+      
+    <div id="idmostrararchivos" align="center">
+	  <form action="ArchivosBorrar.po" method="GET">
+        <div class="ca">Archivos anexos a la solicitud </div>
+		<table class="tabf" summary="" border="0" id="idArchivos">
+		  <tr>
+			<td class="cf1">Borrar</td>
+			<td class="cf1">Archivo</td>
+			<td class="cf2">Fecha de colocaci&oacute;n</td>
+			<td class="cf1">Usuario Inserci&oacute;n</td>
+		  </tr>
+		</table>
+		<br>
+		
+		 <INPUT class="INP" TYPE="hidden" name="origen" value="A">
+		 <INPUT class="INP" TYPE="hidden" name="solicitud" id="idsolicitudmail"> <br>
+
+		<br>
+            <INPUT TYPE="Submit" class="BOT" value="Eliminar Archivo">
+	  </form>
+      </div>
+      
+     <div id="idAplazamientos" align="center">
+      <div class="ca">Aplazamientos solicitados</div>
+ 	  <table class="tabf" summary="" border="0" id= "idDetalleAplazamientos">
+		<tr>
+		  <td class="cf1">Justificaci&oacute;n </td>
+		  <td class="cf2">Nueva fecha Solicitada </td>
+		  <td class="cf1">Estado </td>
+		  <td class="cf2">Fecha Acept&oacute; o Neg&oacute; </td>
+		  <td class="cf1">Raz&oacute;n de la Negaci&oacute;n</td>
+		</tr>
+	  </table>
+     </div>
+
+    <div id="pedircacao" align="center">
+	<form name="miForma5" action="PedirAplazamiento.po" method="GET" onsubmit="return SalvarCacao();">
+	  <table class="tabf" summary="" border="0" cellpadding="1" cellspacing="1">
+		<tr>
+		 <td class ="ca" COLSPAN="2"><STRONG>Solicitar Aplazamiento</STRONG></td>
+		</tr> 
+		<tr>
+		  <td class="tit">Nueva fecha (aaaa-mm-dd)</td>
+		  <td class="dat">
+		  <INPUT class="INP" TYPE="text" name="fecha" id="fechaCacao" maxlength="10"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'FE');">
+			<INPUT TYPE="button" class="BOT" id="bfechaCacao" value="...">                    
+		  </td>
+		</tr>
+		<tr>
+		  <td class="tit">Justificaci&oacute;n :</td> 
+		  <td class="dat"><INPUT class="INP" TYPE="text" name="observacion" maxlength="200" size="140"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"></td>
+		</tr>
+		<tr>
+		  <td class="dat2" colspan="2"><INPUT class="INP" TYPE="hidden" name="solicitud" id="idsolicitudped">
+		  <INPUT class="INP" TYPE="hidden" name="fechaEstCacao" id="fechaEstCacao">
+		  <INPUT TYPE="Submit" class="BOT" value="Solicitar Aplazamiento"  name="miBoton"></td>
+		</tr>
+	   </table>
+	 </form>
+    </div>
+      
+    <div id="CambiarResp" align="center">
+	   <form action="Responsable.po" name="formresp" method="GET">
+	   <table class="tabf" summary="" border="0" cellpadding="1" cellspacing="1">
+		<tr>
+		 <td class ="ca" COLSPAN="2"><STRONG>Cambiar Responsable</STRONG></td>
+		</tr> 
+	   <tr>
+		 <td class="tit">Nuevo Responsable : </td>
+		 <td class="dat"><SELECT class="INP" NAME="nuevoresp" id="NvoResp"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select> </td>
+	   </tr>
+	   <tr>
+		 <td class="tit">Notifiqueme la respuesta dada al cliente : </td>
+		 <td class="dat"><INPUT class="INP" TYPE="Checkbox" NAME="notificar" VALUE="1"></td>
+	   </tr>
+	   <tr>
+		 <td class="dat2" colspan="2"><INPUT class="INP" TYPE="hidden" name="solicitud" id="idSolicitudResp">
+		 <INPUT TYPE="Submit" class="BOT" value="Cambiar Responsable"  name="miBoton" onClick="document.formresp.miBoton.style.display='none'"></td>
+	   </tr>
+	   </table>
+	   </form>                   
+    </div>
+      
+    <div id="cambiarestado" align="center">
+	  <form enctype="multipart/form-data" name="myForm" action="CambiarEstadoCliente.po" method="post" onsubmit="return Salvar();">
+	  <INPUT class="INP" TYPE="hidden" name="solicitud" id="idsolicitud"> 
+	  <table class="tabf" summary="" border="0">
+		  <tr>
+		   <td class ="ca" COLSPAN="2"><STRONG>Cambiar de Estado</STRONG></td>
+		  </tr> 
+		 <tr>
+		 <td class="tit">Observaci&oacute;n </td>
+		 <td class="dat"><INPUT class="INP" TYPE="text" name="observacion" maxlength="200" size="70" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		 </tr>
+		 <tr>
+		 <td class="tit">Archivo a anexar </td>
+		 <td class="dat"><INPUT class="INP" TYPE="hidden" name="theFileName"><INPUT class="INP" TYPE="file" name="upload" size="30"></td>
+		 </tr>
+		 <tr>
+		   <td class="tit">Nuevo Estado</td>
+		   <td class="dat"><SELECT class="INP" NAME="nuevoestado" id="estados" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="MostrarMensaje()"> </select></td>
+		  </tr>
+		 <tr>
+		   <td colspan="2"  class="dat2">
+			<INPUT class="INP" TYPE="hidden" name="numeroAnexos" id="numeroAnexos" value="0">
+			<INPUT class="INP" TYPE="hidden" name="anexosHechos" id="anexosHechos" value="0">
+			<INPUT class="INP" TYPE="hidden" name="tareasPendiente" id="tareasPendiente" value="0">
+			<INPUT TYPE="Submit" class="BOT" name="miBoton" value="Cambiar de Estado"  onClick="setFileName();">
+		   </td>
+		  </tr>
+	   </table>
+	   <br>
+	   <div id="mensajeR" style="display:none" class="ne">&nbsp;</div>
+	  </form>
+    </div>
+    
+    <div align="center">
+	  <table summary="">
+		<tr>
+		  <td id="divSolicitudPadre">
+			<form id="formaPadre" action="VSEnCurso.po" method="post">
+			  <INPUT class="INP" TYPE="hidden" name="solicitud" id="idSolicitudPadre"> 
+			  <INPUT class="INP" TYPE="hidden" name="lectura" value="1"> 
+			  <INPUT TYPE="Submit" class="BOT" value="Ver Solicitud Principal"><br>
+			</form>
+		  </td>
+		  <td id="idNuevaSolicitud">
+			<form action="SolicitudHija.po" method="post">
+			  <INPUT class="INP" TYPE="hidden" id="idSolicitudNueva" name="solicitud"> 
+			  <INPUT TYPE="Submit" class="BOT" value="Generar Nueva Solicitud"><br>
+			</form>
+		  </td>
+		  <td id="idReplicar">
+			<form action="ReplicasF1.po" method="post">
+			  <INPUT class="INP" TYPE="hidden" id="idSolicitudReplica" name="solicitud"> 
+			  <INPUT TYPE="Submit" class="BOT" value="Replicar Solicitud"><br>
+			</form>
+		  </td>
+		  <td id="idModCaracteristica">
+			<form action="ModificarCaracteristica.po" method="post">
+			  <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguiente" name="pagina_siguiente">
+			  <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitudModificar" name="solicitud">
+			  <INPUT TYPE="Submit" class="BOT" value="Modificar Caracteristica">
+			</form>
+		  </td>
+		  <td id="idRecordarAtencion">
+			<form action="RecordarAtencion.po" name="frmRecordarAtn" method="GET">
+			  <INPUT class="INP" TYPE="hidden" name="solicitud" id="idSolicitudRecordar"> 
+			  <INPUT TYPE="Submit" class="BOT" value="Recordar Atenci&oacute;n">
+			</form>
+		  </td>
+		  <td id="idMasArchivos">
+			<form action="PreArchivos.po" method="post">
+			  <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguienteArc" name="pagina_siguiente">
+			  <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitudArchivos" name="solicitud"> 
+			  <INPUT TYPE="Submit" class="BOT" value="Anexar Archivos">
+			 </form>
+		  </td>
+		  <td id="tdAcciones">
+			<form action="ListarAcciones.po" method="post" TARGET="_blank">
+			  <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitudMejora" name="solicitud"> 
+		  <INPUT TYPE="Submit" class="BOT" value="Ver Documentos Para Auditoria">
+			</form>
+		  </td>
+		  
+		</tr>
+	  </table>
+    </div>
+	</div>
+    
+   <script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaCacao',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaCacao'
+      });
+   </script>
+   
+   <script TYPE="text/javascript" language="JavaScript" id="JSValfechas">
+   </script>
+   
+    
+  </body>
+</html>

@@ -1,0 +1,294 @@
+<html>
+ <head>
+ <title>ContActaInicio</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+
+ 
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar(document.miForma.consecutivoContrato,"Consecutivo Contrato","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaActa,"Fecha Acta","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(){
+ 	sVolver="SI";
+ 	document.miForma.numeroContrato.value="";
+    document.miForma.action="ContContratoAct.po";
+    document.miForma._operacion.value="P";
+    return true;
+}
+
+ function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+ }
+ 
+
+var  sVolver2="NO";
+
+function converToDate(string) {
+	var date = new Date();
+	var anio = parseInt(string.substring(6, 10));
+	var mes = eval(string.substring(3, 5)-1);
+	var dia = parseInt(string.substring(0, 2));
+	date.setYear(anio);
+	date.setMonth(mes);
+	date.setDate(dia);
+	return date;
+}
+
+function validarFecha(fecha){
+	var hoy = new Date();
+	var fechaHoy = converToDate(document.getElementById(fecha).value);
+	if(hoy.getTime()< fechaHoy.getTime()){
+		alert("La Fecha debe ser anterior o igual a hoy");
+		document.getElementById(fecha).value="";
+	}
+}
+
+function generarActa(){
+ 	sVolver="SI";
+ 	document.miForma._operacion.value="GenerarActa";
+   	return true;
+}
+
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+ <br>
+ <br>
+ <div class="container">
+
+  <div id="trCreacionRegistro">
+        <form name="miForma" action="ContActaInicioAct.po" METHOD="post" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">Acta Inicio</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContActaInicioActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">N&uacute;mero Contrato</td>
+           <td class="dat"><input type="Text" class="IND" readonly name="numeroContrato" id="numeroContrato" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Acta</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaActa" id="fechaActa" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="validarFecha('fechaActa')">
+           <input type="button" id="bfechaActa" class="btnCalendario">
+           </td>
+          </tr>   
+                 
+          <tr id="trDocumentosAnexos">
+           <td class="dat" width="100%" colspan="4">
+            <table class="tabw" summary="">
+             <caption class="ca">Documentos Anexos</caption>
+              <tr>
+               <td class="tit" style="width: 28px">Anexo</td>
+               <td class="tit">Documento</td>
+              </tr>
+              <tr>
+               <td align="center" class="dat" style="width: 24px" ><input type="checkbox" name="cedula" id="cedula" class="INP" value="S"></td>
+               <td class="dat">C&eacute;dula</td>
+              </tr>
+              <tr>
+               <td align="center" class="dat" style="width: 24px" ><input type="checkbox" name="pasadoJudicial" id="pasadoJuducial" class="INP" value="S"></td>
+               <td class="dat">Pasado Judial</td>
+              </tr>
+              <tr>
+               <td align="center" class="dat" style="width: 24px" ><input type="checkbox" name="rut" id="rut" class="INP" value="S"></td>
+               <td class="dat">Rut</td>
+              </tr>
+              <tr>
+               <td align="center" class="dat" style="width: 24px" ><input type="checkbox" name="procuraduria" id="procuraduria" class="INP" value="S"></td>
+               <td class="dat">Procuradur&iacute;a</td>
+              </tr>
+              <tr>
+               <td align="center" class="dat" style="width: 24px" ><input type="checkbox" name="contraloria" id="contraloria" class="INP" value="S"></td>
+               <td class="dat">Contralor&iacute;a</td>
+              </tr>
+              <tr>
+               <td align="center" class="dat" style="width: 24px" ><input type="checkbox" name="contrato" id="contrato" class="INP" value="S"></td>
+               <td class="dat">Contrato</td>
+              </tr>
+              <tr>
+               <td align="center" class="dat" style="width: 24px" ><input type="checkbox" name="polizas" id="polizas" class="INP" value="S"></td>
+               <td class="dat">Polizas</td>
+              </tr>
+              <tr>
+               <td align="center" class="dat" style="width: 24px" ><input type="checkbox" name="impuestos" id="impuestos" class="INP" value="S"></td>
+               <td class="dat">Impuestos</td>
+              </tr>
+              <tr>
+               <td align="center" class="dat" style="width: 24px" ><input type="checkbox" name="habilitacion" id="habilitacion" class="INP" value="S"></td>
+               <td class="dat">Registro de Habilitaci&oacute;n</td>
+              </tr>
+            
+            </table>           
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4"><input type="hidden" name="_operacion" ID="_operacion" value="C">
+            <input type="hidden" name="consecutivoContrato" id="consecutivoContrato">
+            <input type="hidden" name="numeroEstudio" id="numeroEstudio">
+            <input type="Submit" class="BOT" value= "Volver Al contrato" onClick="Salir();">
+			<input type="Submit" class="BOT" id="btnGenerarActa" value= "Generar Acta de Inicio" onClick="generarActa();">
+			<input type="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+     </div>
+    
+    <div id="trResultados">
+      <table summary=""  class="tabf sortable resizable">
+       <thead>
+        <tr>
+         <th class="cf2">Número Contrato</th>
+         <th class="cf1">Fecha Acta</th>
+        </tr>
+       </thead>
+       <tbody id="detalle">
+       </tbody>
+       <tfoot>
+        <tr>
+         <td  class="PIE" colspan="11">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+        </tr>
+       </tfoot>
+      </table>
+     </div>
+
+    <div id="trDocumentos">
+     <td align="center">
+      <table summary=""  class="tabf sortable resizable">
+       <thead>
+        <tr>
+         <th class="cf2">Documento</th>
+         <th class="cf1">Fecha Generaci&oacute;n</th>
+        </tr>
+       </thead>
+       <tbody id="detalleDocumentos">
+       </tbody>
+      </table>
+     </td>
+    </tr>
+   </table>
+
+ </div>
+   
+<script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaActa',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaActa'
+      });
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

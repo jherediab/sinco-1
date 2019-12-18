@@ -1,0 +1,231 @@
+<html>
+<head>
+<title>Listar Documentos</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<script type="text/javascript" src="media/prototype.js"></script>
+<script type="text/javascript" src="media/tablekit.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript">
+  function add_member( proceso,subproceso,nombre) {
+    this.proceso=proceso;
+    this.subproceso=subproceso;
+    this.nombre=nombre;
+ }
+ function add_area(codigo,nombre) {
+    this.codigo=codigo;
+    this.nombre=nombre;
+ }
+
+</SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript"  id="elScript">
+</SCRIPT>
+
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript">
+var sVolver="NO";
+function cambioProceso(proceso){
+   var i=0;
+   var j=0;
+
+   objeto=document.getElementById('subproceso');
+   objeto.length=0;
+
+   var optionObj = new Option("","");
+   objeto.options[j] = optionObj;
+   j++;
+
+   for (i=0; i<matriz.length; i++){
+      var elItem=matriz[i];
+      if (elItem.proceso==proceso){
+         optionObj = new Option( elItem.nombre,elItem.subproceso);
+         objeto.options[j] = optionObj;
+         j++;
+       }
+    } // for
+}
+
+function cambioSubProceso(){
+
+		$('unidadServicio').length=0;
+		
+        if ($('subproceso').value.length==0){
+         return true;
+        }
+		
+        var url="ConsultasAjax.po?_operacion=serviciosSubproceso&estado=A&proceso="+$('proceso').value+"&subproceso="+$('subproceso').value;
+        new Ajax.Request(url,{
+            method:'get',  
+             onSuccess: function(transport) {
+				llenarBlancoAtr($('unidadServicio'),transport.responseXML.getElementsByTagName('servicios'),'servicio','descripcion');
+             },     
+             onFailure: function() {
+              alert("Ups... Error obteniendo respuesta Ajax");
+             }    
+         }
+    );
+}
+
+function VerDocumentos(tipoDocumento){
+  openPG("CalVerDocumento.po?numeroDocumento="+document.miForma.codigo.value+"&tipoDocumento="+tipoDocumento+"&_operacion=VDC");
+}
+
+function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+}
+</SCRIPT>
+
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+<br> 
+
+ <div class="container">
+
+ <div id="trConsulta">
+  <form  name="miForma2" action="CalDocumentosListar.po" method="post">
+    <table class="tabf" summary="" border="0" cellspacing="1" cellpadding="1">
+     <tr>
+      <td class ="ca" colspan="4">Consulta Documentos</td>
+     </tr>
+     <tr>
+        <td class="tit">C&oacute;digo documento</td>
+        <td class="dat"><INPUT class="INP" TYPE="Text" NAME="codigo" id="codigo" maxlength="20" size="20" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+        <td class="tit">Tipo Documento</td>
+        <td class="dat"><SELECT NAME="tipoDocumento" class="INP" id="tipoDocumento" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+     </tr>
+
+     <tr>
+        <td class="tit">Descripci&oacute;n</td>
+        <td class="dat" colspan="3"><INPUT class="INP" TYPE="Text" NAME="descripcion" id="descripcion" maxlength="250" size="150" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+     </tr>
+
+     <tr>
+        <td class="tit">Proceso</td>
+        <td class="dat"><SELECT NAME="proceso" class="INP" id="proceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioProceso(this.options[this.selectedIndex].value);"></SELECT></td>
+        <td class="tit">Subproceso</td>
+        <td class="dat"><SELECT NAME="subproceso" class="INP" id="subproceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioSubProceso();"></SELECT></td>
+     </tr>
+	 
+	 <tr>
+        <td class="tit">Unidad / Servicio</td>
+        <td class="dat"><SELECT NAME="unidadServicio" class="INP" id="unidadServicio" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+     </tr>
+     
+     <tr>
+       <td class="tit">Estado</td>
+       <td class="dat"><SELECT NAME="estado" class="INP" id="estado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+         <td class="tit">Fecha de Emisi&oacute;n</td>
+         <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaEmision" id="fechaEmision" maxlength="25" size="40" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+     </tr>
+
+      <tr>
+         <td class="tit">Versi&oacute;n</td>
+         <td class="dat"><INPUT class="INP" TYPE="Text" NAME="version" id="version" maxlength="25" size="40" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+         <td class="tit">Fecha de Revisi&oacute;n</td>
+         <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaVersion" id="fechaVersion" maxlength="25" size="40" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+      </tr>
+      
+      <tr>
+         <td class="tit">Responsable</td>
+         <td class="dat" colspan="3"><SELECT NAME="responsable" class="INP" id="responsable" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+      </tr>
+
+      <tr>
+         <td class="tit">Distribuido A</td>
+         <td class="dat" colspan="3"><SELECT NAME="distribuido" class="INP" id="distribuido" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+      </tr>
+     
+     <tr>
+       <td class="tit">Observaciones</td>
+       <td class="dat" colspan="3"><INPUT class="INP" TYPE="Text" NAME="observaciones" id="observaciones" maxlength="512" size="150" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+     </tr>
+     
+     <tr>
+      <td class="dat2" colspan="4">
+       <input type="hidden" name="_operacion" value="L">
+       <input TYPE="Submit" class="BOT" value= "Consultar" onClick="Consultar();">
+      </td>
+     </tr>
+    </table>
+   </form>
+  </div>
+ 
+ <div id="trResultados">
+    <table summary="" class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf2">C&oacute;digo</th>
+        <th class="cf1">Descripci&oacute;n</th>
+        <th class="cf2">Proceso</th>
+        <th class="cf1">Sub Proceso</th>
+        <th class="cf2">Versi&oacute;n/Revisi&oacute;n</th>
+        <th class="cf1">Fecha Versi&oacute;n/Revisi&oacute;n</th>
+        <th class="cf2">Fecha Emisi&oacute;n</th>
+        <th class="cf1">Observaciones</th>
+        <th class="cf2">Estado</th>
+	    <th class="cf1">Resposables</th>
+		<th class="cf2">Orden</th>
+		<th class="cf1">Fecha Modificaci&oacute;n</th>
+       </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="12">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+</div>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+
+
+</BODY>
+</HTML>

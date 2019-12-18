@@ -1,0 +1,404 @@
+<html>
+ <head>
+ <title>Procesos</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript" language="JavaScript" src="media/menu.js"></script>
+ <script type="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script type="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script type="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ var iFilaAnexos=1;
+  var nuevaOperacion="";
+ 
+ 
+ 
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('proceso'),"Proceso","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('descripcion'),"Descripción","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar($('objetivo'),"Objetivo","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('estado'),"Estado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('tipoProceso'),"Tipo Proceso","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+    nuevaOperacion = $('_operacion').value;
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+  if($('_operacion').value=="E"){
+ 
+ $('_operacion').value=nuevaOperacion;
+ }
+
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+ 
+ function Subprocesos(){
+  sVolver2="SI";
+  document.ff.action="CalSubProcesosAct.po";
+  $('_operacion').value="L";
+  document.ff.submit();
+  return true;
+ }
+ 
+ function ConsultarMapa(){
+  sVolver2="SI";
+  document.ff.action="CalVerMapaProcesos.po";
+ }
+ 
+
+ </script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+
+ <table  summary="" width="100%" border="0">
+  <tr>
+   <td>
+     <script type="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<br>
+<div class="container">
+ <form name="ff" action="CalProcesosAct.po" method="post" onsubmit="return Salvar()">
+ <input type="hidden" name="_operacion" id="_operacion" value="X">
+
+ <table summary="" class="tabw">
+  <tr>
+   <td  class="tablaContenido">
+    <table   class="tabf" summary="" border="0">
+     <tr>
+	   <td class="titulo">Procesos</td>
+      <td class="datc">
+       <label id="labelNombre" name="labelNombre" align="center"></label>
+      </td>
+ 	    <td class="dat2">
+		   <input type="submit" class="BOT"  value= "Consultar Proceso" id="btnConsultar"  onClick="PreparaConsulta();">
+		   <input type="submit" class="BOT"  value= "Nuevo Proceso" id="btnCrear" onClick="Nuevo();">
+		   <input type="Button" class="BOT"  value= "Ayuda" id="btnAyuda" onClick="show_help('CalProcesos');">
+		     <input type="hidden" name="objetivoHidden" id="objetivoHidden">
+ 	    </td>
+     </tr>
+    </table>
+ 	 </td>
+  </tr>
+ </table>
+ 
+
+ <div id="trConsulta">
+       <table class="tabf" summary="" border="0">
+        <tr>
+          <td colspan="2" class="ca" width="95%">CONSULTA</td>
+        </tr>
+        <tr>
+         <td class="tit">Descripci&oacute;n Proceso</td>
+         <td class="dat"> <input type="text" class="INP" name="descripcion" id="fdescripcion" maxlength="120" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+        </tr>
+
+        <tr>
+         <td class="tit">Estado Proceso</td>
+         <td class="dat"><select name="estado" class="INP" id="festado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+        </tr>
+
+      <tr>
+       <td class="dat2" colspan="2">
+	    <input type="submit" class="BOT"  value= "Mapa de Procesos" onClick="ConsultarMapa();">
+        <input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+       </td>
+      </tr>
+     </table>
+   </div>
+ 
+	
+  <div id="trResultados">
+    <table summary=""  class="tabf sortable resizable">
+     <thead id="detalleHead">
+      <tr id="detalleTr">
+        <th class="cf2">C&oacute;digo Proceso</th>
+        <th class="cf1">Descripci&oacute;n</th>
+        <th class="cf2">Estado</th>
+        <th class="cf1">Tipo Proceso</th>
+		
+		
+		<!--
+		<th class="cf1">Normograma</th>
+		<th class="cf1">Mapa de Riesgos</th>
+		
+        <th class="cf2">Caracterizaci&oacute;n</th>-->
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="7">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+ 
+ 
+  <div id="trCreacionRegistro">
+         <table class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+              <td colspan="4" class="ca">Creaci&oacute;n / Modificaci&oacute;n</td>
+          </tr>
+          <tr>
+           <td class="tit">C&oacute;digo Proceso</td>
+           <td class="dat"> <input type="text" class="INP" name="proceso" id="proceso" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Descripci&oacute;n</td>
+           <td class="dat"> <input type="text" class="INP" name="descripcion" id="descripcion" maxlength="120" size="100"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+		  <tr>
+           <td class="tit">Objetivo</td>
+           <td class="dat" colspan="3"> <input type="text" class="INP" name="objetivo" id="objetivo" maxlength="200" size="166"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          
+          </tr>
+		  
+		  <tr>
+		   <td class="tit">Justificaci&oacute;n</td>
+           <td class="dat" colspan="3"> <input type="text" class="INP" name="justificacion" id="justificacion" maxlength="200" size="166"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		  </tr>
+		  
+		  
+          <tr>
+           <td class="tit">Estado</td>
+           <td class="dat"> <select name="estado" class="INP" id="estado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+           <td class="tit">Tipo Proceso</td>
+           <td class="dat"> <select name="tipoProceso" class="INP" id="tipoProceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+           <tr>
+            <td class="dat2" colspan="4">
+              <input type="submit" class="BOT" value="Guardar Cambios"   id="btnGrabar" onclick="Grabar();">
+              <input type="submit" class="BOT" value="Eliminar Proceso" id="btnEliminar" onclick="Eliminar();">
+              <INPUT class="BOT"  TYPE="Submit"  id="subprocesosEd" VALUE="Sub Procesos" name="miBotonS" onClick="Subprocesos();" accesskey="S">
+              <input type="submit" class="BOT" value="Regresar"   id="btnSalir" onclick="Salir();">
+            </td>
+           </tr>
+          </table>
+        </div>
+  
+	<div id="trEdicion">
+       <table class="tabf" summary="">
+        <tr>
+         <td colspan="4" class="ca">Edici&oacute;n</td>
+        </tr>
+          <tr>
+           <td class="tit">C&oacute;digo Proceso</td>
+           <td class="dat"><span id="codigoEd">&nbsp;</span></td>
+           <td class="tit">Descripci&oacute;n</td>
+           <td class="dat"><span id="descripcionEd">&nbsp;</span></td>
+          </tr>
+		  
+		  <tr>
+		   <td class="tit">Objetivo</td>
+           <td class="dat" colspan="3"><span id="objetivoEd">&nbsp;</span></td>
+		  </tr>
+		  
+		  <tr>
+		   <td class="tit">Justificaci&oacute;n</td>
+           <td class="dat" colspan="3"><span id="justificacionEd">&nbsp;</span></td>
+		  </tr>
+
+          <tr>
+           <td class="tit">Estado</td>
+           <td class="dat"><span id="estadoEd">&nbsp;</span></td>
+           <td class="tit">Tipo Proceso</td>
+           <td class="dat"><span id="tipoProcesoEd">&nbsp;</span></td>
+          </tr>
+		  
+		   <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"><span id="usuarioInsercionEd">&nbsp;</span></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"><span id="fechaInsercionEd">&nbsp;</span></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"><span id="usuarioModificacionEd">&nbsp;</span></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"><span id="fechaModificacionEd">&nbsp;</span></td>
+          </tr>
+
+           <tr>
+            <td class="dat2" colspan="4">
+ 	          <input type="hidden" name="proceso" id="procesoKey">
+              <INPUT class="BOT"  TYPE="Submit"  id="btnProcesos" VALUE="Sub Procesos" name="miBotonS" onClick="Subprocesos();" accesskey="S">
+              <input type="submit" class="BOT" value="Editar Proceso"   id="btnModificar" onClick="Modificar();">
+            </td>
+           </tr>
+
+          <tr>
+           <td colspan="4">
+		   <br>
+		   <table summary="" class="tabw sortable resizable">
+		     <caption class="ca">Sub Procesos</caption>
+			 <thead id="subprocesosHead">
+			  <tr id="trSubProcesos">
+				<th class="cf1">Sub Proceso</th>
+				<th class="cf2">Descripci&oacute;n</th>
+				<th class="cf1">Estado</th>
+				<th class="cf2">Factor</th>
+			 </tr>
+			 </thead>
+			 <tbody id="subprocesos">
+			 </tbody>
+			</table>		  
+			<br>
+           </td>
+          </tr>
+
+  
+          </table>
+        </div>
+  </form>
+  </div>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>
+

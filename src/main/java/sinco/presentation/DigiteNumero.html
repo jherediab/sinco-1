@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Sistema de Solicitud de Servicios</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  onLoad="document.forms[0].solicitud.focus()">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+ <div class="container">
+	<form method="POST" action="SolicitudUnica.po">
+	  <table summary="" border="0" class="tabf">
+		  <tr>
+		   <td class ="ca" COLSPAN="2"><STRONG><span id="titulo">Ver Solicitud N&uacute;mero</span></STRONG></td>
+		  </tr> 
+		  <tr>
+			<td class="dat">N&uacute;mero</td>
+			<td class="dat">
+			  <INPUT class="INP" TYPE="hidden" name="tipo" id="idTipo" value="solicitud">
+			  <INPUT class="INP" TYPE="text" name="solicitud" onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">                       
+			</td>
+		  </tr> 
+		  <tr>                      
+			<td class="dat2" colspan="2">
+			  <INPUT TYPE="Submit" class="BOT" value="Aceptar" name="miBoton" onClick="Ocultar();">
+			</td>
+		  </tr>
+	  </table>
+	</form>
+  </div>
+
+</body>
+</html>
+

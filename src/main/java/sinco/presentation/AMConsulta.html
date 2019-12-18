@@ -1,0 +1,164 @@
+<html>
+<head>
+<title>Consulta Acciones</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<script type="text/javascript" src="media/prototype.js"></script>
+<script type="text/javascript" src="media/tablekit.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+ <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript"  >
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+<br>
+ <div class="container">
+  
+	<FORM name="miForma" ACTION="AMConsulta.po" METHOD="post">
+      <INPUT TYPE="hidden" NAME="_operacion" id="_operacion" value="L">
+      <table summary=""  border="0" class="tabf">
+        <tr>
+           <td class ="ca" COLSPAN="5"><STRONG>Consulta de acciones de mejoramiento</STRONG></td>
+          </tr> 
+        <tr>
+           <td class="tit">Se implantar&aacute; en</td>
+           <td class="tit"><SELECT class="INP" NAME="areaImplanta" id="idAreaImplanta" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT>
+           <INPUT class="INP" TYPE="Checkbox" NAME="areasHijas" VALUE="1" id="checkBox">Incluir Sub Areas
+           </td>
+           <td class="tit">Codigo Estado</td>
+           <td class="dat"><SELECT class="INP" NAME="codigoEstado" id="codigoEstado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+
+        <tr>
+           <td class="tit">Fecha Desde (AAAA-MM-DD)</td>
+           <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaDesde" id="fechaDesde" maxlength="10" size="15" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+                          <INPUT TYPE="button" class="BOT" id="bfechaDesde" value="...">
+           </td>
+           <td class="tit">Fecha Hasta (AAAA-MM-DD)</td>
+           <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaHasta" id="fechaHasta" maxlength="10" size="15" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+                           <INPUT TYPE="button" class="BOT" id="bfechaHasta" value="...">
+           </td>
+        </tr>
+
+        <tr>
+           <td class="tit">Acci&oacute;n</td>
+           <td class="dat"><SELECT class="INP" NAME="accion" id="accion" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+           <td class="tit">Origen</td>
+           <td class="dat"><SELECT class="INP" NAME="origen" id="origen" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+
+        <tr>
+           <td class="tit">Proceso</td>
+           <td class="dat"><SELECT class="INP" NAME="proceso" id="proceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+           
+           <td class="tit">Norma</td>
+           <td class="dat"><SELECT class="INP" NAME="norma" id="norma" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+
+        <tr>
+           <td class="tit">Numeral</td>
+           <td class="dat"><INPUT class="INP" TYPE="Text" NAME="numeral" id="numeral" maxlength="20" size="15" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">La acción de mejora est&aacute; implantada</td>
+           <td class="dat"><SELECT class="INP" NAME="implantada" id="implantada" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+        
+        <tr>
+           <td class="tit">Tema</td>
+           <td class="dat"><INPUT class="INP" TYPE="Text" id="tema" name="tema" maxlength="60" size="60" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"></td>
+           <td class="tit">Impacto</td>
+           <td class="dat"><SELECT class="INP" NAME="impacto" id="impacto" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+
+        <tr>
+          <td class="dat2" colspan="4" align="right"><INPUT TYPE="Submit" class="BOT" VALUE="Listar"  name="miBoton"></td>
+         </tr>
+      </table>
+     </FORM>
+	<br> 
+
+	  <table summary=""  class="tabf sortable resizable">
+		 <thead>
+		  <tr>
+		   <th class="cf1">N&uacute;mero</th>
+		   <th class="cf2">Area</th>
+		   <th class="cf1">Estado</th>
+		   <th class="cf2">Fecha Vigencia</th>
+		   <th class="cf1">Acci&oacute;n</th>
+		   <th class="cf2">Origen</th>
+		   <th class="cf1">Proceso</th>
+		   <th class="cf2">Impacta en </th>
+		   <th class="cf1">Implantada</th>
+		   <th class="cf1">Numeral</th>
+		   <th class="cf2">Tema</th>
+		 </tr>
+		 </thead>
+		 <tbody id="detalle">
+		 </tbody>
+		 <tfoot>
+		  <tr>
+		   <td  class="PIE" colspan="11">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+		  </tr>
+		 </tfoot>
+	  </table>
+  </div>
+  
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+
+   <script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaDesde'
+      });
+     Calendar.setup({
+       inputField :  'fechaHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaHasta'
+      });
+   </script>
+	
+
+</body>
+</html>

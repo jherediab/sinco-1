@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>Sistema de mantenimiento de solicitudes</title>
+<br><br><br>
+<br><br><br>
+<br><br><br>
+<br><br><br>
+<br><br><br>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+function Salvar(){
+   var rta;
+   Ocultar();
+
+   rta=validar(document.miForma.l,"Usuario","ALFA",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   rta=validar(document.miForma.p,"Password","ALFA",0,"OBL","0","99");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   return true;
+}
+</SCRIPT>
+
+
+
+</head>
+
+<body class="" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="if (document.miForma!=null) document.miForma.l.focus()">
+<br>
+
+	  <form name="miForma" action="LU.po" method="post" onsubmit="return Salvar();">
+	  <div id="divTabla" >
+	  	 <div class="tituloHospital" id="tituloHospital">
+	  
+		 </div>
+	  <div id="tablaLogin" >
+		  <table summary="" border="0" class="tabp"  align="center" >
+			<tr>
+			 <td class ="ca" COLSPAN="2"><STRONG>Digite sus Datos</STRONG></td>
+			</tr> 
+			<tr> 
+			  <td class="tit">Login:</td>
+			  <td class="dat"><INPUT class="INP" TYPE="text" name="l" id="l" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" > </td>
+			</tr>
+			<tr> 
+			  <td class="tit">Password:</td>
+			  <td class="dat"><INPUT class="INP" TYPE="password" name="p" id="p" maxlength="30" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></td>
+			</tr>
+			<tr> 
+			  <td class="tit" colspan="2">Fecha Actualizaci&oacute;n : Marzo 24 de 2018</td>
+			</tr>
+			<tr> 
+			  <td colspan="2" class="dat2"> 
+               <input type="hidden" name="t" value="w">
+               <INPUT class="INP" TYPE="hidden" id="h" name="h" value="WelcomePresentation.po"> 
+			   <INPUT class="INP" TYPE="submit" value="Entrar" name="miBoton"></td>
+			</tr>
+		  </table>
+		  	 <div class="eco" id="eco">
+	  
+			 </div>
+		 </div> 
+	</form>
+	  </div>
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+var wrapper=document.getElementById("divTabla");
+wrapper.style.height = (screen.height/2);
+wrapper.style.width = (screen.width/2);
+wrapper.style.position = 'absolute';
+wrapper.style.top='20%';
+wrapper.style.left='25%';
+var wrapperT=document.getElementById("tablaLogin");
+wrapperT.style.color='black';
+wrapperT.style.position = 'relative';
+wrapperT.style.top='5%';
+</SCRIPT>
+</body>
+</html>
+

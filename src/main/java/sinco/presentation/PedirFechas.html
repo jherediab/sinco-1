@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>index.htm</title>
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<link type="text/css" rel="stylesheet" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   rta=validar(document.miForma.fechaInicio,"Fecha Inicio","FECH",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaFin,"Fecha Fin","FECH",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }   
+   return true;   
+}
+function Cargar(){
+
+  try {
+      if (document.forms[0]!=null) {
+         document.forms[0].elements[0].focus();
+      }
+  }
+  catch(e){}   
+   
+  try {
+    document.miForma.fechaInicio.value=getCookie("PedirFechasFechaInicio");
+    document.miForma.fechaFin.value=getCookie("PedirFechasFechaFin");
+  }
+  catch(e){
+  }
+  
+  document.miForma.fechaInicio.focus();
+}
+
+function Consultar(){
+   setCookie("PedirFechasFechaInicio",document.miForma.fechaInicio.value,360);
+   setCookie("PedirFechasFechaFin",document.miForma.fechaFin.value,360);
+   return true;
+}
+</SCRIPT>
+
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"   onLoad="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+ <div class="container">
+
+            <FORM name="miForma" ACTION="" METHOD="get" id="forma" onsubmit="return Salvar();">
+
+                <table summary="" border="0" class="tabf">
+                    <tr>
+                     <td class ="ca" COLSPAN="2"><STRONG>RANGO DE FECHAS </STRONG></td>
+                    </tr> 
+                  
+                    <tr> 
+                    <td class="tit">Fecha de Inicio (aaaa-mm-dd)</td>
+                    <td class="dat"> 
+                      <INPUT class="INP" TYPE="Text" NAME="fechaInicio" id="idFechaInicio" maxlength="10" size="20"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'FE');">
+                      <INPUT id="bFechaInicio" TYPE="button" class="BOT" value="...">
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td class="tit">Fecha de Finalizaci&oacute;n (aaaa-mm-dd)</td>
+                    <td class="dat"> 
+                      <INPUT class="INP" TYPE="Text" NAME="fechaFin" id="idFechaFin" maxlength="10" size="20"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'FE');">
+                      <INPUT id="bFechaFin" TYPE="button" class="BOT" value="...">
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td class="tit">
+                    <INPUT class="INP" TYPE="hidden" NAME="area" id="idArea">
+                    <INPUT class="INP" TYPE="hidden" NAME="tipo" id="idTipo">
+                    <INPUT class="INP" TYPE="hidden" NAME="plan" id="idPlan">
+                    <INPUT class="INP" TYPE="hidden" NAME="persona" id="idPersona">
+                    </td>
+                    <td  class="dat2"><INPUT TYPE="Submit" class="BOT" VALUE="Listar" name="miBoton" onClick="Consultar()"></td>
+                  </tr>
+                </table>
+            </FORM>
+
+          </div>
+
+<!-- script que define y configura el calendario-->
+<script type="text/javascript">
+   Calendar.setup({
+    inputField :  "idFechaInicio",  // id del campo de texto
+    ifFormat   :  "%Y-%m-%d",         // formato de la fecha que se escriba en el campo de texto
+    button     :  "bFechaInicio"          // el id del botón que lanzará el calendario
+    });
+   Calendar.setup({
+    inputField :  "idFechaFin",  // id del campo de texto
+    ifFormat   :  "%Y-%m-%d",         // formato de la fecha que se escriba en el campo de texto
+    button     :  "bFechaFin"          // el id del botón que lanzará el calendario
+    });
+</script>
+
+</body>
+</html>

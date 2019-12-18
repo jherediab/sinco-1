@@ -1,0 +1,187 @@
+<html>
+<head>
+<title>Ver Plan especial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<script type="text/javascript" src="media/prototype.js"></script>
+<script type="text/javascript" src="media/tablekit.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function Salvar(){
+ var rta;
+ Ocultar();
+   
+ if (document.miForma.ciclo.length==0){
+   mostrar_mensaje("No hay ciclos disponibles para realizar la operación"); 
+   Mostrar(); 
+   return false;
+ }
+
+  if (document.miForma.ciclo.value==0){
+     mostrar_mensaje("Debe seleccionar un ciclo"); 
+     Mostrar(); 
+     return false;
+  }
+
+ try {
+  if (document.miForma.area.length==0){
+    mostrar_mensaje("No hay areas disponibles para realizar la operación"); 
+    Mostrar(); 
+    return false;
+  }
+   
+  if (document.miForma._operacion.value!="RECARGA"){
+    if (document.miForma.area.value=="0"){
+       mostrar_mensaje("Debe seleccionar un area"); 
+       Mostrar(); 
+       return false;
+    }
+  }
+ }
+ catch(e){} 
+   
+ return true;
+}
+
+function volver(){
+ document.miForma2._operacion.value="RECARGA";
+ document.miForma2.submit();
+ return true;
+}
+
+function Recarga(){
+ if (document.miForma.ciclo.value>0){
+   document.miForma._operacion.value="RECARGA";
+   document.miForma.submit();
+ }
+ return true;
+}
+
+
+</SCRIPT>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){}">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<br> 
+
+<div class="container">
+
+	<div id="trSeleccionar">
+      <FORM name="miForma" ACTION="CalVerPlanEspecial.po" METHOD="get" onsubmit="return Salvar()">
+      
+       <table summary=""  border="0" class="tabf">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Resultados del Plan de area</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat"><SELECT NAME="ciclo" class="INP" id="idCiclo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"  onchange="Recarga();"></SELECT></td>
+        </tr>
+        
+        <tr id="trArea"> 
+           <td class="tit">Area</td>
+           <td class="dat"><SELECT NAME="area" class="INP" id="idArea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+        <tr>
+          <td class="dat2" colspan="2">
+          <INPUT TYPE="hidden" NAME="_operacion" value="VER">
+          <INPUT class="BOT"  TYPE="Submit"  VALUE="Siguiente" name="miBoton" accesskey="G"></td>
+        </tr>
+       </table>
+      </FORM>
+    </div>
+
+	<div id="trPlan">
+      <table class="tabf" align="center" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Resultados Plan de calidad</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat"><span id="nombreCicloA">&nbsp;</span></td>
+        </tr>
+        
+        <tr>
+           <td class="tit">Area</td>
+           <td class="dat"><span id="nombreAreaA">&nbsp;</span></td>
+        </tr>
+       </table>    
+        <br>
+
+		<table class="tabw" summary=""  border="0" id="plan">
+            <caption class="CA">PLAN NUMERO &nbsp; <span id="numeroPlan">&nbsp;</span></caption>
+             <tr>
+              <td width="20%" class="CF2">Objetivo</td>
+              <td width="80%" class="CF1">&nbsp;</td>
+            </tr>
+         </table>                     
+	</div>
+
+	
+	<div id="trVarios" >
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf2">Nombre Area</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+ </div>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+
+
+</body>
+</html>

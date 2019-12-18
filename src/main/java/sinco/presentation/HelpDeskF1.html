@@ -1,0 +1,109 @@
+<html>
+<head>
+<title>Sistema de Solicitud de Servicios</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript">
+function cambioArea(){
+  document.miForma2._operacion.value=2;
+  document.miForma2.action="HelpDeskF1.po";
+  document.miForma2.submit();
+  return true;
+ return false;
+}
+
+function Salvar(){
+ var rta;
+ document.miForma2.miBoton.style.display='none';
+
+ rta=0;
+ try {
+   if (document.miForma2.area.value!=0){
+      rta=1;
+   }
+   if (document.miForma2.servicio.value!=0){
+      rta=1;
+   }
+   if (document.miForma2.persona.value!=0){
+      rta=1;
+   }
+ }
+ catch(Exception){
+  rta=0;
+ }
+ 
+ if(rta==0){
+  document.miForma2.miBoton.style.display=''; 
+  alert("Para avanzar debe haber seleccionado un área, un funcionario y un servicio");
+  return false;
+ }
+ return true;
+}
+</SCRIPT>
+</head>
+
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  onLoad="document.forms[0].filtro.focus()">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+ <div class="container">
+  
+   <form action="HelpDeskF1.po" method="post" id="formaFiltro">
+    <table summary="" border="0" class="tabf">
+      <tr>
+       <td class ="ca" COLSPAN="2"><STRONG>Areas de la Organizaci&oacute;n</STRONG></td>
+      </tr> 
+
+      <tr> 
+       <td class="tit">Nombre del área</td>
+       <td class="dat"> <INPUT class="INP" TYPE="text" name="filtro" maxlength="30"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"> </td>
+      </tr>
+      <tr>
+       <td class="tit">&nbsp;</td>
+       <td   class="dat2"> 
+        <INPUT class="INP" TYPE="hidden" name="_operacion" value="1">
+        <INPUT TYPE="Submit" class="BOT" value="Buscar"  name="miBoton" onClick="Ocultar();">
+       </td>
+      </tr>
+   </table>
+  </form>
+  
+  <div  align="center" id="seleccion">
+   <form name="miForma2" action="HelpDeskF2.po" method="post" onsubmit="return Salvar();">
+    <table summary="" border="0" class="tabf">
+     <tr>
+      <td class ="ca" COLSPAN="2"><STRONG>Busqueda</STRONG></td>
+     </tr> 
+     <tr> 
+      <td class ="tit">Area</td>
+      <td class ="dat"><SELECT class="INP" NAME="area" id="idArea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioArea()"></select></td>
+     </tr>
+     <tr id="funcionario"> 
+      <td class ="tit">Funcionarios</td>
+      <td class ="dat"><SELECT class="INP" NAME="persona" id="idPersona" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+     </tr>
+     <tr id="trServicio"> 
+      <td class ="tit">Servicio a prestar</td>
+      <td class ="dat"><SELECT class="INP" NAME="servicio" id="idServicio" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+     </tr>
+     <tr>
+      <td  class ="dat2" colspan="2"> 
+        <INPUT class="INP" TYPE="hidden" name="_operacion" value="3">
+        <INPUT TYPE="Submit" class="BOT" value="Escoger" name="miBoton" onClick="document.miForma2.miBoton.style.display='none'">
+      </td>
+     </tr>
+    </table>
+   </form>
+  </div>
+ </div>
+</body>
+</html>
+

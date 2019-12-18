@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+    <appender name="Sinco-ROLL" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/misApps/logs/application.log"/>
+        <param name="MaxFileSize" value="2MB"/>
+        <param name="MaxBackupIndex" value="2"/>
+		<param name="threshold" value="SEVERE"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601}: [%t] %C{1}, %p, %c: %m%n"/>
+        </layout>
+    </appender>
+    
+    <logger name="com.package.logger.LogClass">
+            <level value="ERROR"/>
+    </logger>
+    
+    <appender name="Sinco-ACCESS" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/misApps/logs/access.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>    
+    </appender>
+    <appender name="Sinco-Console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601}: %p: %m%n"/>
+        </layout>    
+    </appender>
+    
+    <!-- For Windows use only -->
+    <!--
+    <appender name="Sinco-EventViewer" class="org.apache.log4j.nt.NTEventLogAppender">
+        <param name="source" value="Sinco"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601}: [%t] %C{1}, %p, %c: %m%n"/>
+        </layout>    
+    </appender>
+    -->
+    
+    <appender name="Sinco-XMLOutFormat" class="org.apache.log4j.FileAppender">
+        <param name="File" value="/misApps/logs/chainsaw.log"/>
+        <param name="append" value="false"/>
+        <layout class="org.apache.log4j.xml.XMLLayout"/>
+    </appender>
+    <appender name="CHAINSAW_Sinco_CLIENT" class="org.apache.log4j.net.SocketAppender">
+        <param name="RemoteHost" value="localhost"/>
+        <param name="Port" value="4445"/>
+        <param name="LocationInfo" value="true"/>
+    </appender>
+</log4j:configuration>

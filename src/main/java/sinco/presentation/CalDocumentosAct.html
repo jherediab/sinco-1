@@ -1,0 +1,695 @@
+<html>
+<head>
+<title>Documentos</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script type="text/javascript" src="media/prototype.js"></script>
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript">
+ function add_area(codigo,nombre) {
+    this.codigo=codigo;
+    this.nombre=nombre;
+ }
+
+</SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript"  id="scriptAreas">
+</SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript"  id="areasAsignadas">
+</SCRIPT>
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript"  id="responsables">
+</SCRIPT>
+
+
+<SCRIPT TYPE="text/javascript"  language="JavaScript">
+var sVolver="NO";
+
+function cambioProceso(){
+        $('subproceso').length=0;
+        if ($('proceso').value.length==0){
+          return true;
+        }
+		
+        var url="ConsultasAjax.po?_operacion=cargarSubprocesos&proceso="+$('proceso').value;
+        new Ajax.Request(url,{
+            method:'get',  
+             onSuccess: function(transport) {
+             llenarBlancoAtr($('subproceso'),transport.responseXML.getElementsByTagName('subproceso'),'codigo','descripcion');
+             },     
+             onFailure: function() {
+              alert("Ups... Error obteniendo respuesta Ajax");
+             }    
+         }
+    );  
+  }
+  
+
+function cambioSubproceso(){
+
+		$('servicio').length=0;
+		
+        if ($('subproceso').value.length==0){
+         return true;
+        }
+		
+        var url="ConsultasAjax.po?_operacion=serviciosSubproceso&estado=A&proceso="+$('proceso').value+"&subproceso="+$('subproceso').value;
+        new Ajax.Request(url,{
+            method:'get',  
+             onSuccess: function(transport) {
+				llenarBlancoAtr($('servicio'),transport.responseXML.getElementsByTagName('servicios'),'servicio','descripcion');
+             },     
+             onFailure: function() {
+              alert("Ups... Error obteniendo respuesta Ajax");
+             }    
+         }
+    );  
+  }
+  
+function cambioProceso2(){
+        $('subProcesoC').length=0;
+        if ($('procesof').value.length==0){
+          return true;
+        }
+		
+        var url="ConsultasAjax.po?_operacion=cargarSubprocesos&proceso="+$('procesof').value;
+        new Ajax.Request(url,{
+            method:'get',  
+             onSuccess: function(transport) {
+             llenarBlancoAtr($('subProcesoC'),transport.responseXML.getElementsByTagName('subproceso'),'codigo','descripcion');
+             },     
+             onFailure: function() {
+              alert("Ups... Error obteniendo respuesta Ajax");
+             }    
+         }
+    );  
+  }
+  
+
+function cambioSubproceso2(){
+
+		$('unidadServicioC').length=0;
+		
+        if ($('subProcesoC').value.length==0){
+         return true;
+        }
+		
+        var url="ConsultasAjax.po?_operacion=serviciosSubproceso&estado=A&proceso="+$('procesof').value+"&subproceso="+$('subProcesoC').value;
+        new Ajax.Request(url,{
+            method:'get',  
+             onSuccess: function(transport) {
+				llenarBlancoAtr($('unidadServicioC'),transport.responseXML.getElementsByTagName('servicios'),'servicio','descripcion');
+             },     
+             onFailure: function() {
+              alert("Ups... Error obteniendo respuesta Ajax");
+             }    
+         }
+    );  
+  }
+
+  function contarObjetos(my_form, field_name){
+   len     =       my_form.elements.length;
+   var     index   =       0;
+   var cuantos=0;
+   for( index=0; index < len; index++ ){
+     if( (my_form.elements[index].name).substring(0,3)== field_name ){
+        if (my_form.elements[index].value>0){
+         cuantos++;
+        }
+     }
+   }
+   return cuantos;
+  }
+
+ function carga(){
+  var i=0;
+  try {
+    for (i=0; i<mResponsables.length; i++){
+     var elItem=mResponsables[i];
+     InsertarArea('tablaResponsables','',elItem.codigo);
+    } // for
+
+    for (i=0; i<mAsignada.length; i++){
+     var elItem=mAsignada[i];
+     InsertarArea('tablaLineas','',elItem.codigo);
+    } // for
+   }
+   catch(e){
+   }
+}
+
+function ValidaPeriodo(periodo){
+
+var elPeriodo= periodo.value;
+
+ var elanno= elPeriodo.substring(0,4); 
+ var  elmes=  elPeriodo.substring(4,6);  
+ 
+  
+ var now = new Date();
+
+ if (elmes<1 || elmes > 12){
+   alert("El mes no es valido");
+   return false;
+ }
+
+ if (elanno< 2000 || elanno > now.getFullYear()){  //(now.getFullYear()-1)
+   alert("El año debe ser posterior o igual a 2000 "); 
+   return false;
+ }
+ 
+ if (elanno==now.getFullYear() && elmes >(now.getMonth()+1)){
+   alert("El mes no puede ser posterior al mes en curso"); 
+   return false;
+ }  
+ return true;
+}
+
+
+function Salvar(){
+ var rta;
+ Ocultar();
+ 
+ 
+ 
+ document.getElementById("tipoDocumento").disabled = false;
+ document.getElementById("proceso").disabled = false;
+ try{document.getElementById("subproceso").disabled = false;}catch(err){};
+  
+ 
+ if (sVolver=="SI"){
+    return true;
+ }
+
+ rta=validar(document.miForma.codigo,"Código Documento","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+ rta=validar(document.miForma.tipoDocumento,"Tipo Documento","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+ 
+ rta=validar(document.miForma.descripcion,"Descripción","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ rta=validar(document.miForma.proceso,"Proceso","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ rta=validar(document.miForma.version,"Fecha Emisión","ALFA",0,"OBL","200001","205912");
+ if(!rta){
+   Mostrar();
+   return false;
+ }  
+ 
+ rta=validar(document.miForma.fechaVersion,"Fecha Versión","ALFA",0,"OBL","200001","205912");
+ if(!rta){
+   Mostrar();
+   return false;
+ }  
+ 
+ /*
+ if (ValidaPeriodo(document.miForma.fechaVersion)==false){
+   Mostrar();
+   document.miForma.fechaVersion.focus();
+   return false;
+ }
+ */
+
+
+/* if ($('idEstado').value=='R' && $('estadoh').value!='R'){
+   Mostrar();
+   alert("El estado en revisión solo debe ser asignado a traves de una solicitud en simasol");
+   return false;
+ }*/
+  
+ if ($('idEstado').value!='I'){
+   var cuantos;
+   cuantos=contarObjetos(self.document.miForma,'aa_');
+   if (cuantos==0){
+      alert("Debe seleccionar como mínimo una area a quien se distribuye");
+      Mostrar(); 
+      return false;
+   }
+   cuantos=contarObjetos(self.document.miForma,'ar_');
+   if (cuantos==0){
+      alert("Debe seleccionar como mínimo un responsable del documento");
+      Mostrar(); 
+      return false;
+   }
+ }
+	if(document.miForma.Doc.value!=''){
+	}else{
+
+		try{ rta=validar(document.miForma.subproceso,"SubProceso","ALFA",0,"OBL","0","999");
+		 if(!rta){
+		   Mostrar();
+		   return false;
+		 }  }catch(err){};
+		 
+	}
+ 
+ 
+ 
+ var resp = confirm('Esta seguro de realizar esta operación?'); 
+ if(!resp)  Mostrar(); 
+ return resp;
+}
+
+function Recarga(){
+
+	document.getElementById("tipoDocumento").disabled = false;
+	document.getElementById("proceso").disabled = false;
+ try{ 
+	   document.getElementById("subproceso").disabled = false;  
+   }catch(err){
+   } 
+ document.miForma._operacion.value="R";
+  document.miForma.target="";
+ document.miForma.submit();
+ return true;
+}
+
+function fVolver(){
+	if(document.miForma.Doc.value!=''){
+	
+		try{
+			if(document.getElementById("subproceso").value!=''){
+				document.miForma.action="CalProcesosAct.po";
+				document.miForma._operacion.value="V";
+				document.miForma.descripcion.value="";
+				document.miForma.estado.value="";
+				sVolver="SI"; 
+				return true;
+			
+			};
+		}catch(err){
+
+		}
+
+	  document.miForma.action="CalProcesosAct.po";
+	  document.miForma.descripcion.value="";
+	  document.miForma.estado.value="";
+	}else{
+	 document.miForma.codigo.value="";
+	 document.miForma.target="";
+	}
+	document.miForma._operacion.value="L";
+	 sVolver="SI"; 
+ return true;
+}
+
+function fHistoria(){
+  document.miForma.action="CalDocumentosArchivos.po";
+  document.miForma._operacion.value="VerHistoria";
+  document.miForma.target="";
+  sVolver="SI";
+  return true;
+}
+
+
+function fListaMaestra(){
+  openPG('CalDocumentosPdf.po');
+  return true;
+}
+
+
+function fVersion(){
+  document.miForma.action="CalDocumentosAct.po";
+  document.miForma._operacion.value="version";
+  document.miForma.target="";
+  sVolver="SI";
+  return true;
+}
+
+
+function fDocumentos(){
+  document.miForma.action="CalDocumentosArchivos.po";
+  document.miForma._operacion.value="Subir";
+  document.miForma.target="";
+  sVolver="SI";
+  return true;
+}
+
+
+function VerDocumentos(tipoDocumento){
+  openPG("CalVerDocumento.po?numeroDocumento="+document.miForma.codigo.value+"&tipoDocumento="+tipoDocumento+"&_operacion=VDC");
+}
+
+function Consultar(){
+   document.miForma2.action="CalDocumentosAct.po";
+   document.miForma2._operacion.value="L";
+   return true;
+}
+function Creacion(){
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+}
+
+</SCRIPT>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  onLoad="carga();">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+<br> 
+  
+  <div class="container">
+
+  <div id="trConsulta">
+	<form  name="miForma2" action="CalDocumentosAct.po" method="post">
+	 
+    <table summary="" border="0" cellspacing="0" cellpadding="0" class="tabf">
+     <tr>
+      <td class ="ca" colspan="4">Consulta Documentos</td>
+     </tr>
+     <tr>
+        <td class="tit">C&oacute;digo documento</td>
+        <td class="dat"><INPUT class="INP" TYPE="Text" NAME="codigo" id="codigof" maxlength="20" size="20" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onBlur="if (document.miForma._operacion.value!='M') Recarga();"></td> 
+        <td class="tit">Tipo Documento</td>
+        <td class="dat"><SELECT NAME="tipoDocumento" class="INP" id="tipoDocumentof" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+     </tr>
+
+     <tr>
+       <td class="tit">Proceso</td>
+       <td class="dat"><SELECT NAME="proceso" class="INP" id="procesof" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioProceso2();"></SELECT></td>
+       <td class="tit">SubProceso</td>
+       <td class="dat"><SELECT NAME="subProcesoC" class="INP" id="subProcesoC" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioSubproceso2();"></SELECT></td>
+     </tr>
+	 
+	 <tr> 
+	<!-- <td class="tit">Unidad / Servicio</td>
+     <td class="dat"><SELECT NAME="unidadServicioC" class="INP" id="unidadServicioC" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>-->
+	 <td class="tit">Descripci&oacute;n</td>
+     <td class="dat" colspan="3"><INPUT class="INP" TYPE="Text" NAME="descripcionConsulta" id="descripcionf" maxlength="50" size="40" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+	 </tr>
+ 
+     <tr>
+	  <td class="tit">Estado</td>
+	  <td class="dat" colspan="3">
+	   <SELECT NAME="estado" class="INP" id="estadof" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+     </tr>
+	 
+     <tr>
+       <td class="tit">Observaciones</td>
+       <td class="dat" colspan="3"><INPUT class="INP" TYPE="Text" NAME="fobservaciones" id="fobservaciones" maxlength="512" size="150" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+     </tr>
+     
+     <tr>
+      <td class="dat2" colspan="4">
+       <input type="hidden" name="_operacion" value="L">
+       <INPUT TYPE="button" class="BOT" VALUE="Lista Maestra" onClick="fListaMaestra();" accesskey="L">
+       <input TYPE="Submit" class="BOT" value= "Consultar" onClick="Consultar();">
+       <input TYPE="Submit" class="BOT" value= "Crear" onClick="Creacion();">
+      </td>
+     </tr>
+    </table>
+   </form>
+  </div>
+
+ <div id="TrCreacionRegistro">
+       <FORM name="miForma" ACTION="CalDocumentosAct.po" METHOD="post" onsubmit="return Salvar()">
+	   <input type="hidden" name="objetivoHidden" id="objetivoHidden" value="">
+           <table  summary=""  border="0" class="tabf">
+           
+             <tr>
+               <td class ="ca" COLSPAN="4" id="titulo"><STRONG>ASIGNACION DE DOCUMENTOS AL SUBPROCESO</STRONG></td>
+             </tr>       
+             <tr>
+                <td class="tit">C&oacute;digo documento</td>
+                <td class="dat"><INPUT class="INP" TYPE="Text" NAME="codigo" id="idCodigo" maxlength="20" size="20" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onBlur="if (document.miForma._operacion.value!='M') Recarga();"></td>
+                <td class="tit">Tipo Documento</td>
+                <td class="dat"><SELECT NAME="tipoDocumento" class="INP" id="tipoDocumento" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+             </tr>
+
+             <tr>
+                <td class="tit">Descripci&oacute;n</td>
+                <td class="dat" colspan="3"><INPUT class="INP" TYPE="Text" NAME="descripcion" id="idDescripcion" maxlength="250" size="150" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+
+             <tr>
+                <td class="tit">Observaciones</td>
+                <td class="dat" colspan="3"><INPUT class="INP" TYPE="Text" NAME="observaciones" id="observaciones" maxlength="512" size="150" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+
+
+             <tr>
+                <td class="tit">Proceso</td>
+                <td class="dat" id="pro"><SELECT NAME="proceso" class="INP" id="proceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioProceso();"></SELECT></td>
+                <td class="tit" id="subpro">Subproceso</td>
+                <td class="dat" id="subpro2"><SELECT NAME="subproceso" class="INP" id="subproceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioSubproceso();"></SELECT></td>
+             </tr>
+
+          <!--   <tr id="servi">
+                <td class="tit">Unidad / Servicio</td>
+                <td class="dat" colspan="3"><SELECT NAME="servicio" class="INP" id="servicio" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+             </tr>-->
+			 
+            <tr>
+              <td class="tit">Estado</td>
+              <td class="dat" colspan="3">
+			   <INPUT TYPE="hidden" NAME="estadoh" id="estadoh" value="">
+			   <SELECT NAME="estado" class="INP" id="idEstado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+             <!-- <td class="tit">Fecha Inicio Revisi&oacute;n</td>
+              <td class="dat"><span id="fechaRevision">&nbsp;</span></td>-->
+            </tr>
+
+             <tr>
+                <td class="tit">Versi&oacute;n</td>
+                <td class="dat"><INPUT class="INP" TYPE="Text" NAME="version" id="idVersion" maxlength="25" size="40" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+                <td class="tit">Fecha Revisi&oacute;n</td>
+                <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaVersion" id="idFechaVersion" maxlength="25" size="40" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+             <tr>
+                <td class="tit">Fecha de Emisi&oacute;n</td>
+                <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaEmision" id="fechaEmision" maxlength="25" size="40" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+                <td class="tit">Orden de presentaci&oacute;n en Mapa de procesos</td>
+                <td class="dat"><INPUT class="INP" TYPE="Text" NAME="orden" id="orden" maxlength="5" size="30" onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+             
+             <tr>
+                <td class="tit">Responsable</td>
+                <td class="dat" colspan="3">
+                <table summary=""  border="0" id="tablaResponsables">
+                   <tr>
+                      <th class="cf2" align="center">C&oacute;digo Area</th>
+                      <th class="cf1" align="center">Eliminar</th>
+                   </tr>
+                 </table>
+                 <input name="filtroResp" type="input" maxlength="15" size="10"> 
+                 <input name="AgregarLinea" TYPE="button" class="BOT" value="Agregar Responsable" onclick="InsertarArea('tablaResponsables',document.miForma.filtroResp.value,0);"> 
+                </td>
+             </tr>
+
+             <tr>
+                <td class="tit">Distribuido A</td>
+                <td class="dat"  colspan="3">
+                <table summary=""  border="0" id="tablaLineas">
+                   <tr>
+                      <th class="cf2" align="center">C&oacute;digo Area</th>
+                      <th class="cf1" align="center">Eliminar</th>
+                   </tr>
+                 </table>
+                 <input name="filtroDist" type="input" value="" maxlength="15" size="10"> 
+                 <input name="AgregarLinea" TYPE="button" class="BOT" value="Agregar Area" onclick="InsertarArea('tablaLineas',document.miForma.filtroDist.value,0);"> 
+                </td>
+             </tr>
+             
+             
+            <tr>
+              <td class="tit">Documento Asociado</td>
+              <td class="dat" width="27%"><a id="documentoWord">&nbsp;</a></td>
+              <td class="tit">Documento Publicado</td>
+              <td class="dat" width="27%"><a id="documentoPdf">&nbsp;</a></td>
+            </tr>
+
+             <tr>
+              <td class="tit">Fecha Inserci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="fechaInsercion" maxlength="20" size="30" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+              <td class="tit">Usuario Inserci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="usuarioInsercion" maxlength="20" size="30" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+
+             <tr>
+              <td class="tit">Fecha Modificaci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="fechaModificacion" maxlength="20" size="30" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+              <td class="tit">Usuario Modificaci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="usuarioModificacion" maxlength="20" size="30" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+              
+             <tr id="trAct">
+                <td class="dat2" colspan="4">
+                <INPUT TYPE="Submit" class="BOT" VALUE="Grabar" name="miBotonG" accesskey="G">
+                <INPUT TYPE="Submit" class="BOT" VALUE="Documentos" id="miBotonD" onClick="fDocumentos();" accesskey="D">
+                <INPUT TYPE="Submit" class="BOT" VALUE="Historia" id="miBotonB" onClick="fHistoria();" accesskey="B">
+                <INPUT TYPE="Submit" class="BOT" VALUE="Cerrar Versi&oacute;n" id="miVersion" onClick="fVersion();" accesskey="V">
+                <INPUT TYPE="Submit" class="BOT" VALUE="Volver" name="miBotonN" onClick="fVolver();" accesskey="N">
+				</td>
+              </tr>
+            </table>
+		   <INPUT TYPE="hidden" NAME="Doc" id="Doc" value="">
+           <INPUT TYPE="hidden" NAME="recarga" value="0">
+           <INPUT TYPE="hidden" id="consecutivo" NAME="consecutivo" value="0">
+           <INPUT TYPE="hidden" NAME="_operacion" id="operacion" value="C">
+       </FORM>
+     </div>
+ 
+	<div id="trResultados">
+          <table summary=""  border="0" id="detalle" class="tabf">
+           <tr>
+             <td class="cf1">Consecutivo</td>
+             <td class="cf2">C&oacute;digo</td>
+             <td class="cf1">Descripci&oacute;n</td>
+             <td class="cf2">Versi&oacute;n/Revisi&oacute;n</td>
+             <td class="cf1">Fecha Versi&oacute;n/Revisi&oacute;n</td>
+             <td class="cf2">Estado</td>
+             <td class="cf1">Resposables</td>
+             <td class="cf2">Orden</td>
+             <td class="cf1">Fecha Modificaci&oacute;n</td>
+           </tr> 
+          </table>
+       </div>
+    </div>
+
+<script TYPE="text/javascript" language="JavaScript">
+var iFilaLineas=0;
+function InsertarArea(miTabla,filtro,codigoArea){
+
+   //console.log("paso 1. subproceso="+$('subproceso').value);	
+
+    var Tabla = document.getElementById(miTabla);
+
+    var tr = document.createElement("tr");
+    tr.id = "FilaLineas" + iFilaLineas;
+    
+    td = document.createElement("td");
+    select = document.createElement("select");
+    select.id = "areaAsignada";
+    if (miTabla=='tablaResponsables') {
+       select.name = "ar_"+iFilaLineas;
+    }
+    else {
+       select.name = "aa_"+iFilaLineas;
+    }
+    //select.disabled = "true";
+    select.numero = iFilaLineas;
+    select.size = "1";
+    select.className = "INP";
+    var j=0;
+    
+    var optionObj = new Option(" ",0);
+    select.options[j] = optionObj;    
+    
+    var i=0;
+    for (j=0; j<mAreas.length; j++){
+       var elItem=mAreas[i];
+       var bValido=1;
+       if (filtro.length>0){
+       
+          if (elItem.nombre.substring(0,filtro.length).toLowerCase()!=filtro.toLowerCase()) {
+              bValido=0;
+           }
+       }
+       if (bValido==1){
+          var option = document.createElement("option");
+          
+          option.setAttribute("value",elItem.codigo);
+          option.appendChild(document.createTextNode(elItem.nombre));
+          
+          if (codigoArea==elItem.codigo){
+             option.setAttribute("selected","true");
+          }       
+          select.appendChild(option);
+       }
+       i++;
+    }
+    
+    td.appendChild(select);
+    tr.appendChild(td);
+    
+    // EliminarLinea
+    td = document.createElement("td");
+    input = document.createElement("input");
+    input.id = "FilaLineas"+ iFilaLineas;
+    input.idfila = "FilaLineas" + iFilaLineas;
+    input.name = "EliminarLinea";
+    input.type = "button";
+    input.value = "Eliminar";
+    input.className="submitLink";
+    if (miTabla=='tablaResponsables') {
+       input.onclick = BorrarResponsables;
+    }
+    else {
+       input.onclick = BorrarArea;
+    }
+    td.appendChild(input);
+    tr.appendChild(td);
+
+    Tabla.tBodies[0].appendChild(tr);
+    iFilaLineas=iFilaLineas+1;
+    return;
+}
+
+function BorrarResponsables(e){
+    var Tabla = document.getElementById("tablaResponsables");
+    
+    var obj;
+    if (Rutinas.Browser.IE){     
+        obj=window.event.srcElement;
+    }       
+    else {
+       obj=e.target;
+    }
+    Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+    return;
+}
+
+function BorrarArea(e){
+    var Tabla = document.getElementById("tablaLineas");
+    
+    var obj;
+    if (Rutinas.Browser.IE){     
+        obj=window.event.srcElement;
+    }       
+    else {
+       obj=e.target;
+    }
+    Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+    return;
+}
+
+
+</SCRIPT>
+</BODY>
+</HTML>

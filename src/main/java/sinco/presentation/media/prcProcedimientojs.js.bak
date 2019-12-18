@@ -1,0 +1,733 @@
+ var sVolver2="NO";
+ var sVolver="NO";
+ var totalPolitica = 0;
+ var totalProcAntecedente = 0;
+ var totalProveedorEntrada = 0;
+ var totalClienteSalida	= 0;
+ var totalPlanear = 0;
+ var totalHacer = 0;
+ var totalVerificar = 0;
+ var totalActual = 0;
+ var totalRecursos = 0;
+
+function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+   return true;
+ }
+ 
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('idProcedimiento'),"Id Procedimiento","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('procesoId'),"Proceso Id","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('subprocesoId'),"Subproceso Id","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('servicioUnidadId'),"ServicioUnidad Id","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoEmpleado'),"Código Empleado","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('objetivo'),"Objetivo","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('alcance'),"Alcance","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('definiciones'),"Definiciónes","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('concepto'),"Concepto","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('estado'),"Estado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Proveedores'),"Proveedores","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Entradas'),"Entradas","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Clientes'),"Clientes","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('Salidas'),"Salidas","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoEmpleadoDescPlan'),"CódigoEmpleadoDescPlan","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoEmpleadoDescHac'),"CódigoEmpleadoDescHac","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoEmpleadoDescVer'),"CódigoEmpleadoDescVer","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('codigoEmpleadoDescAct'),"CódigoEmpleadoDescAct","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('tipoRecurso'),"TipoRecurso","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   $('_operacion').value="E";
+   return true;
+ }
+ 
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="X";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+
+// FUNCIONES AGREGAR POLITICA
+ function agregarPolitica(){
+   if(document.getElementById('PoliticaText').value.length!=0){
+ 	   var tabla=document.getElementById('TablaPoliticaText').getElementsByTagName("TBODY")[0];
+       var fila = document.createElement("TR"); 
+       fila.id = "TablaPoliticaText" + totalPolitica;
+       
+       var td1 = document.createElement("TD");
+       var td2 = document.createElement("TD");
+
+ 	   input = document.createElement("input");
+       input.id = "FilaPoliticaText"+ totalPolitica;
+       input.idfila = "FilaPoliticaText" + totalPolitica;
+       input.name = "EliminarLinea";
+       input.type = "button";
+       input.value = "Eliminar";
+       input.className="submitLink";
+       input.onclick = eliminarPolitica;
+       
+		if(document.forms[0]._operacion.value=="D"){
+				 td2.appendChild(document.createTextNode(" "));
+		}else{
+			td2.appendChild(input);
+		}
+		
+		td1.appendChild(document.createTextNode(document.getElementById('PoliticaText').value));
+		fila.appendChild(td1); 
+		fila.appendChild(td2);
+		tabla.appendChild(fila);
+		totalPolitica = totalPolitica + 1;
+		alert(totalPolitica);
+		document.getElementById('PoliticaText').value="";
+	}
+	else{
+		alert("Debe digitar la Politica");
+	}
+ }
+ function eliminarPolitica(e){
+      var Tabla = document.getElementById("TablaPoliticaText");
+      var obj;
+      if (navigator.appVersion.indexOf("MSIE")!=-1){
+         obj=window.event.srcElement;
+      }       
+      else if(navigator.userAgent.indexOf("Firefox")!=-1){
+        obj=e.target;
+      }
+      Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+      totalPolitica = totalPolitica - 1;
+      return;
+ }
+ 
+	 // FUNCIONES PROCEDIMIENTOS ANTECEDENTES
+	 function agregarProcAnteriores(){
+		var indice = document.getElementById('AnterioresText').selectedIndex;
+		if(indice == null || indice == 0){
+			alert("Debe seleccionar un procedimiento antecesor");
+		}
+		else{
+		   var tabla=document.getElementById('TablaAnterioresText').getElementsByTagName("TBODY")[0];
+		   var fila = document.createElement("TR"); 
+		   fila.id = "TablaAnterioresText" + totalProcAntecedente;
+		   
+		   var td1 = document.createElement("TD");
+		   var td2 = document.createElement("TD");
+
+		   input = document.createElement("input");
+		   input.id = "FilaProcAntecedenteText"+ totalProcAntecedente;
+		   input.idfila = "FilaProcAntecedenteText" + totalProcAntecedente;
+		   input.name = "EliminarLinea";
+		   input.type = "button";
+		   input.value = "Eliminar";
+		   input.className="submitLink";
+		   input.onclick = eliminarProcAntecesor;
+		   
+			if(document.forms[0]._operacion.value=="D"){
+					 td2.appendChild(document.createTextNode(" "));
+			}else{
+				td2.appendChild(input);
+			}
+			
+			td1.appendChild(document.createTextNode(document.getElementById('AnterioresText').value));
+			fila.appendChild(td1); 
+			fila.appendChild(td2);
+			tabla.appendChild(fila);
+			totalProcAntecedente = totalProcAntecedente + 1;
+			alert(totalProcAntecedente);
+			document.getElementById('AnterioresText').selectedIndex = "";
+		}
+	 }
+	 function eliminarProcAntecesor(e){
+		 debugger;
+		  var Tabla = document.getElementById("TablaAnterioresText");
+		  var obj;
+		  if (navigator.appVersion.indexOf("MSIE")!=-1){
+			 obj=window.event.srcElement;
+		  }       
+		  else if(navigator.userAgent.indexOf("Firefox")!=-1){
+			obj=e.target;
+		  }
+		  Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		  totalProcAntecedente = totalProcAntecedente - 1;
+		  return;
+	 }
+ 
+	// FUNCIONES PROCEDIMIENTOS PROVEEDOR/ENTRADA
+	 function agregarProveedoresEntradas(){
+		var indice = document.getElementById('Proveedores').selectedIndex;
+		var indice2 = document.getElementById('Entradas').selectedIndex;
+		debugger;
+		if(indice == null || indice == 0){
+			alert("Debe seleccionar un proveedor.");
+		}
+		else if(indice2 == null || indice2 == 0){
+			alert("Debe seleccionar una entrada.");
+		}
+		else{
+		   var tabla=document.getElementById('TablaProveedorText').getElementsByTagName("TBODY")[0];
+		   var fila = document.createElement("TR"); 
+		   fila.id = "TablaProveedorText" + totalProveedorEntrada;
+		   
+		   var td1 = document.createElement("TD");
+		   var td2 = document.createElement("TD");
+		   var td3 = document.createElement("TD");
+
+		   input = document.createElement("input");
+		   input.id = "FilaProveedorText"+ totalProveedorEntrada;
+		   input.idfila = "FilaProveedorText" + totalProveedorEntrada;
+		   input.name = "EliminarLinea";
+		   input.type = "button";
+		   input.value = "Eliminar";
+		   input.className="submitLink";
+		   input.onclick = eliminarProveedoresEntradas;
+		   
+			if(document.forms[0]._operacion.value=="D"){
+					 td3.appendChild(document.createTextNode(" "));
+			}else{
+				td3.appendChild(input);
+			}
+			
+			td1.appendChild(document.createTextNode(document.getElementById('Proveedores').value));
+			fila.appendChild(td1);
+			td2.appendChild(document.createTextNode(document.getElementById('Entradas').value));
+			fila.appendChild(td2);
+			fila.appendChild(td3);
+			tabla.appendChild(fila);
+			totalProveedorEntrada = totalProveedorEntrada + 1;
+			alert(totalProveedorEntrada);
+			document.getElementById('Proveedores').selectedIndex = 0;
+			document.getElementById('Entradas').selectedIndex = 0;
+		}
+	 }
+	 function eliminarProveedoresEntradas(e){
+		  var Tabla = document.getElementById("TablaProveedorText");
+		  var obj;
+		  if (navigator.appVersion.indexOf("MSIE")!=-1){
+			 obj=window.event.srcElement;
+		  }       
+		  else if(navigator.userAgent.indexOf("Firefox")!=-1){
+			obj=e.target;
+		  }
+		  Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		  totalProveedorEntrada = totalProveedorEntrada - 1;
+		  return;
+	}
+	
+	// FUNCIONES PROCEDIMIENTOS CLIENTE/SALIDA
+	 function agregarClientesSalidas(){
+		var indice = document.getElementById('Clientes').selectedIndex;
+		var indice2 = document.getElementById('Salidas').selectedIndex;
+		if(indice == null || indice == 0){
+			alert("Debe seleccionar un Clientes.");
+		}
+		else if(indice2 == null || indice2 == 0){
+			alert("Debe seleccionar una Salidas.");
+		}
+		else{
+		   var tabla=document.getElementById('TablaClientesText').getElementsByTagName("TBODY")[0];
+		   var fila = document.createElement("TR"); 
+		   fila.id = "TablaClientesText" + totalClienteSalida;
+		   
+		   var td1 = document.createElement("TD");
+		   var td2 = document.createElement("TD");
+		   var td3 = document.createElement("TD");
+
+		   input = document.createElement("input");
+		   input.id = "FilaClientesText"+ totalClienteSalida;
+		   input.idfila = "FilaClientesText" + totalClienteSalida;
+		   input.name = "EliminarLinea";
+		   input.type = "button";
+		   input.value = "Eliminar";
+		   input.className="submitLink";
+		   input.onclick = eliminarClienteEntrada;
+		   
+			if(document.forms[0]._operacion.value=="D"){
+					 td3.appendChild(document.createTextNode(" "));
+			}else{
+				td3.appendChild(input);
+			}
+			
+			td1.appendChild(document.createTextNode(document.getElementById('Clientes').value));
+			fila.appendChild(td1);
+			td2.appendChild(document.createTextNode(document.getElementById('Salidas').value));
+			fila.appendChild(td2);
+			fila.appendChild(td3);
+			tabla.appendChild(fila);
+			totalClienteSalida = totalClienteSalida + 1;
+			alert(totalClienteSalida);
+			document.getElementById('Clientes').selectedIndex = 0;
+			document.getElementById('Salidas').selectedIndex = 0;
+		}
+	 }
+	 
+	 function eliminarClienteEntrada(e){
+		  var Tabla = document.getElementById("TablaClientesText");
+		  var obj;
+		  if (navigator.appVersion.indexOf("MSIE")!=-1){
+			 obj=window.event.srcElement;
+		  }       
+		  else if(navigator.userAgent.indexOf("Firefox")!=-1){
+			obj=e.target;
+		  }
+		  Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		  totalClienteSalida = totalClienteSalida - 1;
+		  return;
+	}
+	
+	
+	// FUNCIONES PROCEDIMIENTOS PLANEAR
+	 function agregarDescripcionPlanear(){
+		var indice = document.getElementById('codigoEmpleadoDescPlan').selectedIndex;
+		var txtDesc = document.getElementById('DescripcionProcPlan').value;
+		var txtRegistro = document.getElementById('RegistroPlan').value;
+		if(indice == null || indice == 0){
+			alert("Debe seleccionar un responsable.");
+		}
+		else if(txtDesc == ""){
+			alert("Debe ingresar una descripci&oacute;n.");
+		}
+		else{
+		   var tabla=document.getElementById('TablaPlanearText').getElementsByTagName("TBODY")[0];
+		   var fila = document.createElement("TR"); 
+		   fila.id = "TablaPlanearText" + totalPlanear;
+		   
+		   var td1 = document.createElement("TD");
+		   var td2 = document.createElement("TD");
+		   var td3 = document.createElement("TD");
+		   var td4 = document.createElement("TD");
+
+		   input = document.createElement("input");
+		   input.id = "FilaPlanearText"+ totalPlanear;
+		   input.idfila = "FilaPlanearText" + totalPlanear;
+		   input.name = "EliminarLinea";
+		   input.type = "button";
+		   input.value = "Eliminar";
+		   input.className="submitLink";
+		   input.onclick = eliminarDescripcionPlanear;
+		   
+			if(document.forms[0]._operacion.value=="D"){
+					 td4.appendChild(document.createTextNode(" "));
+			}else{
+				td4.appendChild(input);
+			}
+			
+			td1.appendChild(document.createTextNode(txtDesc));
+			fila.appendChild(td1);
+			td2.appendChild(document.createTextNode(indice));
+			fila.appendChild(td2);
+			td3.appendChild(document.createTextNode(txtRegistro));
+			fila.appendChild(td3);
+			fila.appendChild(td4);
+			tabla.appendChild(fila);
+			totalPlanear = totalPlanear + 1;
+			alert(totalPlanear);
+			document.getElementById('codigoEmpleadoDescPlan').selectedIndex = 0;
+			document.getElementById('DescripcionProcPlan').value = "";
+			document.getElementById('RegistroPlan').value = "";
+		}
+	 }
+	 function eliminarDescripcionPlanear(e){
+		  var Tabla = document.getElementById("TablaPlanearText");
+		  var obj;
+		  if (navigator.appVersion.indexOf("MSIE")!=-1){
+			 obj=window.event.srcElement;
+		  }       
+		  else if(navigator.userAgent.indexOf("Firefox")!=-1){
+			obj=e.target;
+		  }
+		  Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		  totalPlanear = totalPlanear - 1;
+		  return;
+	}
+	
+	// FUNCIONES PROCEDIMIENTOS HACER
+	 function agregarDescripcionHacer(){
+		var indice = document.getElementById('codigoEmpleadoDescHac').selectedIndex;
+		var txtDesc = document.getElementById('DescripcionProcHac').value;
+		var txtRegistro = document.getElementById('RegistroHac').value;
+		if(indice == null || indice == 0){
+			alert("Debe seleccionar un responsable.");
+		}
+		else if(txtDesc == ""){
+			alert("Debe ingresar una descripci&oacute;n.");
+		}
+		else{
+		   var tabla=document.getElementById('TablaHacerText').getElementsByTagName("TBODY")[0];
+		   var fila = document.createElement("TR"); 
+		   fila.id = "TablaHacerText" + totalHacer;
+		   
+		   var td1 = document.createElement("TD");
+		   var td2 = document.createElement("TD");
+		   var td3 = document.createElement("TD");
+		   var td4 = document.createElement("TD");
+
+		   input = document.createElement("input");
+		   input.id = "FilaHacerText"+ totalHacer;
+		   input.idfila = "FilaHacerText" + totalHacer;
+		   input.name = "EliminarLinea";
+		   input.type = "button";
+		   input.value = "Eliminar";
+		   input.className="submitLink";
+		   input.onclick = eliminarDescripcionHacer;
+		   
+			if(document.forms[0]._operacion.value=="D"){
+					 td4.appendChild(document.createTextNode(" "));
+			}else{
+				td4.appendChild(input);
+			}
+			
+			td1.appendChild(document.createTextNode(txtDesc));
+			fila.appendChild(td1);
+			td2.appendChild(document.createTextNode(indice));
+			fila.appendChild(td2);
+			td3.appendChild(document.createTextNode(txtRegistro));
+			fila.appendChild(td3);
+			fila.appendChild(td4);
+			tabla.appendChild(fila);
+			totalHacer = totalHacer + 1;
+			alert(totalHacer);
+			document.getElementById('codigoEmpleadoDescHac').selectedIndex = 0;
+			document.getElementById('DescripcionProcHac').value = "";
+			document.getElementById('RegistroHac').value = "";
+		}
+	 }
+	 function eliminarDescripcionHacer(e){
+		  var Tabla = document.getElementById("TablaHacerText");
+		  var obj;
+		  if (navigator.appVersion.indexOf("MSIE")!=-1){
+			 obj=window.event.srcElement;
+		  }       
+		  else if(navigator.userAgent.indexOf("Firefox")!=-1){
+			obj=e.target;
+		  }
+		  Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		  totalHacer = totalHacer - 1;
+		  return;
+	}
+	
+	// FUNCIONES PROCEDIMIENTOS VERIFICAR
+	 function agregarDescripcionVerificar(){
+		var indice = document.getElementById('codigoEmpleadoDescVer').selectedIndex;
+		var txtDesc = document.getElementById('DescripcionProcVer').value;
+		var txtRegistro = document.getElementById('RegistroVer').value;
+		if(indice == null || indice == 0){
+			alert("Debe seleccionar un responsable.");
+		}
+		else if(txtDesc == ""){
+			alert("Debe ingresar una descripci&oacute;n.");
+		}
+		else{
+		   var tabla=document.getElementById('TablaVerificarText').getElementsByTagName("TBODY")[0];
+		   var fila = document.createElement("TR"); 
+		   fila.id = "TablaVerificarText" + totalVerificar;
+		   
+		   var td1 = document.createElement("TD");
+		   var td2 = document.createElement("TD");
+		   var td3 = document.createElement("TD");
+		   var td4 = document.createElement("TD");
+
+		   input = document.createElement("input");
+		   input.id = "FilaVerificarText"+ totalVerificar;
+		   input.idfila = "FilaVerificarText" + totalVerificar;
+		   input.name = "EliminarLinea";
+		   input.type = "button";
+		   input.value = "Eliminar";
+		   input.className="submitLink";
+		   input.onclick = eliminarDescripcionVerificar;
+		   
+			if(document.forms[0]._operacion.value=="D"){
+					 td4.appendChild(document.createTextNode(" "));
+			}else{
+				td4.appendChild(input);
+			}
+			
+			td1.appendChild(document.createTextNode(txtDesc));
+			fila.appendChild(td1);
+			td2.appendChild(document.createTextNode(indice));
+			fila.appendChild(td2);
+			td3.appendChild(document.createTextNode(txtRegistro));
+			fila.appendChild(td3);
+			fila.appendChild(td4);
+			tabla.appendChild(fila);
+			totalVerificar = totalVerificar + 1;
+			alert(totalVerificar);
+			document.getElementById('codigoEmpleadoDescVer').selectedIndex = 0;
+			document.getElementById('DescripcionProcVer').value = "";
+			document.getElementById('RegistroVer').value = "";
+		}
+	 }
+	 function eliminarDescripcionVerificar(e){
+		  var Tabla = document.getElementById("TablaVerificarText");
+		  var obj;
+		  if (navigator.appVersion.indexOf("MSIE")!=-1){
+			 obj=window.event.srcElement;
+		  }       
+		  else if(navigator.userAgent.indexOf("Firefox")!=-1){
+			obj=e.target;
+		  }
+		  Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		  totalVerificar = totalVerificar - 1;
+		  return;
+	}
+	
+	// FUNCIONES PROCEDIMIENTOS ACTUAR
+	 function agregarDescripcionActuar(){
+		var indice = document.getElementById('codigoEmpleadoDescAct').selectedIndex;
+		var txtDesc = document.getElementById('DescripcionProcAct').value;
+		var txtRegistro = document.getElementById('RegistroAct').value;
+		if(indice == null || indice == 0){
+			alert("Debe seleccionar un responsable.");
+		}
+		else if(txtDesc == ""){
+			alert("Debe ingresar una descripci&oacute;n.");
+		}
+		else{
+		   var tabla=document.getElementById('TablaActualText').getElementsByTagName("TBODY")[0];
+		   var fila = document.createElement("TR"); 
+		   fila.id = "TablaActualText" + totalActual;
+		   
+		   var td1 = document.createElement("TD");
+		   var td2 = document.createElement("TD");
+		   var td3 = document.createElement("TD");
+		   var td4 = document.createElement("TD");
+
+		   input = document.createElement("input");
+		   input.id = "FilaActuarText"+ totalActual;
+		   input.idfila = "FilaActuarText" + totalActual;
+		   input.name = "EliminarLinea";
+		   input.type = "button";
+		   input.value = "Eliminar";
+		   input.className="submitLink";
+		   input.onclick = eliminarDescripcionActuar;
+		   
+			if(document.forms[0]._operacion.value=="D"){
+					 td4.appendChild(document.createTextNode(" "));
+			}else{
+				td4.appendChild(input);
+			}
+			
+			td1.appendChild(document.createTextNode(txtDesc));
+			fila.appendChild(td1);
+			td2.appendChild(document.createTextNode(indice));
+			fila.appendChild(td2);
+			td3.appendChild(document.createTextNode(txtRegistro));
+			fila.appendChild(td3);
+			fila.appendChild(td4);
+			tabla.appendChild(fila);
+			totalActual = totalActual + 1;
+			alert(totalActual);
+			document.getElementById('codigoEmpleadoDescAct').selectedIndex = 0;
+			document.getElementById('DescripcionProcAct').value = "";
+			document.getElementById('RegistroAct').value = "";
+		}
+	 }
+	 function eliminarDescripcionActuar(e){
+		  var Tabla = document.getElementById("TablaActualText");
+		  var obj;
+		  if (navigator.appVersion.indexOf("MSIE")!=-1){
+			 obj=window.event.srcElement;
+		  }       
+		  else if(navigator.userAgent.indexOf("Firefox")!=-1){
+			obj=e.target;
+		  }
+		  Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		  totalActual = totalActual - 1;
+		  return;
+	}
+	
+	// FUNCIONES PROCEDIMIENTOS RECURSOS
+	 function agregarRecurso(){
+		var indice = document.getElementById('tipoRecurso').selectedIndex;
+		var txtDesc = document.getElementById('DescRecurso').value;
+		if(indice == null || indice == 0){
+			alert("Debe seleccionar un responsable.");
+		}
+		else if(txtDesc == ""){
+			alert("Debe ingresar una descripci&oacute;n.");
+		}
+		else{
+		   var tabla=document.getElementById('TablaRecursosText').getElementsByTagName("TBODY")[0];
+		   var fila = document.createElement("TR"); 
+		   fila.id = "TablaRecursosText" + totalRecursos;
+		   
+		   var td1 = document.createElement("TD");
+		   var td2 = document.createElement("TD");
+		   var td3 = document.createElement("TD");
+
+		   input = document.createElement("input");
+		   input.id = "FilaRecursoText"+ totalRecursos;
+		   input.idfila = "FilaRecursoText" + totalRecursos;
+		   input.name = "EliminarLinea";
+		   input.type = "button";
+		   input.value = "Eliminar";
+		   input.className="submitLink";
+		   input.onclick = eliminarRecurso;
+		   
+			if(document.forms[0]._operacion.value=="D"){
+					 td3.appendChild(document.createTextNode(" "));
+			}else{
+				td3.appendChild(input);
+			}
+			
+			td1.appendChild(document.createTextNode(indice));
+			fila.appendChild(td1);
+			td2.appendChild(document.createTextNode(txtDesc));
+			fila.appendChild(td2);
+			fila.appendChild(td3);
+			tabla.appendChild(fila);
+			totalRecursos = totalRecursos + 1;
+			alert(totalRecursos);
+			document.getElementById('tipoRecurso').selectedIndex = 0;
+			document.getElementById('DescRecurso').value = "";
+			document.getElementById('RegistroAct').value = "";
+		}
+	 }
+	 function eliminarRecurso(e){
+		  var Tabla = document.getElementById("TablaRecursosText");
+		  var obj;
+		  if (navigator.appVersion.indexOf("MSIE")!=-1){
+			 obj=window.event.srcElement;
+		  }       
+		  else if(navigator.userAgent.indexOf("Firefox")!=-1){
+			obj=e.target;
+		  }
+		  Tabla.tBodies[0].removeChild(document.getElementById(obj.idfila));
+		  totalRecursos = totalRecursos - 1;
+		  return;
+	}

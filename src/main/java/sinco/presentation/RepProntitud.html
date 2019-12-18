@@ -1,0 +1,220 @@
+<html>
+ <head>
+ <title>Servicios</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+ <script type="text/javascript" language="JavaScript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+ <script TYPE="text/javascript" language="JavaScript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" language="JavaScript" src="media/tablekit.js"></script>
+ 
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <SCRIPT TYPE="text/javascript"language="JavaScript">
+
+   function Salvar(){
+      var rta;
+      
+    if (document.miForma.exportar.checked==false){
+      Ocultar();
+    }
+    return true;   
+   }
+   
+   function Consultar(){
+     document.miForma._operacion.value="L";   
+   }
+
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   <td align="right">
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+ <br>
+ <div class="container">
+  <div id="trConsulta">
+    <form  name="miForma" action="RepProntitud.po" method="post" onsubmit="return Salvar();">
+     <table class="tabf" summary="" border="0" cellspacing="2" cellpadding="2">
+      <tr>
+       <td colspan="4">
+        <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+         <tr>
+          <td class="ca" width="99%">Reporte Prontitud</td>
+          <td class="ca" width="1%"><a href = "Javascript:show_help('RepProntitud');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+         </tr>
+        </table>
+       </td>
+      </tr>
+      
+      <tr>
+        <td class="tit">A&ntilde;o:</td>
+        <td class="dat" colspan="3"><SELECT class="INP" NAME="anno" id="anno" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+      </tr>
+      
+      <tr> 
+        <td class="tit">Mes </td>
+        <td class="dat" colspan="3"><SELECT class="INP" NAME="mes1" id="mes1" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+      </tr>
+           
+       <tr> 
+         <td class="tit">Area Proveedor</td>
+         <td class="dat"  colspan="3"><p> <SELECT class="INP" NAME="areaProveedor" id="areaProveedor" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </p> </td>
+       </tr>
+       
+       <tr> 
+          <td class="tit">Exportar</td>
+          <td class="dat"><INPUT class="INP" TYPE="checkbox" NAME="exportar" id="exportar" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" value="S"></td>
+          <td class="dat2" colspan="2"> 
+            <input type="hidden" name="_operacion" value="L">
+            <INPUT TYPE="Submit" class="BOT" value="Listar" name="miBoton" onClick="Consultar()">
+          </td>
+       </tr>    
+     </table>
+    </form>
+   </div>
+   
+  <div id="trResultados">
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf2">Area</th>
+        <th class="cf1">Linea Base</th>
+        <th class="cf2">Promedio Mes</th>
+        <th class="cf1">Indice de prontitud </th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+        <td class="PIE" >Total Registros&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+        <td class="PIED"><span id="lineaBase">&nbsp;</span></td>
+        <td class="PIED"><span id="lineaMovil">&nbsp;</span></td>
+        <td class="PIED"><span id="prontitud">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+  
+  
+  <div id="trDetallado">
+    <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+     <tr>
+      <td colspan="2">
+       <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+         <td class="ca" width="98%">Detalle de la prontitud para <span id="nombreArea">&nbsp;</span></td>
+         <td class="ca" width="2%"><a href = "Javascript:show_help('ServiciosListar');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+        </tr>
+       </table>
+      </td>
+     </tr>
+    </table>
+    <br>
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf1">Servicio</th>
+        <th class="cf2">Linea Base</th>
+        <th class="cf1">Promedio Mes</th>
+        <th class="cf2">Indice de prontitud </th>
+     </tr>
+     </thead>
+     <tbody id="detalleServicio">
+     </tbody>
+     <tfoot>
+      <tr>
+        <td class="PIE" >Total Registros&nbsp;<span id="nroRegistrosDet">&nbsp;</span></td>
+        <td  class="PIED"><span id="lineaBaseDet">&nbsp;</span></td>
+        <td  class="PIED"><span id="lineaMovilDet">&nbsp;</span></td>
+        <td  class="PIED"><span id="prontitudDet">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+    <br>
+    <input type="button" class="BOT" value= "Salir" onClick="regresar();">    
+   </div>
+ 
+ 
+  <div id="trSolicitudes">
+    <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+     <tr>
+      <td colspan="2">
+       <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+         <td class="ca" width="98%"><span id="nombreServicio">&nbsp;</span></td>
+         <td class="ca" width="2%"><a href = "Javascript:show_help('RepProntitud');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+        </tr>
+       </table>
+      </td>
+     </tr>
+    </table>
+    <br>
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+       <th class="cf1">Nro Solicitud</th>
+       <th class="cf1">Area Proveedora</th>
+       <th class="cf2">Proveedor</th>
+       <th class="cf1">Fecha Vigencia</th>
+       <th class="cf2">Fecha Estimada Terminaci&oacute;n</th>
+       <th class="cf1">Tiempo Atenci&oacute;n</th>
+     </tr>
+     </thead>
+     <tbody id="detalleSolicitud">
+     </tbody>
+     <tfoot>
+      <tr>
+        <td class="PIE" >Total Registros&nbsp;</td>
+        <td  class="PIED"><span id="nroRegistrosSol">&nbsp;</span></td>
+        <td  class="PIED"colspan="3">&nbsp;</td>
+        <td  class="PIED"><span id="tiempo">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+    <br>
+    <input type="button" class="BOT" value= "Salir" onClick="regresar();">    
+   </div>
+ 
+  
+ </div>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+    
+    
+ </body>
+</html>

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xmlc PUBLIC "-//ENHYDRA//DTD XMLC 1.1//EN" "http://www.enhydra.org/xml/xmlc/xmlc-1.1.dtd">
+<xmlc><domEdits><urlMapping newUrl="Navegacion.po" url="Navegacion.html"/><urlMapping newUrl="Login.po" url="Login.html"/><urlMapping newUrl="WelcomeLdap.po" url="WelcomeLdap.html"/><urlMapping newUrl="Principal.po" url="Principal.html"/></domEdits><compileOptions compileSource="false" keepGeneratedSource="true" sourceOutputRoot="C:\apps\sinco\presentation\src-generated"/><documentClass name="sinco.presentation.CaracteristicasValorHTML"/><inputDocument url="C:\apps\sinco\presentation\xmlc_for_compile\CaracteristicasValor.html"/><parser/><html/></xmlc>

@@ -1,0 +1,296 @@
+ <html>
+ <head>
+ <title>Interventor</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+
+ 
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  if(document.miForma._operacion.value=='M'){
+	document.miForma.Agregar.style.display="";	
+  }
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar(document.miForma.tipoIdentificacion,"Tipo Identificación","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.identificacionInterventor,"Identificación Interventor","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.apellidosInterventor,"Apellidos Interventor","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.nombresInterventor,"Nombres Interventor","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    document.miForma._operacion.value="L";
+    return true;
+ }
+
+ function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+ }
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+
+
+
+var  sVolver2="NO";
+
+function cargarDatosInterventor(tipoDocumento, numeroDocumento){
+
+	if(numeroDocumento==""){
+
+
+	alert("Ingrese un numero de Documento a buscar");
+
+	}else{
+		var url='ConsultasAjaxOld.po?_operacion=buscarDatosInterventor&tipoDocumento='+tipoDocumento+'&numeroDocumento='+numeroDocumento;
+			new Ajax.Request(url,{
+				method:'get',  
+				onSuccess: function(transport){
+				
+					if(transport.responseXML.getElementsByTagName('existe')[0].childNodes[0].textContent=="false"){
+					document.miForma.Agregar.style.display="none";
+					alert("El Interventor no se encuentra registrado en la Base de Datos. \nVerifique los Datos o cree un Interventor nuevo");		
+					}else{					
+						document.miForma.Agregar.style.display="";
+						document.getElementById('tipoIdentificacion').value = transport.responseXML.getElementsByTagName('tipoDoc')[0].childNodes[0].textContent;	
+						document.getElementById('identificacionInterventor').value = transport.responseXML.getElementsByTagName('numDoc')[0].childNodes[0].textContent;		
+						document.getElementById('apellidosInterventor').value = transport.responseXML.getElementsByTagName('apellidos')[0].childNodes[0].textContent;		
+						document.getElementById('nombresInterventor').value = transport.responseXML.getElementsByTagName('nombres')[0].childNodes[0].textContent;		
+						document.getElementById('direccionInterventor').value = transport.responseXML.getElementsByTagName('direccion')[0].childNodes[0].textContent;		
+						document.getElementById('telefonoInterventor').value = transport.responseXML.getElementsByTagName('telefono')[0].childNodes[0].textContent;		
+						document.getElementById('usuarioInsercion').value = transport.responseXML.getElementsByTagName('fechaInser')[0].childNodes[0].textContent;		
+						document.getElementById('fechaInsercion').value = transport.responseXML.getElementsByTagName('usuarioInser')[0].childNodes[0].textContent;		
+						document.getElementById('usuarioModificacion').value = transport.responseXML.getElementsByTagName('fechaMod')[0].childNodes[0].textContent;		
+						document.getElementById('fechaModificacion').value = transport.responseXML.getElementsByTagName('usuaarioMod')[0].childNodes[0].textContent;			
+					}
+				},     
+				onFailure: function() {
+					alert("El Interventor no se encuentra registrado en la Base de Datos. \nVerifique los Datos o cree un Interventor nuevo");
+				}    
+			}	
+			);  
+
+
+		}	
+}
+
+
+		
+function agregar(){
+	if(document.miForma.identificacionInterventor.value.length==0){
+      	alert("Por Favor Seleccione un interventor");
+    }
+    else{
+        window.opener.agregarDatosInterventor(document.miForma.tipoIdentificacion.value,document.miForma.identificacionInterventor.value,document.miForma.nombresInterventor.value+' '+document.miForma.apellidosInterventor.value);
+        cerrar();		
+    } 
+}
+
+function cerrar() { 
+    ventana=window.self; 
+    ventana.opener=window.self; 
+    ventana.close(); 
+} 
+
+function ocultarAgregar(){
+document.miForma.Agregar.style.display="none";
+}
+
+
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+ <br>
+ <br>
+ <div class="container">
+ 
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr id="trCreacionRegistro">
+   <td>
+    <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td align="center">
+        <form name="miForma" action="ContInterventorAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">Interventor</td>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">Tipo Identificaci&oacute;n</td>
+           <td class="dat"> <select name="tipoIdentificacion" class="INP" id="tipoIdentificacion" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+           <td class="tit">Identificaci&oacute;n Interventor</td>
+           <td class="dat"> <input type="Text" class="INP" name="identificacionInterventor" id="identificacionInterventor" maxlength="16" size="20"  onkeypress="validarTecla(event, 'AL'); ocultarAgregar();" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <input type="Button" class="BOT" value= "Buscar" onClick="cargarDatosInterventor(document.miForma.tipoIdentificacion.value,document.miForma.identificacionInterventor.value);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Apellidos Interventor</td>
+           <td class="dat"> <input type="Text" class="INP" name="apellidosInterventor" id="apellidosInterventor" maxlength="30" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Nombres Interventor</td>
+           <td class="dat"> <input type="Text" class="INP" name="nombresInterventor" id="nombresInterventor" maxlength="30" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Direcci&oacute;n Interventor</td>
+           <td class="dat"> <input type="Text" class="INP" name="direccionInterventor" id="direccionInterventor" maxlength="25" size="25"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Tel&eacute;fono Interventor</td>
+           <td class="dat"> <input type="Text" class="INP" name="telefonoInterventor" id="telefonoInterventor" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4"><input type="hidden" name="_operacion" ID="_operacion" value="C">
+            <input type="Button" class="BOT" VALUE="Agregar" id="Agregar" onClick="agregar();" accesskey="E" style="display:none">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+        </td>
+       </tr> 
+      </table>
+     </td>
+    </tr>
+  <tr id="trResultados">
+   <td align="center">
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf2">Tipo Identificaci&oacute;n</th>
+        <th class="cf1">Identificaci&oacute;n Interventor</th>
+        <th class="cf2">Apellidos Interventor</th>
+        <th class="cf1">Nombres Interventor</th>
+        <th class="cf2">Direcci&oacute;n Interventor</th>
+        <th class="cf1">Tel&eacute;fono Interventor</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="6">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </td>
+  </tr>
+ </table>
+ </div>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

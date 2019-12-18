@@ -1,0 +1,1031 @@
+<html>
+ <head>
+ <title>Contrato</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+ <script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script type="text/javascript" src="media/moment.min.js"></script>
+ <script type="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ var docCharSet = "";
+
+	function OcultarBotones(){
+	try {
+	/*
+		if (document.miForma.codigoRp.value.length==0){
+			document.miForma.polizas.style.display="none";
+			document.miForma.impuestos.style.display="none";
+			document.miForma.actaInicio.style.display="none";
+			document.miForma.adicion.style.display="none";
+			//document.miForma.generarContrato.style.display="none";
+			document.miForma.liquidar.style.display="none";
+		}
+		*/
+		
+	}
+	catch(e){}
+	}
+
+ 	function Cargar(){
+  		try {
+    		if (document.forms[0]!=null){
+      			document.forms[0].elements[0].focus();
+    		}
+    		docCharSet = document.characterSet;
+		    if (docCharSet === undefined) {
+		        docCharSet = document.charset;
+		    }
+  		}	
+  		catch(e){}
+  		try {
+	  		OcultarBotones();
+  		}
+  		catch(e){}
+  		try{
+  			if(document.miForma.fechaInicio.value!="" && document.miForma.fechaFinal.value!=""){
+				
+				var laFechaInicio = moment($('fechaInicio').value,'YYYY-MM-DD');
+				var laFechaFin = moment($('fechaFinal').value,'YYYY-MM-DD');
+				
+				var meses =laFechaFin.diff(laFechaInicio,'months')
+				var dias =laFechaFin.diff(laFechaInicio,'days')
+				var duracion = meses+" Meses "+ (dias - meses *30)+ " Dias";
+  	  		}
+  		}catch(e){}
+ 	}
+
+ 	function Salvar(){
+   		var rta;
+   		Ocultar();
+   		limpieza();
+   		if (sVolver=="SI"){
+      		return true;
+   		}
+   		rta=validar(document.miForma.numeroEstudio,"Número Estudio","ENT",0,"OBL","0","999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}	  	
+      		return false;
+   		}
+		rta=validar(document.miForma.numeroContrato,"Número Contrato","ALFA",0,"OBL","0","999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}	  	
+      		return false;
+   		}
+		rta=validar(document.miForma.fechaContrato,"Fecha Contrato Desde","FEC",0,"OBL","0","999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}
+	  	
+      		return false;
+   		}
+		rta=validar(document.miForma.fechaContratoHasta,"Fecha Contrato Hasta","FEC",0,"OBL","0","999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}
+	  	
+      		return false;
+   		}
+		
+		rta=validar(document.miForma.valorContrato,"Valor Contrato","DEC",2,"OBL","0","999999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}	  	
+      		return false;
+   		}
+		
+		rta=validar(document.miForma.valorContratoLetra,"Valor Contrato Letra","ALFA",0,"OBL","0","999999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}	  	
+      		return false;
+   		}
+		
+		rta=validar(document.miForma.tipoPersona,"Tipo de persona","ENT",0,"OBL","0","999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}	  	
+      		return false;
+   		}
+   		rta=validar(document.miForma.codigoSucursal,"Contratista","ENT",0,"OBL","0","999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}	  	
+      		return false;
+   		}
+		
+		rta=validar(document.miForma.cdpN,"cdp","ENT",0,"OBL","0","999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}	  	
+      		return false;
+   		}
+		
+		rta=validar(document.miForma.vigencia,"Vigencia","FEC",0,"OBL","0","999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}
+	  	
+      		return false;
+   		}
+		
+	//	rta=validar(document.miForma.docInterventor,"Interventor","ENT",0,"OBL","0","999999999999999");
+   //		if(!rta){
+    //  		Mostrar();
+    //  		if(document.miForma._operacion.value=="C"){
+	//   			OcultarBotones();
+	//   		}
+	//  	
+    //  		return false;
+   	//	}
+ 
+
+		
+   		rta=validar(document.miForma.estado,"Estado","ALFA",0,"OBL","0","999999999999999");
+   		if(!rta){
+      		Mostrar();
+      		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}
+	  		return false;
+   		}
+		
+	var fechaInicioContrato = moment($('fechaContrato').value,'YYYY-MM-DD');
+	var fechaFinContrato = moment($('fechaContratoHasta').value,'YYYY-MM-DD');
+		
+	if (fechaInicioContrato.diff(fechaFinContrato,'days')>=0){
+	alert("La Fecha Fin de Contrato debe ser mayor a la Fecha de Inicio");
+	Mostrar();
+	return false;
+	}
+		
+		
+		
+   		var resp = confirm('Esta seguro de realizar esta operación?'); 
+   		if(!resp) { 
+	   		Mostrar();
+	   		if(document.miForma._operacion.value=="C"){
+	   			OcultarBotones();
+	   		}
+	  	}
+   		if(document.miForma.tipoPersona.value=="2"){
+   			//Validar campos juridicos 	
+   	   	}
+      	return resp;
+ 	}
+
+ function Eliminar(){
+   sVolver="SI";
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+	document.getElementById("expedida").disabled = false;
+	document.getElementById("tipoContrato").disabled = false;
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(id){
+	 sVolver="SI";
+	 document.miForma._operacion.value="D";
+	 if(document.getElementById(id).value=="S"){
+	 	document.miForma.action="ContEstudioPrevioSaludAct.po";
+	 }
+	 else if(document.getElementById(id).value=="A"){
+		 document.miForma.action="ContEstudioPrevioAdminAct.po";
+	 }
+	 return true;
+ }
+
+ function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+ }
+
+ function Nuevo(){
+	 sVolver="SI";
+	 document.miForma.numeroContrato.value="";
+	 document.miForma.codigoSucursal.value="";
+	 document.miForma._operacion.value="Nuevo";
+	 return true;
+ }
+ 
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+
+var  sVolver2="NO";
+
+	function mostrarCamposJuridicos(){
+  		if(document.miForma.tipoPersona.value=="2"){
+			document.getElementById('trCamposJuridicos').style.display='';
+  	  	}else{
+  	  		document.getElementById('trCamposJuridicos').style.display='none';
+   		}
+  	}
+
+function cargarMunicipios(departamento, municipio, combo){
+<!--	alert(departamento+"||"+municipio+"|||"+combo);-->
+<!--	if(document.getElementById(combo).value.length==0){-->
+<!--		document.getElementById(combo).value="";-->
+<!--	}-->
+	var url='ConsultasAjaxOld.po?_operacion=buscarMunicipiosPorDepartamento&codigoDepto='+departamento
+    new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+        llenarComboBlanco(document.getElementById(municipio), transport.responseXML.getElementsByTagName('municipio'),'codigo','nombre');
+		},     
+        onFailure: function() {
+        alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    } );  
+ }
+
+function buscarSucursales(departamento,municipio,combo){
+<!--	tipoPrestador="IPS";-->
+<!--	try{-->
+<!--		if(document.miForma.tipoEstudio.value=="A"){-->
+<!--			tipoPrestador="Ter";-->
+<!--		}-->
+<!--	}catch(e){-->
+<!--	-->
+<!--	};-->
+<!--	alert(departamento+"||"+municipio+"|||"+combo);-->
+<!--	var url="ConsultasAjaxOld.po?_operacion=buscarSucursalporPrestador&departamento="+departamento+"&municipio="+municipio+"&tipoPrestador="+tipoPrestador;-->
+	var url="ConsultasAjaxOld.po?_operacion=buscarSucursalporMunicipio&departamento="+departamento+"&municipio="+municipio;
+ 	new Ajax.Request(url,{
+     	method:'get',  
+     	onSuccess: function(transport) {
+     	llenarComboBlanco(document.getElementById("codigoSucursal"),transport.responseXML.getElementsByTagName('codigoSucursal'),'codigo','nombre');
+     	},     
+     	onFailure: function() {
+      		alert("No fue posible cargar la información");
+     	}    
+ 	}); 
+}
+
+function buscarSucursalesTipoPersona(combo){
+		var url="ConsultasAjaxOld.po?_operacion=buscarContratistaPorTipoPersona&tipoPersona="+combo;
+	 	new Ajax.Request(url,{
+	     	method:'get',  
+	     	onSuccess: function(transport) {
+	     	llenarComboBlanco(document.getElementById("codigoSucursal"),transport.responseXML.getElementsByTagName('codigoSucursal'),'codigo','nombre');
+	     	llenarComboBlanco(document.getElementById("expedida"),"","","");
+	     	llenarComboBlanco(document.getElementById("expedidaMun"),"","","");
+	     	document.getElementById("nrocc").value = "";
+			document.getElementById("telefonoCelular").value = "";
+			document.getElementById("email").value = "";
+			document.getElementById("direccion").value = "";
+	     	llenarComboBlanco(document.getElementById("NaturalezaJuridica"),"","","");
+	     	document.getElementById("numeroRegistro").value = "";
+	     	document.getElementById("numeroFolio").value = "";
+	     	document.getElementById("numeroLibro").value = "";
+	     	document.getElementById("fechaInscripcion").value = ""; 
+	     	},     
+	     	onFailure: function() {
+	      		alert("No fue posible cargar la información");
+	     	}    
+	 	}); 
+}
+
+function buscarDocumentoExpedicionDepMunNumContratista(codigoContratistaSucursal){
+	var url="ConsultasAjaxOld.po?_operacion=buscarDocumentoExpedicionDepMunNumContratista&codigoSucursalContratista="+codigoContratistaSucursal;
+ 	new Ajax.Request(url,{
+     	method:'get',  
+     	onSuccess: function(transport) {
+     	llenarCombo(document.getElementById("expedida"),transport.responseXML.getElementsByTagName('DepExpedicion'),'codigo','nombre');		
+     	llenarCombo(document.getElementById("expedidaMun"),transport.responseXML.getElementsByTagName('MunExpedicion'),'codigoMun','nombreMun');
+		
+		
+        var x = transport.responseXML.getElementsByTagName('NumCc')[0];
+        var y = x.childNodes[1];
+        document.getElementById("nrocc").value = y.textContent;
+		
+		var x = transport.responseXML.getElementsByTagName('Tel')[0];
+        var y = x.childNodes[1];
+        document.getElementById("telefonoCelular").value = y.textContent;
+		
+		var x = transport.responseXML.getElementsByTagName('Email')[0];
+        var y = x.childNodes[1];
+        document.getElementById("email").value = y.textContent;
+		
+		var x = transport.responseXML.getElementsByTagName('Dir')[0];
+        var y = x.childNodes[1];
+        document.getElementById("direccion").value = y.textContent;
+		
+        if(document.miForma.tipoPersona.value=="2"){ 
+     	llenarCombo(document.getElementById("NaturalezaJuridica"),transport.responseXML.getElementsByTagName('NatJur'),'codigoNatJur','nombreNatJur');
+     	 var x = transport.responseXML.getElementsByTagName('NumReg')[0];
+         var y = x.childNodes[1];
+         document.getElementById("numeroRegistro").value = y.textContent; 
+         var x = transport.responseXML.getElementsByTagName('NumFol')[0];
+         var y = x.childNodes[1];
+         document.getElementById("numeroFolio").value = y.textContent; 
+         var x = transport.responseXML.getElementsByTagName('NumLib')[0];
+         var y = x.childNodes[1];
+         document.getElementById("numeroLibro").value = y.textContent; 
+         var x = transport.responseXML.getElementsByTagName('FecIns')[0];
+         var y = x.childNodes[1];
+         document.getElementById("fechaInscripcion").value = y.textContent;
+        } 
+     	},     
+     	onFailure: function() {
+      		alert("No fue posible cargar la información");
+     	}    
+ 	});
+}
+
+function buscarNumeroDocumentoContratista(codigoContratistaSucursal){
+	var url="ConsultasAjaxOld.po?_operacion=buscarNumeroDocumentoContratista&codigoContratista="+codigoContratistaSucursal;
+ 	new Ajax.Request(url,{
+     	method:'get',  
+     	onSuccess: function(transport) {
+     	llenarComboBlanco(document.getElementById("nrocc"),transport.responseXML.getElementsByTagName('codigoSucursal'),'codigo','nombre');
+     	},     
+     	onFailure: function() {
+      		alert("No fue posible cargar la información");
+     	}    
+ 	}); 
+}
+
+function buscarContratista(departamento,municipio,combo){
+
+	var url="ConsultasAjaxOld.po?_operacion=buscarSucursalporPrestador&departamento="+departamento+"&municipio="+municipio;
+		combo=document.getElementById(combo)
+ 	new Ajax.Request(url,{
+     	method:'get',  
+     	onSuccess: function(transport) {
+        	llenarBlancoAtr(combo,transport.responseXML.getElementsByTagName('sucursal'),'codigo','nombre');
+     	},     
+     	onFailure: function() {
+      		alert("No fue posible cargar la información");
+     	}    
+ 	}); 
+}
+
+
+function AgregarInterventor(){
+	window.open("ContInterventorAct.po","ventana","width=1000,height=450,scrollbars=YES");
+}
+
+function AgregarRp(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContRpAct.po";
+}
+
+
+function agregarDatosInterventor(tipoDocumento, numeroDocumento, nombreInterventor){
+	document.miForma.tipoDocInterventor.value=tipoDocumento;
+	document.miForma.docInterventor.value=numeroDocumento;
+	document.miForma.nombreInterventor.value=nombreInterventor;
+}
+
+function agregarDatoRp(numeroRegistro){
+	document.miForma.codigoRp.value=numeroRegistro;
+	document.getElementById('btnGrabar').click();
+}
+function AgregarTarifas(){
+    sVolver="SI";
+	document.miForma._operacion.value="cargar";
+	document.miForma.action="ContContratoTarifasAct.po";
+}
+
+function AgregarCdp(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContCdpContratoAct.po";
+}
+
+function GenerarContrato(){
+	document.miForma._operacion.value="GenerarContrato";
+}
+
+function AgregarPoliza(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContPolizaAct.po";
+}
+
+function AgregarImpuesto(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContImpuestoAct.po";
+}
+
+function AgregarAdicion(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContAdicionContratoAct.po";
+}
+
+function AgregarActaInicio(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContActaInicioAct.po";
+}
+
+function Liquidar(){
+	sVolver="SI";
+    document.miForma._operacion.value="Nuevo";
+    document.miForma.action="ContContratoLiquidacionAct.po";
+}
+
+function buscarContrato(contrato){
+	if(document.miForma._operacion.value=='C'){
+		var url='ConsultasAjaxOld.po?_operacion=verificarContrato&numeroContrato='+document.getElementById(contrato).value;
+		new Ajax.Request(url,{
+        	method:'get',  
+        	onSuccess: function(transport) {
+			var resultado=getNodeValue(transport.responseXML.getElementsByTagName('respuesta')[0],'existe');
+           		if(resultado=='true'){
+					alert("Este Numero de Contrato ya esta registrado");
+					document.getElementById(contrato).value="";
+           		}
+           	},     
+           	onFailure: function(){
+           		alert("Ups... Error obteniendo respuesta Ajax");
+           	}
+        });		
+	}	
+}
+
+
+function AgregarServicios(){
+	sVolver="SI";
+	document.miForma._operacion.value="P";
+	document.miForma.action="ContContratoServicioAct.po";
+	return true;	
+}
+
+
+ function  CargarServicios(){
+	    var url='ConsultasAjaxOld.po?_operacion=cargarServicioPorFiltro&filtroServicio='+document.miForma2.filtroServicio.value+"&charset="+docCharSet;
+	     new Ajax.Request(url,{
+	        method:'get',  
+	        onSuccess: function(transport) {
+	    	 llenarComboBlancoXML(document.getElementById('codigoServicio'), transport.responseXML.getElementsByTagName('servicio'),'codigo','nombre');
+	          document.miForma.codigoServicio.value=" ";
+			 },     
+	        onFailure: function() {
+	       //  alert("Ups... Error obteniendo respuesta Ajax");
+	        }    
+	    }
+	   );  
+	}
+	
+	
+	function Exportar(){
+	 	sVolver="SI";
+	 	sOcultar="SI";
+		document.miForma2._operacion.value="Exportar";
+		document.miForma2.target="_blank";
+	}
+ function convertirNumero(numero){
+ 
+ 	var url="ConsultasAjaxOld.po?_operacion=convertirNumero&numero="+numero;
+ 	new Ajax.Request(url,{
+     	method:'get',  
+     	onSuccess: function(transport) {
+
+        document.getElementById('valorContratoLetra').value = transport.responseXML.getElementsByTagName('numero')[0].childNodes[0].textContent;
+     	},     
+     	onFailure: function() {
+      		alert("No fue posible cargar la información");
+     	}    
+ 	}); 
+	
+ }
+		
+
+
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+ <br/>
+ <br/>
+ <div class="container"> 
+  <div id="trConsulta">
+    <form  name="miForma2" action="ContContratoAct.po" method="get" onsubmit="return Salvar2();">
+     <table class="tabf" summary="" border="0" cellspacing="2" cellpadding="2">
+      <tr>
+       <td colspan="4">
+        <table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+         <tr>
+          <td class="ca" width="95%">CONSULTA Contrato</td>
+          <td class="ca" width="5%"><a href = "Javascript:show_help('ContContratoAct');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"/></a></td>
+         </tr>
+        </table>
+       </td>
+      </tr>
+      <tr>
+       <td class="tit">N&uacute;mero Estudio</td>
+       <td class="dat"><input type="text" class="INP" name="numeroEstudio" id="fnumeroEstudio" maxlength="10" size="20" onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+       <td class="tit">N&uacute;mero Contrato</td>
+       <td class="dat"> <input type="text" class="INP" name="numeroContrato" id="fnumeroContrato" maxlength="20" size="20" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+      </tr>
+
+      <tr>
+       <td class="tit">Departamento</td>
+       <td class="dat"> <select class="INP" name="fdepartamento" id="fdepartamento" onkeypress="validarTecla(event, 'AL');" onchange="cargarMunicipios(this.value, 'fmunicipio')" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></select></td>
+       <td class="tit">Municipio</td>
+       <td class="dat"> <select class="INP" name="fmunicipio" id="fmunicipio" onkeypress="validarTecla(event, 'AL');" onchange="buscarSucursales(document.miForma2.fdepartamento.value, this.value, 'fcodigoSucursal')" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></select></td>
+      </tr>
+        
+       <tr>
+       <td class="tit">Contratista</td>
+       <td class="dat" colspan="3"><select name="fcodigoSucursal" class="INP" id="fcodigoSucursal"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+      </tr>
+	  
+      <tr>
+       <td class="tit">Fecha Inicio Desde</td>
+       <td class="dat"><input type="text" class="INP" name="fechaInicioDesde" id="ffechaInicioDesde" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+                       <input type="button" id="bffechaInicioDesde" class="btnCalendario"/>
+       </td>
+       <td class="tit">Fecha Inicio Hasta</td>
+       <td class="dat"> <input type="text" class="INP" name="fechaInicioHasta" id="ffechaInicioHasta" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+                        <input type="button" id="bffechaInicioHasta" class="btnCalendario"/>
+       </td>
+      </tr>
+
+      <tr>
+       <td class="tit">Fecha Final Desde</td>
+       <td class="dat"><input type="text" class="INP" name="fechaFinalDesde" id="ffechaFinalDesde" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+                       <input type="button" id="bffechaFinalDesde" class="btnCalendario"/>
+       </td>
+       <td class="tit">Fecha Final Hasta</td>
+       <td class="dat"> <input type="text" class="INP" name="fechaFinalHasta" id="ffechaFinalHasta" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+                        <input type="button" id="bffechaFinalHasta" class="btnCalendario"/>
+       </td>
+      </tr>
+
+      <tr>
+       <td class="tit">Fecha Contrato Desde</td>
+       <td class="dat"><input type="text" class="INP" name="fechaContratoDesde" id="ffechaContratoDesde" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+                       <input type="button" id="bffechaContratoDesde" class="btnCalendario"/>
+       	</td>
+       	<td class="tit">Fecha Contrato Hasta</td>
+       	<td class="dat"> <input type="text" class="INP" name="fechaContratoHasta" id="ffechaContratoHasta" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+                        <input type="button" id="bffechaContratoHasta" class="btnCalendario"/>
+       	</td>
+      </tr>
+
+		<tr>
+           	<td class="tit">Filtro de Servicio</td>
+           	<td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="filtroServicio" id="filtroServicio"  size="50"  onkeypress="validarTecla(event, 'AL');"  onkeyup="return f_salto(event);">
+            		<input type="button" class="BOT" id="btnBuscar" name="btnBuscar" value= "Buscar" onClick="CargarServicios();">
+           	</td>
+        </tr>
+        <tr>
+        	<td class="tit">Servicio</td>
+        	<td class="dat" colspan="3"> <SELECT NAME="codigoServicio" class="INP" id="codigoServicio"  onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+          	
+        <tr>
+			<td class="tit">Tipo Red</td>
+			<td class="dat"><select name="tipoRed" class="INP" id="tipoRed" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+
+			<td class="tit">Imputaciones</td>
+			<td class="dat"><select name="fimputacion" class="INP" id="fimputacion" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+		</tr>
+
+      <tr>
+        <td class="tit">Tipo de Contrato </td>
+        <td class="dat"><SELECT NAME="ftipoEstudio" class="INP" id="ftipoEstudio"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+            </SELECT></td>
+       	<td class="tit">Estado</td>
+       	<td class="dat"><select name="estado" class="INP" id="festado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+      </tr> 
+
+      <tr>
+       <td class="dat2" colspan="4">
+       <input type="hidden" name="_operacion" value="L"/>
+
+       <input type="hidden" class="INP" name="tipo" id="tipo"  value=""/>
+       <input type="submit" class="BOT"  value= "Consultar" onclick="Consultar();"/>
+       <input type="hidden" name="reporte" value="ReporteContratos"> 
+       <input type="hidden" name="formatoExportacion" value="xls">        
+       <input type="submit" class="BOT" value= "Exportar Reporte" onClick="Exportar();">
+       <input type="submit" class="BOT"  value= "Crear" id="btnCrear" onclick="Creacion();"/>
+       </td>
+      </tr>
+     </table>
+    </form>
+   </div>
+   
+  <div id="trCreacionRegistro">
+        <form name="miForma" action="ContContratoAct.po" method="post" onsubmit="return Salvar();">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">Contrato</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContContratoActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"/></a></td>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">N&uacute;mero Estudio</td>
+           <td class="dat"><input type="text" class="IND" readonly="readonly" name="numeroEstudio" id="numeroEstudio" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+           <td class="tit">Consecutivo Contrato</td>
+           <td class="dat"><input type="text" class="IND" readonly="readonly" name="consecutivoContrato" id="consecutivoContrato" maxlength="15" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+          </tr>
+
+          <tr>
+           <td class="tit">N&uacute;mero Contrato</td>
+           <td class="dat"> <input type="text" class="INP" name="numeroContrato" id="numeroContrato" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+           <td class="tit">Forma Contrato</td>
+           <td class="dat"><span id="txtFormaContrato">&nbsp;</span></td>
+          </tr>
+          
+          <tr>
+            <td class="tit">Tipo Contrato</td>
+            <td class="dat"><select name="tipoContrato" class="INP" id="tipoContrato" onkeydown="f_salto()"></select></td>
+            <td class="tit">Forma Pago</td>
+            <td class="dat"><span id="formaPago">&nbsp;</span></td>
+          </tr>
+
+          <tr>
+		    <td class="tit">Fecha Contrato Desde</td>
+            <td class="dat"> <input type="text" class="INP" name="fechaContrato" id="fechaContrato" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+            <input type="button" id="bfechaContrato" class="btnCalendario"/>
+			</td>           
+
+			<td class="tit">Fecha Contrato Hasta</td>
+            <td class="dat"> <input type="text" class="INP" name="fechaContratoHasta" id="fechaContratoHasta" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+            <input type="button" id="bfechaContratoHasta" class="btnCalendario"/>
+			</td> 
+          </tr>
+
+          <tr>
+           <td class="tit">Valor Contrato</td>
+           <td class="dat"> <input type="text" class="INPD" name="valorContrato" id="valorContrato" maxlength="15" size="25" title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="f_salto(event)" onfocus="this.value=desformatnum(this.value)" onblur="convertirNumero(this.value); this.value=formatnum(this.value)"/></td>
+           <td class="tit">Valor Contrato en Letra</td>
+           <td class="dat"> <input type="text" class="INPD" name="valorContratoLetra" id="valorContratoLetra" maxlength="92" size="60" title="numeroLetra" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+<!--           <td class="tit">Duracion Contrato</td>-->
+<!--           <td class="dat"> <input type="text" class="IND" readonly="readonly" name="duracionContrato" id="duracionContrato" maxlength="20" size="25"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>-->
+          </tr>
+
+          <tr>
+           <td class="tit">Departamento</td>
+           <td class="dat"> <select class="INP" name="departamento" id="departamento" onkeypress="validarTecla(event, 'AL');" onchange="cargarMunicipios(this.value, 'municipio', 'codigoSucursal')" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+           <td class="tit">Municipio</td>
+           <td class="dat"> <select class="INP" name="municipio" id="municipio" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" ></select></td>
+          </tr>
+        
+          <tr>
+           <td class="tit">Tipo Persona</td>
+           <td class="dat"> <select name="tipoPersona" class="INP" id="tipoPersona" onkeypress="validarTecla(event, 'AL');" onchange="buscarSucursalesTipoPersona(this.value);  mostrarCamposJuridicos();" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+           <td class="tit">Contratista</td>
+           <td class="dat"> <select name="codigoSucursal" class="INP" id="codigoSucursal" onkeypress="validarTecla(event, 'AL');" onchange="buscarDocumentoExpedicionDepMunNumContratista(this.value);" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select>
+           <input type="submit" value="Agregar Servicio" id="btnServicios" onclick="AgregarServicios();"/></td>
+		  </tr>
+		  
+		  <tr>
+		  	<td class="tit">Nro de cc / NIT</td>
+		  	<td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="nrocc" id="nrocc" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		  </tr>
+		   
+		  <tr> 
+		   <td class="tit">Departamento de expedici&oacute;n</td>
+		   <td class="dat">
+		   <select name="expedida" class="INP" id="expedida" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select> 
+		   </td>
+		   <td class="tit">Municipio de expedici&oacute;n</td>
+		   <td class="dat">
+		   <select name="expedidaMun" class="INP" id="expedidaMun" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select> 
+		   </td>
+		  </tr>
+		  
+
+		  
+		  <tr id="trCamposJuridicos">
+				<td COLSPAN="6">
+					<table width="100%">
+						<tr>
+							<td class="ca" COLSPAN="6"><STRONG> Campos
+							Jur&iacute;dicos</STRONG></td>
+						</tr>
+						<tr>
+							<td class="tit" >Naturaleza Juridica</td>
+							<td class="dat" colspan="3"><SELECT
+								NAME="naturalezaJuridica" class="INP" id="NaturalezaJuridica"
+								onkeyDown="f_salto()"></SELECT></td>
+							<!--								<td class="tit">Dv</td>-->
+							<!--								<td class="dat"><INPUT TYPE="Text" class="INP" NAME="dv"-->
+							<!--								id="Dv" maxlength="1" size="50" -->
+							<!--								onkeypress="validarTecla(event, 'EN');" onkeyDown="f_salto()"></td>-->
+						</tr>
+						<tr>
+							<td class="tit">N&uacute;mero de registro</td>
+							<td class="dat"><INPUT TYPE="Text" class="INP"
+								NAME="numeroRegistro" id="numeroRegistro"
+								onkeypress="validarTecla(event, 'EN');" onkeyDown="f_salto()"></td>
+							<td class="tit">N&uacute;mero de folio</td>
+							<td class="dat"><INPUT TYPE="Text" class="INP"
+								NAME="numeroFolio" id="numeroFolio"
+								onkeypress="validarTecla(event, 'EN');" onkeyDown="f_salto()"></td>
+						</tr>
+						<tr>
+							<td class="tit">N&uacute;mero de libro</td>
+							<td class="dat"><INPUT TYPE="Text" class="INP"
+								NAME="numeroLibro" id="numeroLibro"
+								onkeypress="validarTecla(event, 'EN');" onkeyDown="f_salto()"></td>
+								<td class="tit">Fecha de inscripci&oacute;n</td>
+								<td class="dat"><INPUT TYPE="Text" class="INP"
+								NAME="fechaInscripcion" id="fechaInscripcion"
+								onkeypress="validarTecla(event, 'AL');" onkeyDown="f_salto()">
+						</tr>
+					</table>
+				</td>
+			</tr>
+<!--		  <tr>-->
+<!--		   <td class="tit">Valor Numero</td>-->
+<!--		   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="valorNumero" id="valorNumero" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>-->
+<!--		   <td class="tit">Valor en Letra</td>-->
+<!--		   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="valorLetra" id="valorLetra" maxlength="50" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>-->
+<!--		  </tr>-->
+		  
+		  <tr>
+		   <td class="tit">Telefono o Celular</td>
+		   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="telefonoCelular" id="telefonoCelular" maxlength="15" size="20"></td>
+		   <td class="tit">E-mail</td>
+		   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="email" id="email" maxlength="30" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		  </tr>
+		  
+		  <tr>
+		   <td class="tit">Direccion</td>
+		   <td class="dat" colspan="3"> <INPUT TYPE="Text" class="INP" NAME="direccion" id="direccion" maxlength="60" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+<!--		   <td class="tit">Plazo de Ejecución</td>
+		   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="plazoEjecucion" id="plazoEjecucion" maxlength="10" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">-->
+		  </tr>
+		  
+		  <tr>
+<!--		  traer de estudio previo-->
+		   <td class="tit">Numero de Cdp</td>
+		   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="cdpN" id="cdpN" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		   <td class="tit">Vigencia</td>
+		   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="vigencia" id="vigencia" maxlength="10" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		  </tr>
+		  
+		  <tr>
+		   <td class="tit">Regimen Tributario</td>
+		   <td class="dat"> <select class="INP" name="regimenTributario" id="regimenTributario" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+<!--		   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="regimenTributario" id="regimenTributario" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>-->
+		   <td class="tit">Supervisor</td>
+		   <td class="dat"> <select class="INP" NAME="supervisor" id="supervisor" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>	   
+<!--		   <td class="dat"> <INPUT TYPE="Text" class="INP" NAME="supervisor" id="supervisor" maxlength="20" size="30"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>-->
+		  </tr>
+		  
+          <tr>
+           <td class="tit">Fecha Inicio</td>
+           <td class="dat"> <input type="text" readonly="readonly" class="IND" name="fechaInicio" id="fechaInicio" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+           </td>
+           <td class="tit">Fecha Final</td>
+           <td class="dat"> <input type="text" readonly="readonly" class="IND" name="fechaFinal" id="fechaFinal" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Tipo Documento Interventor</td>
+           <td class="dat"> <input type="text" readonly="readonly" class="IND" name="tipoDocInterventor" id="tipoDocInterventor" maxlength="2" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/>
+                            <input type="button"  value="Agregar" id="btnInterventor" onclick="AgregarInterventor()" accesskey="I"/></td>
+           <td class="tit">Documento Interventor</td>
+           <td class="dat"> <input type="text" readonly="readonly" class="IND" name="docInterventor" id="docInterventor" maxlength="16" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Nombre Interventor</td>
+           <td class="dat"colspan="3"><input type="text" readonly="readonly" class="IND" name="nombreInterventor" id="nombreInterventor" maxlength="70" size="70"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Estado</td>
+           <td class="dat"colspan="3"> <select name="estado" class="INP" id="estado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+          </tr>
+
+		 <tr>
+		  <td class="tit">Condici&oacute;n Especial al contrato</td>
+		  <td class="dat" colspan="3">
+			<textarea name="condicionesEspeciales" id="condicionesEspeciales" rows="4" cols="100" 
+					   onkeypress="validarTecla(event, 'ALSE');"
+						 onkeydown="textCounter(actividadesDesarrollarText,txtCont5,100000);" 
+						 onkeyup="textCounter(actividadesDesarrollarText,txtCont5,100000);"></textarea>
+						 <input type="hidden" name="txtCont5" value="0"/>              	
+		  </td>
+		 </tr>
+		  
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled="disabled" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled="disabled" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled="disabled" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled="disabled" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"/></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4">
+            <input type="hidden" name="_operacion" id="_operacion" value="C"/>
+            <input type="hidden" name="tipoEstudio" id="tipoEstudio" value="A"/>
+            <input type="hidden" name="codigoSucursalHidden" id="codigoSucursalHidden"/>            
+            <input type="hidden" name="origen" id="origen" value="C"/>   
+			<input type="hidden" name="cdp" id="cdp" value=""/>  			
+            <input type="hidden" name="formaContrato" id="formaContrato" value=""/>
+            <input type="hidden" name="numeroAdicion" id="numeroAdicion" value="0"/>
+            <input type="submit" class="BOT" value="Estudio Previo" onclick="Salir('tipoEstudio');"/>
+		    <input type="submit" class="BOT" id="generarContrato" value="Contrato" onclick="GenerarContrato();"/>
+		    <input type="submit" class="BOT" id="btnCodigoRp" value="+ RP" onclick="AgregarRp();" accesskey="G"/>
+		    <input type="submit" class="BOT" id="polizas" value="Polizas" onclick="AgregarPoliza();"/>
+		    <input type="submit" class="BOT" id="impuestos" value="Impuestos" onclick="AgregarImpuesto();"/>
+		    <input type="submit" class="BOT" id="actaInicio" value="Acta de Inicio" onclick="AgregarActaInicio();"/>
+		    <input type="submit" class="BOT" id="adicion" value="Modificatorio" onclick="AgregarAdicion();"/>
+		    <input type="submit" class="BOT" id="liquidar" value="Liquidar" onclick="Liquidar();"/>
+		    <input type="submit" class="BOT" id="btnNuevo" value="Nuevo" onclick="Nuevo();"/>
+		    <input type="submit" class="BOT" id="btnEliminar" value="Eliminar" onclick="Eliminar();" accesskey="E"/>
+            <input type="submit" class="BOT" id="btnGrabar" value="Grabar" onclick="Grabar();" accesskey="G"/></td>
+           </tr>
+          </table>
+         </form>
+        </div>
+		
+		
+  <div id="trDocumentos">
+	  <table summary="" class="tabf" border="0" cellspacing="1" cellpadding="0"  id="detalleDocumentos">
+	   <tr>
+		<td class="cf1">Documento </td>
+		<td class="cf2">Tipo de documento </td>
+		<td class="cf1">Fecha de generaci&oacute;n</td>
+	   </tr> 
+	  </table>
+    <br/>
+  </div>
+
+    <div id="trResultados">
+	  <table summary=""  class="tabf sortable resizable">
+	   <thead>
+	    <tr>
+	      <th class="cf2">Numero Contrato</th>
+	      <th class="cf1">Nombre Contratista</th>
+	      <th class="cf2">Fecha Inicio</th>
+	      <th class="cf1">Fecha Final</th>
+	      <th class="cf2">Resumen</th>
+	    </tr>
+	   </thead>
+	   <tbody id="detalle">
+	   </tbody>
+	   <tfoot>
+	    <tr>
+	     <td  class="PIE" colspan="11">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+	    </tr>
+	   </tfoot>
+	  </table>
+	 </div>
+   </div>
+
+<script type="text/javascript">
+<!--	Calendar.setup({-->
+<!--	    inputField :  'fechaInicio',-->
+<!--    	ifFormat   :  '%Y-%m-%d',-->
+<!--    	button     :  'bfechaInicio'-->
+<!--     });-->
+     Calendar.setup({
+       inputField :  'ffechaInicioDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaInicioDesde'
+      });
+     Calendar.setup({
+       inputField :  'ffechaInicioHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaInicioHasta'
+      });
+<!--     Calendar.setup({-->
+<!--         inputField :  'fechaFinal',-->
+<!--         ifFormat   :  '%Y-%m-%d',-->
+<!--         button     :  'bfechaFinal'-->
+<!--        });-->
+     Calendar.setup({
+       inputField :  'ffechaFinalDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaFinalDesde'
+      });
+     Calendar.setup({
+       inputField :  'ffechaFinalHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaFinalHasta'
+      });
+     Calendar.setup({
+       inputField :  'fechaContrato',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaContrato'
+      });
+     Calendar.setup({
+       inputField :  'ffechaContratoDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaContratoDesde'
+      });
+     Calendar.setup({
+       inputField :  'ffechaContratoHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaContratoHasta'
+      });
+	 Calendar.setup({
+       inputField :  'fechaContratoHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaContratoHasta'
+       });
+<!--     Calendar.setup({-->
+<!--         inputField :  'plazoEjecucion',-->
+<!--         ifFormat   :  '%Y-%m-%d',-->
+<!--         button     :  'bplazoEjecucion'-->
+<!--        });-->
+
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>
+

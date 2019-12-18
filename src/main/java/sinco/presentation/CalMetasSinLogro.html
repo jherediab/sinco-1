@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>Metas sin diligenciar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<script type="text/javascript" src="media/prototype.js"></script>
+<script type="text/javascript" src="media/tablekit.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function salvar(){
+   var rta;
+   Ocultar();
+   if (document.miForma.exportar.checked==true){
+      Mostrar();
+   }
+   
+   return true;   
+}
+
+
+function Cargar(){
+}
+
+function Consultar(){
+   return true;
+}
+
+ </SCRIPT>
+
+
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="try {try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){};}catch(e){}">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<br>
+
+
+ <div class="container">
+	<div>
+          <FORM name="miForma" ACTION="CalMetasSinLogro.po" METHOD="get" onSubmit="return salvar();">
+           <table class="tabf" summary=""  border="0">
+            <tr>
+             <td class ="ca" COLSPAN="4">Metas Sin Diligenciar</td>
+            </tr> 
+
+            <tr>
+               <td class="tit">Ciclo</td>
+               <td class="dat"><SELECT NAME="ciclo" class="INP" id="idCiclo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+               <td class="tit">Exportar</td>
+               <td class="dat"><INPUT class="INP" TYPE="checkbox" NAME="exportar" id="exportar" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" value="S"></td>
+            </tr>        
+            
+            <tr>
+              <td class="dat2" colspan="4">
+              <INPUT class="INP" TYPE="hidden" NAME="_operacion" value="Listar">
+              <INPUT class="BOT"  TYPE="Submit" VALUE="Listar"  name="miBoton" onClick="Ocultar();"></td>
+             </tr>
+            </table>
+          </FORM>
+     </div>
+  
+	<br>
+  <table class="tabf" summary=""  border="0" id="plan">
+     <tr>
+      <td class="CF2">Objetivo</td>
+      <td class="CF1">&nbsp;</td>
+    </tr>
+  </table>                     
+</div>
+</body>
+</html>
+

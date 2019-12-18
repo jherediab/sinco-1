@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Pre gerencial</title>
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<style type="text/css">
+TH{
+      COLOR: #804000; 
+      font-family: Times New Roman;
+      font-size: 12pt;
+}
+</style>
+</head>
+
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  onLoad="document.forms[0].anno.focus()">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+ <div class="container">
+  <form action="not_set" id="forma" method="post">
+    <table summary="" class="tabf">
+      <tr>
+       <td class ="ca" COLSPAN="2"><STRONG>REPORTES / Par&aacute;metros de B&uacute;squeda </STRONG></td>
+      </tr> 
+      <tr>
+        <td class="tit">A&ntilde;o:</td>
+        <td class="dat"> <SELECT class="INP" NAME="anno" id="IdAnno" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+      </tr>
+      <tr> 
+        <td class="tit"> Mes Inicial:</td>
+        <td class="dat"> <SELECT class="INP" NAME="mes1" id="IdMes1" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+      </tr>
+      <tr> 
+        <td class="tit">Mes Final:</td>
+        <td class="dat"><SELECT class="INP" NAME="mes2" id="IdMes2" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+      </tr>
+
+      <tr id="areas"> 
+        <td class="tit">Area</td>
+        <td class="dat"><SELECT class="INP" NAME="area" id="IdArea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+      </tr>
+
+      <tr> 
+        <td  class="dat2" colspan="2" align="right"> <INPUT TYPE="Submit" class="BOT" value="Buscar"  name="miBoton" onClick="Ocultar();"> </td>
+      </tr>
+    </table>
+	</form>
+</div>
+</body>
+</html>
+
+

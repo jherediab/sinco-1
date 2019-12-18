@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>Sistema de Solicitud de Servicios</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+<br>
+ <div class="container">
+
+       <table summary="" cellpadding="2" cellspacing="0" align="center" class="tabf">
+              <tr>
+               <td class ="ca" COLSPAN="2"><STRONG>Aceptar Hallazgos #<span id="numerosolicitud">0</span></STRONG></td>
+              </tr> 
+              <tr> 
+                <td class="tit">Servicio:</td>
+                <td class="dat"> <span id="servicio">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit">Area Proveedora:</td>
+                <td class="dat"> <span id="areap">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit">Persona Responsable:&nbsp;&nbsp;</td>
+                <td class="dat"><span id="proveedor">&nbsp;</span></td>
+              </tr>
+              <tr> 
+                <td class="tit">Fecha Generada:</td>
+                <td class="dat"> <span id="fecha">&nbsp;</span></td>
+              </tr>
+        </table>
+		<br>
+
+	<div id="detalles">
+        <form name="miForma" action="ModificarHallazgos.po" method="post">
+           <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguiente" name="pagina_siguiente">
+            <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitud" name="solicitud">
+                <table class="tabf"  summary="" border="0" align="center">
+                   <tr>
+                    <td class ="ca" COLSPAN="2"><STRONG>Caracteristicas</STRONG></td>
+                   </tr> 
+                  <tr> 
+                    <td>
+                      <table class="tabw" summary="" border="0" id="idDetalle" cellpadding="1" cellspacing="1">
+                        <tr> 
+                          <td class="cf1">Caracteristica</td>
+                          <td class="cf1">Descripci&oacute;n</td>
+                          <td class="cf1">Acepta</td>
+                          <td class="cf1">Norma</td>
+                          <td class="cf1">Numeral</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+		  
+                  <tr> 
+                    <td align="right"> 
+                      <INPUT TYPE="Submit" class="BOT" value="Salvar " name="miBoton" onClick="Ocultar();">
+                    </td>
+                  </tr>
+                </table>
+                </form>
+     </div>
+  </div>
+</body>
+</html>

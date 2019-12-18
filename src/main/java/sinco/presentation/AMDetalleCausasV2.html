@@ -1,0 +1,237 @@
+<html>
+<head>
+<title>Detalle Causa</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+
+
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+
+function carga(){
+   try {
+     document.forms[0].observacion.value=document.forms[0].observacion2.value;
+     document.forms[0].observacion2.value=''; 
+
+     if (document.forms[0]!=null) 
+       document.forms[0].observacion.focus();
+    }
+    catch(e){}
+}
+
+function Salvar1(){
+ var rta;
+ Ocultar();
+
+ rta=validar(document.miForma1.observacion,"Observacion","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+ return true;
+}
+
+function Salvar2(){
+ var rta;
+ Ocultar();
+
+ rta=validar(document.miForma2.fechaRevision,"Nueva Fecha estimada de Terminacion","FEC",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ var dateObj = getFechaActual();
+ var laFecha = crearDate(document.miForma2.fechaRevision.value);
+
+ if (laFecha.getTime() < dateObj.getTime())  {
+   mostrar_mensaje("La fecha estimada de terminacion no puede ser anterior o igual a la fecha del dia");
+   Mostrar();
+   return false;
+ }
+ 
+ rta=validar(document.miForma2.observacion,"Observacion","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ var resp = confirm('Esta seguro de realizar esta operación?'); 
+ if(!resp) Mostrar(); 
+ return resp;
+}
+
+function Salvar3(){
+ var rta;
+ Ocultar();
+
+ rta=validar(document.miForma3.estado,"Estado","ENT",0,"OBL","0","999");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ var resp = confirm('Esta seguro de realizar esta operación?'); 
+ if(!resp) Mostrar(); 
+ return resp;
+}
+
+function Salvar6(){
+ var rta;
+ Ocultar();
+ return true;
+}
+
+</SCRIPT>
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="carga()">
+ <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript"  >
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+<br> 
+
+
+<div class="container">
+
+	<div>
+    <table summary=""  border="0" id="detalle" class="tabf">
+     <tr>
+      <td class ="ca" COLSPAN="4"><STRONG>Causa de la acci&oacute;n de mejoramiento&nbsp;#&nbsp;<span id="numero">&nbsp;</span></STRONG></td>
+     </tr> 
+
+      <tr>
+           <td class="tit">¿Por qu&eacute;?</td>
+           <td class="dat"  colspan="3"><span id="porque">&nbsp;</span></td>
+      </tr>
+
+      <tr>
+           <td class="tit">La acci&oacute;n que se propone realizar es</td>
+           <td class="dat" colspan="3"><span id="accion">&nbsp;</span></td>
+      </tr>
+
+      <tr>
+           <td class="tit">Justificaci&oacute;n del beneficio</td>
+           <td class="dat" colspan="3"><span id="beneficio">&nbsp;</span></td>
+      </tr>
+
+      <tr>
+           <td class="tit">Fecha inicio</td>
+           <td class="dat"><span id="fecha_inicio">&nbsp;</span></td>
+           <td class="tit">Fecha estimada terminaci&oacute;n</td>
+           <td class="dat"><span id="fecha_estimada_terminacion">&nbsp;</span></td>
+      </tr>
+
+      <tr>
+           <td class="tit">Fecha real de terminaci&oacute;n</td>
+           <td class="dat" colspan="3"><span id="fecha_real_terminacion">&nbsp;</span></td>
+      </tr>
+
+      <tr>
+           <td class="tit">Estado</td>
+           <td class="dat"><span id="nombreEstado">&nbsp;</span></td>
+           <td class="tit">Responsable de la revisi&oacute;n</td>
+           <td class="dat"><span id="responsable">&nbsp;</span></td>
+      </tr>
+
+      <tr>
+           <td class="tit">Prorrogas</td>
+           <td class="dat" colspan="3"><span id="Prorrogas">&nbsp;</span></td>
+      </tr>
+   </table>
+  </div>
+
+	<div id="idObservaciones">
+	<br>
+       <table summary="" class="tabf" border="0" id="detalleS">
+        <caption class="ca">Seguimiento</caption> 
+        <tr>
+              <td class="cf1">Observaci&oacute;n</td>
+              <td class="cf2">Fecha</td>
+              <td class="cf1">Autor</td>
+        </tr>
+       </table>
+     </div> 
+
+	
+
+	<div id="idmostrararchivos">
+       <form action="AMBorrarArchivos.po" method="post">
+         <table summary=""  class="tabf" border="0" id="detalleArchivos">
+         <caption class="ne">Archivos anexos a esta causa</caption>
+          <tr>
+            <td class="cf2">Marca</td>
+            <td class="cf1">Archivo</td>
+            <td class="cf2">Fecha de colocaci&oacute;n</td>
+          </tr>
+         </table>
+       <INPUT TYPE="hidden" NAME="numero" id="idNumeroArch">
+       <INPUT TYPE="hidden" NAME="causa" id="idCausaArch">
+       <INPUT TYPE="hidden" NAME="pagina" value="AMDetalleCausasV2.po">
+       <INPUT class="BOT" TYPE="Submit" id="idBotonArchivos" value="Eliminar archivos marcados">       
+       </form> 
+       
+      </div>
+	
+
+	<div>
+    <table class="tabp"  align="center" summary=""  border="0">
+           <tr>
+            <td id="trAgregarArchivo">
+               <form name="miForma4" action="AMPreArchivos.po" method="post" onsubmit="return Ocultar();">
+                 <INPUT TYPE="hidden" name="numero" id="numeroAr">
+                 <INPUT TYPE="hidden" name="causa" id="causaAr" value="0">
+                 <INPUT class="BOT" TYPE="Submit" value="Anexar Archivos" name="miBoton" >
+                </form>
+            </td>
+            <td>
+              <FORM name="miForma5" ACTION="AMDetalleV2.po" method="post" onsubmit="return Ocultar();">
+               <INPUT TYPE="hidden" name="numero" id="numeroV">
+               <INPUT class="BOT" TYPE="Submit" VALUE="Volver"  name="miBoton">
+              </FORM>
+             </td>
+             
+             <td id="trBitacora">
+              <FORM name="miForma7" target="_blank" ACTION="BitacoraListar.po" method="post">
+               <INPUT TYPE="hidden" name="tabla" value="AM_CAUSAS">
+               <INPUT TYPE="hidden" name="llave" id="llave">
+               <INPUT TYPE="hidden" name="llave2" id="llave2">
+               <INPUT class="BOT" TYPE="Submit" name="miBoton" VALUE="Ver Bit&aacute;cora">
+              </FORM>
+             </td>             
+             
+            </tr>
+           </table>
+         </div>
+	</div>
+
+   <script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaRevision',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaRevision'
+      });
+   </script>
+ </body>
+</html>
+

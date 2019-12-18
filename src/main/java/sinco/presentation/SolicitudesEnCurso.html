@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>Solicitudes en curso</title>
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<script type="text/javascript" src="media/tablekit.js"></script>
+
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+</head>
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+
+<div class="container">
+  <div class="ca">ESTAS SON SUS SOLICITUDES EN CURSO</div>
+  <br>
+	<table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+       <th class="cf1">Nro Solicitud</th>
+       <th class="cf2">Servicio</th>
+       <th class="cf1">Area Proveedora</th>
+       <th class="cf2">Proveedor</th>
+       <th class="cf1">Fecha Estimada Terminaci&oacute;n</th>
+     </tr>
+     </thead>
+     <tbody id="solicitudes" >
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="5">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+  </div>
+  
+  
+ 
+   <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+   </script>
+    
+
+</body>
+</html>
+

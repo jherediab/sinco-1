@@ -1,0 +1,225 @@
+<html>
+ <head>
+ <title>Servicios</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+ <script TYPE="text/javascript" language="JavaScript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ 
+<link type="text/css" rel="stylesheet" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+ 
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   rta=validar(document.miForma.fechaInicio,"Fecha Inicio","FECH",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaFin,"Fecha Fin","FECH",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }   
+   /*
+   rta=validar(document.miForma.sujeto,"Tipo de area","ALF",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   } 
+   */
+   
+   if (document.miForma.exportar.checked==true){
+      Mostrar();
+   }
+   
+   return true;   
+}
+
+
+function Cargar(){
+
+  try {
+     document.forms[0].fechaInicio.focus()
+  } 
+  catch(e){}
+   
+  try {
+    document.miForma.fechaInicio.value=getCookie("EscSujFechaInicio");
+    document.miForma.fechaFin.value=getCookie("EscSujFechaFin");
+  }
+  catch(e){
+  }
+  
+  document.miForma.fechaInicio.focus();
+}
+
+function Consultar(){
+   setCookie("EscSujFechaInicio",document.miForma.fechaInicio.value,360);
+   setCookie("EscSujFechaFin",document.miForma.fechaFin.value,360);
+   
+   if (document.miForma.exportar.checked==true){
+     document.miForma.target="_blank";
+   }
+   else {
+     document.miForma.target="";
+   
+   }
+   
+   return true;
+}
+
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   <td align="left">
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+ <br>
+  <div class="container">
+ 
+  <div id="trConsulta">
+    <form  name="miForma" action="ReporteRevisionDireccion.po" method="post" onsubmit="return Salvar();">
+     <table class="tabf" summary="" border="0" cellspacing="2" cellpadding="2">
+      <tr>
+       <td colspan="2">
+        <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+         <tr>
+          <td class="ca" width="95%">CONSULTA Informe Revisi&oacute;n por la direcci&oacute;n</td>
+          <td class="ca" width="5%"><a href = "Javascript:show_help('ServiciosListar');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+         </tr>
+        </table>
+       </td>
+      </tr>
+      <tr> 
+        <td class="tit">Fecha de Inicio (aaaa-mm-dd)</td>
+        <td class="dat"> 
+          <INPUT class="INP" TYPE="Text" NAME="fechaInicio" id="fechaInicio" maxlength="10" size="20"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'FE');">
+          <input TYPE="button" class="BOT" id="bFechaInicio" value="...">
+        </td>
+      </tr>
+      <tr> 
+          <td class="tit">Fecha de Finalizaci&oacute;n (aaaa-mm-dd)</td>
+          <td class="dat"> 
+            <INPUT class="INP" TYPE="Text" NAME="fechaFin" id="fechaFin" maxlength="10" size="20"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'FE');">
+            <input TYPE="button" class="BOT" id="bFechaFin" value="...">
+          </td>
+       </tr>
+          
+       <tr> 
+          <td class="tit">Indice de ... </td>
+          <td class="dat"><select  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" name="sujeto" id="sujeto"> </select> </td>
+       </tr>
+       <tr> 
+          <td class="tit">Exportar</td>
+          <td class="dat"><INPUT class="INP" TYPE="checkbox" NAME="exportar" id="exportar" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" value="S"></td>
+       </tr>
+        
+       <tr> 
+          <td class="tit">&nbsp;</td>
+          <td class="dat2"> 
+            <input type="hidden" name="_operacion" value="L">
+            <INPUT TYPE="Submit" class="BOT" value="Listar" name="miBoton" onClick="Consultar()">
+          </td>
+       </tr>    
+     </table>
+    </form>
+   </div>
+  
+  <div id="trResultados">
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+         <th class="cf2">Area</th>
+         <th class="cf1">Total Recibidas</th>
+         <th class="cf2">Total Atendidas</th>
+         <th class="cf1">Total Por Atender</th>
+         <th class="cf1">Total Escaladas</th>
+         <th class="cf2">Ind Oportunidad %</th>
+         <th class="cf1">Ind Perc. Serv. %</th>
+         <th class="cf2">Ind Satisfacci&oacute;n %</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+         <td class="PIE">Totales&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+         <td class="PIE"><span id="TR">&nbsp;</span></td>
+         <td class="PIE"><span id="TA">&nbsp;</span></td>
+         <td class="PIE"><span id="TPA">&nbsp;</span></td>
+         <td class="PIE"><span id="TE">&nbsp;</span></td>
+         <td class="PIE"><span id="IO">&nbsp;</span></td>
+         <td class="PIE"><span id="IP">&nbsp;</span></td>
+         <td class="PIE"><span id="IT">&nbsp;</span></td>       
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+ 
+ </div>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+    
+<!-- script que define y configura el calendario-->
+<script type="text/javascript">
+   Calendar.setup({
+    inputField :  "fechaInicio",  // id del campo de texto
+    ifFormat   :  "%Y-%m-%d",     // formato de la fecha que se escriba en el campo de texto
+    button     :  "bFechaInicio"  // el id del botón que lanzará el calendario
+    });
+    
+   Calendar.setup({
+    inputField :  "fechaFin",  // id del campo de texto
+    ifFormat   :  "%Y-%m-%d",         // formato de la fecha que se escriba en el campo de texto
+    button     :  "bFechaFin"          // el id del botón que lanzará el calendario
+    });
+    
+</script>
+    
+ </body>
+</html>

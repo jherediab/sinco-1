@@ -1,0 +1,156 @@
+<html>
+<head>
+<title>Capturar Area</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+function newSelectUnSelectAll(flag, my_form, field_name ){
+   len     =       my_form.elements.length;
+   var     index   =       0;
+    for( index=0; index < len; index++ )
+    {
+        if( (my_form.elements[index].name).substring(0,field_name.length)== field_name )
+        {
+            my_form.elements[index].checked=flag;
+        }
+    }
+}
+
+function existeElemento(field_name){
+    var     index   =       0;
+    var my_form=window.opener.document.miForma;
+    len     =       my_form.elements.length;
+    var existe=0;
+    for( index=0; index < len; index++ ){
+        if( my_form.elements[index].name == field_name ){
+            existe=1;
+            break;
+        }
+    }
+    return existe;
+}
+
+
+function Incluir(){
+
+   var my_form=self.document.miForma4;
+   var field_name ;
+   
+   field_name="A_";
+   var len     =       my_form.elements.length;
+
+   var Tabla = window.opener.document.getElementById("detalleRes");
+   var     index   =       0;
+   
+   for( index=0; index < len; index++ ){
+     if( (my_form.elements[index].name).substring(0,2)== field_name ){
+        if (my_form.elements[index].checked==true){
+         var cadena=my_form.elements[index].name;
+         
+         var sValor       =  cadena.substring(0,8);
+         var descripcion  =  cadena.substring(8,cadena.length);
+         
+         if (existeElemento(sValor)==0){
+             var tr = window.opener.document.createElement("tr");
+             
+             if (index % 2 ==0){
+               tr.className="ct1";
+             }
+             else{
+               tr.className="ct2";
+             }
+             td = window.opener.document.createElement("td");
+
+             var input = window.opener.document.createElement("input");
+             input.type ="checkbox";
+             input.name = sValor;
+             input.id = "A_" + sValor;
+             td.appendChild(input);
+             tr.appendChild(td);
+             
+             // Descripcion
+             var txt=window.opener.document.createTextNode(descripcion);
+             td2 = window.opener.document.createElement("td");
+             td2.appendChild(txt);
+             tr.appendChild(td2);
+             Tabla.tBodies[0].appendChild(tr);
+             
+             var input5 = window.opener.document.getElementById('A_' + sValor);
+             input5.checked=true;
+          }
+        }
+     }
+   }
+   window.close();    
+   return true;
+}
+
+</SCRIPT>
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<br> 
+
+<div class="container">
+
+<table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr id="trAreas">
+ <td>
+  <table summary="" width="100%" border="0" cellspacing="2" cellpadding="0">
+   <tr>
+    <td>
+      <FORM name="miForma2" ACTION="AMCapturaAreas.po" METHOD="post">
+       <table align="center" summary=""  border="0">
+        <tr>
+         <td class ="ca"><STRONG>Asignar Areas a la acci&oacute;n</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="dat2">  
+             <INPUT TYPE="text" NAME="descripcion" maxlength="20" size="20">
+             <INPUT class="BOT" TYPE="Submit"  VALUE="Buscar Areas"  id="botonAgr" name="miBoton" accesskey="A">
+           </td>
+        </tr>
+       </table>
+      </form>
+     </td>      
+    </tr>               
+   </table>
+  </td>
+ </tr>
+
+<tr id="trNuevo">
+ <td>
+  <table summary="" width="100%" border="0" cellspacing="2" cellpadding="0">
+   <tr>
+    <td>
+    
+      <FORM name="miForma4" METHOD="post">
+        <table  width="60%" align="center" summary=""  border="0">
+          <tr>
+           <td class="dat2">
+           <INPUT TYPE="button" class="BOT" VALUE="Incluir" onClick="Incluir();">
+           </td>
+         </tr>
+       </table> 
+       <table width="60%" align="center" summary=""  border="0" id="detalle">
+         <caption class ="ca"><STRONG>Areas</STRONG></caption>
+         <tr>
+           <td class="cf1"><INPUT class="INP" TYPE="checkbox" name= "clickcontrol1"  onclick= "newSelectUnSelectAll(this.checked,self.document.miForma4,'A_')"></td>
+           <td class="CF2">Nombre de &aacute;rea</td>
+         </tr>
+       </table>                     
+
+      </FORM>
+     </td>
+    </tr>               
+   </table>
+  </td>
+ </tr>
+
+</table>
+</div>
+</body>
+</html>

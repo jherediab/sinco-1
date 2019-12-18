@@ -1,0 +1,414 @@
+<html>
+<head>
+<title> Ver solicitude no enviada </title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type= "text/css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+
+
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+
+<script type="text/javascript" language="JavaScript">
+
+    function compruebaExtension(archivo) {
+        extensiones_permitidas = new Array(".mp3", ".wav", ".wma", ".mid", ".mpg");
+       //recupero la extensión de este nombre de archivo
+        extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
+       //compruebo si la extensión está entre las permitidas
+
+       permitida = true;
+       for (var i = 0; i < extensiones_permitidas.length; i++) {
+         if (extensiones_permitidas[i] == extension) {
+           permitida = false;
+           break;
+          }
+        }
+        return permitida;
+     }   
+     
+    function setFileName() {
+      var theForm = document.myForm;
+      theForm.theFileName.value = theForm.upload.value;
+    }
+
+    function SalvarCancelacion(){
+     var rta;
+     rta=validar(document.miForma4.observacion,"Justificación","ALFA",0,"OBL","0","99");
+     if(!rta){
+      return false;
+     }
+    }
+
+     function Salvar(){
+       Ocultar();
+     
+       var theForm = document.myForm;
+       if (compruebaExtension(theForm.theFileName.value)==false){
+         Mostrar();
+         alert("La extension del archivo que intensa subir no es permitida");
+         return false;
+       }
+	   
+	   if (theForm.theFileName.value!=""){
+		   $('anexosHechos').value=parseInt($('anexosHechos').value)+1;
+	   }
+	   
+	   if (parseInt($('anexosHechos').value)< parseInt($('numeroAnexos').value)){
+		  Mostrar();
+		  alert("Debe como minimo anexar "+ $('numeroAnexos').value +" Archivo(s)");
+		  return false;
+	   }
+	
+      return true;
+     }
+	 
+	 function buscarAnidadas(nombreCar,valorCar,carAnidada){
+	 
+       var combo= document.getElementById(carAnidada);  
+	   combo.length=0
+	   
+       if (valorCar.length==0){
+         return true;
+       }
+       var url="ConsultasAjax.po?_operacion=caracteristicasAnidadas&caracteristica="+nombreCar+"&valor="+valorCar;
+       new Ajax.Request(url,{
+           method:'get',  
+            onSuccess: function(transport) {
+             llenarBlancoAtr(combo,transport.responseXML.getElementsByTagName('caracteristica'),'codigo','nombre');
+            },     
+            onFailure: function() {
+             alert("Ups... Error obteniendo respuesta Ajax");
+            }    
+        }
+       );  
+   }
+
+   function ejecutarProcedimiento(nombreCar,valorCar,proceso,carAnidada){
+       if (valorCar.length==0){
+         return true;
+       }
+	   var combo;
+	   var existeCombo=false;
+	   if (parseInt(carAnidada)>0){
+         combo= document.getElementById(carAnidada);  
+	     combo.length=0
+		 existeCombo=true;
+	   }	   
+	   var labelmsg='msg'+nombreCar;
+	   $(labelmsg).innerHTML="";
+	   
+       var url="ConsultasAjax.po?_operacion=ejecutarProcedimiento"+
+	                        "&solicitud="+$('solicitud').value+
+	                        "&caracteristica="+nombreCar+
+							"&valor="+valorCar+
+							"&proceso="+proceso+
+							"&anidada="+carAnidada;
+       new Ajax.Request(url,{
+           method:'get',  
+            onSuccess: function(transport) {
+			if (existeCombo!=false){
+               llenarBlancoAtr(combo,transport.responseXML.getElementsByTagName('caracteristica'),'codigo','nombre');
+		    }
+            var anchors = transport.responseXML.getElementsByTagName('reg');
+             for (var i=0; i<anchors.length; i++) {
+                var anchor = anchors[i];
+				
+				$(labelmsg).innerHTML= " " + anchor.getAttribute("msg");
+				
+				if  (anchor.getAttribute("estado")=="N"){
+		           $(nombreCar).value="";
+				}
+				
+             }
+            },     
+            onFailure: function() {
+             alert("Ups... Error obteniendo respuesta Ajax");
+            }    
+        }
+       );  
+   }
+   
+
+   
+   function mostrarPendientes(nombreCar,valorCar){
+	 
+      $$('tr.car').each (
+	   function (elem) {	   
+	    if (elem.readAttribute('depende')==nombreCar && valorCar==elem.readAttribute('valorDepende')){
+	      elem.show();
+		}
+		else if(elem.readAttribute('depende')==nombreCar){
+	      elem.hide();
+		  mostrarPendientes(elem.readAttribute('codigo'),"")
+		}
+	   }
+	  ); 
+   }   
+   
+
+
+function SalvarCar(){
+ var rta;
+ 
+ Ocultar(); 
+ var form = $('frmCar'); 
+ var arr = form.getElements(); 
+ var noValidos =0;
+ arr.each(function(item) {
+   var obliga=item.getAttribute("obliga");
+	if (obliga=="S" && item.value.length>0){
+	   
+       var tipocampo=item.getAttribute("tipo");
+       var asociado=item.name;
+	   if (tipocampo=="3"){
+           rta=validar(item,asociado,"DEC",2,"OBL","0","999999999999999999");
+       }
+	   else if (tipocampo=="4"){
+           rta=validar(item,asociado,"FEC",0,"OBL","0","999999999999999999");
+       }
+       else {
+           rta=validar(item,asociado,"ALFA",0,"OBL","0","999999999999999999");
+       }
+	   if (!rta){
+	     noValidos++;
+	   }
+	   else if (tipocampo=="4"){
+			 var tipoVal=item.getAttribute("tipoVal");
+			 var carVal=item.getAttribute("carVal");
+			 
+			 
+			 var fechaHoy = getFechaActual();
+			 var fechaCampo= crearDate(item.value);
+			 
+			 if (tipoVal=="01"){
+			   if (fechaCampo.getTime() <fechaHoy.getTime()){
+			     alert ("La fecha "+ item.value +" no puede ser anterior a la fecha del dia");
+         	     noValidos++;
+			   }
+			 }
+			 else if (tipoVal=="02"){
+			   
+			   var fechaDepende = $(carVal).value;
+			   var ffechaDepende = crearDate(fechaDepende);
+			   
+			   if (fechaCampo.getTime() <ffechaDepende.getTime()){
+			     alert ("La fecha "+ item.value +" no puede ser anterior a " + fechaDepende);
+         	     noValidos++;
+			   }
+			 }
+			 else  if (tipoVal=="03"){
+			   if (fechaCampo.getTime() > fechaHoy.getTime()){
+			     alert ("La fecha "+ item.value +" no puede ser posterior a la fecha del dia");
+         	     noValidos++;
+			   }
+			 }
+			 else if (tipoVal=="04"){
+			   
+			   var fechaDepende = $(carVal).value;
+			   var ffechaDepende = crearDate(fechaDepende);
+			   
+			   if (fechaCampo.getTime() > ffechaDepende.getTime()){
+			     alert ("La fecha "+ item.value +" no puede ser posteror a " + fechaDepende);
+         	     noValidos++;
+			   }
+			 }
+			 
+		}
+ 	    else if (tipocampo=="3"){
+		     var Nrodecimales=item.getAttribute("decimales");
+			 if (Nrodecimales>0){
+				 var intPos = item.value.indexOf(".");
+				 if (intPos==-1){
+				   alert ("Debe digitar "+Nrodecimales +" Decimales");
+				   noValidos++;
+				 } else {
+					 var valorDecimales = item.value.substring(intPos + 1, item.value.length);
+					 if (valorDecimales.length <Nrodecimales){
+					   alert ("Debe digitar "+Nrodecimales +" Decimales");
+					   noValidos++;
+					 }
+				 }
+			 }
+		}
+ 	} 
+  }
+ );
+
+ if(noValidos>0){
+     Mostrar();
+     return false;
+ }  
+
+ return true;
+}
+   
+
+
+</script>
+</head>
+
+<body class="cb" leftmargin="0" topmargin="0"  marginwidth="0" marginheight="0" id="miBody">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+<div class="container">
+ 	<table summary="" class="tabf" border="0"  align="center" width="80%" cellspacing="0" cellpadding="0">
+	  <tr>
+	   <td class ="ca" COLSPAN="2"><STRONG>SOLICITUD AUN NO ENVIADA &nbsp;#&nbsp; <span id="numerosolicitud">&nbsp;</span></STRONG></td>
+	  </tr> 
+	  <tr> 
+		<td class="tit">Servicio: </td>
+		<td class="dat"><span id= "servicio">&nbsp;</span> </td>
+	  </tr>
+	  <tr> 
+		<td class="tit">Area Proveedora: </td>
+		<td class="dat"><span id="areap">&nbsp;</span> </td>
+	  </tr>
+	  <tr> 
+		<td class="tit">Persona Responsable: </td>
+		<td class="dat"><span id= "proveedor">&nbsp;</span> </td>
+	  </tr>
+	  
+	 <tr> 
+	   <td class="tit">Area que hace la solicitud: </td>
+	   <td class="dat"><span id= "areacliente">&nbsp;</span> </td>
+	  </tr>
+	  <tr> 
+	   <td class="tit">Persona que hace la solicitud: </td>
+	   <td class="dat"><span id="cliente">&nbsp;</span> </td>
+	 </tr>
+	  
+	 <tr> 
+	   <td class="tit">Fecha Generada: </td>
+	   <td class="dat"><span id="fecha">&nbsp;</span> </td>
+	 </tr>
+	  
+	 <tr> 
+	   <td class="tit">Mensaje</td>
+	   <td class="dat" colspan="3"><span class="ne"  id= "mensaje">&nbsp;</span> </td>
+	 </tr>
+	  
+	</table>
+
+	<div align="center">
+	  <form name="miForma" id="frmCar" action="AnadirCaracteristica.po" method="post" onsubmit="return SalvarCar();">
+		  <small>Los campos marcados con * son obligatorios</small><br>
+		   <DIV class="ca">Caracter&iacute;sticas</div>
+		  <table summary="" class="tabf" border="0" id="caracteristicas" width="80%" cellspacing="0" cellpadding="0" >
+			<tr>
+			 <td class="cf1">Caracter&iacute;stica </td>
+			 <td class="cf2">Descripci&oacute;n </td>
+			</tr>
+		  </table>
+		  <br>
+		  <INPUT class="INP" TYPE="hidden" value="not_yet" id="solicitud" name="solicitud"> 
+		  <INPUT class="INP" TYPE="hidden" value="VerSolicitudNoEnviada.po" name="pagina"> 
+		  <INPUT class="INP" TYPE="hidden"  id="helpDesk1" name="helpDesk" value="0">
+		  <INPUT class="INP" TYPE="hidden" value="cli" name= "origen">
+		  <INPUT TYPE="Submit" class="BOT" value= "Guardar Caracter&iacute;sticas" name="miBoton">
+		  <br>
+	  </form>
+		  
+	  <form name="miForma2" action="ExtenderCaracteristica.po" method="post">
+		<div id="extender"> 
+		  Extender Caracter&iacute;sticas<br>
+		  <SELECT class="INP" NAME="extensiones" id= "extensiones" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"> </select><br>
+		  <INPUT class="INP" TYPE="hidden" value="not_yet" id= "segundasolicitud" name="solicitud">
+		  <INPUT class="INP" TYPE="hidden" value="VerSolicitudNoEnviada.po" name="pagina">
+		  <INPUT class="INP" TYPE="Text" name="observacion" maxlength="200" size="70"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"><br>
+		  <INPUT class="INP" TYPE="hidden"  id="helpDesk2" name="helpDesk" value="0">
+		  <INPUT TYPE="Submit" class="BOT" value= "Extender Caracter&iacute;stica"  name="miBoton" onClick="document.miForma2.miBoton.style.display='none'">
+		</div>
+	  </form>
+	  
+	  <div id="idModCaracteristica">
+		<form action="ModificarCaracteristica.po" method="post">
+		   <INPUT class="INP" TYPE="hidden" value= "VerSolicitudNoEnviada.po" id= "pagina_siguiente" name="pagina_siguiente">
+		   <INPUT class="INP" TYPE="hidden" value="not_yet" id= "idSolicitudModificar" name="solicitud">
+		   <INPUT TYPE="Submit" class="BOT" value= "Modificar Caracter&iacute;tica">
+		</form>
+	  </div>
+	  
+	  
+	 <div id="idmostrararchivos">
+		   <form action="ArchivosBorrar.po" method="post">
+			 
+			 <table summary="" border="0" class="tabf" id="idArchivos" cellspacing="0" width="80%" cellpadding="0">
+			  <caption>Archivos anexos a la solicitud </caption>                         
+			   <tr>
+				 <td class="cf1">Enviar </td>
+				 <td class="cf2">Archivo </td>
+				 <td class="cf1">Fecha de colocaci&oacute;n </td>
+			   </tr>
+			 </table>
+		      <INPUT class="INP" TYPE="hidden" name="origen" value="P">
+			  <INPUT class="INP" TYPE="hidden" name="solicitud" id="idsolicitudmail"> 
+			 <br>
+			  <INPUT TYPE="Submit" class="BOT" value="Borrar archivo anexo">
+		   </form>
+	 </div>
+	  
+	  <div id="idMasArchivos">
+	   <form action="PreArchivos.po" method="post">
+		  <INPUT class="INP" TYPE="hidden" value="not_yet" id="pagina_siguienteArc" name="pagina_siguiente">
+		  <INPUT class="INP" TYPE="hidden" value="not_yet" id="idSolicitudArchivos" name="solicitud"> 
+		  <INPUT TYPE="Submit" class="BOT" value="Anexar Archivos">
+	   </form>
+	  </div>           
+		  
+	  <form enctype="multipart/form-data" name= "myForm" action="EnviarSolicitud.po" method= "post" onsubmit="return Salvar();">
+		<table summary="" class="tabf" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+		 <td class ="ca" COLSPAN="2"><STRONG>Si desea anexar un archivo a su solicitud, use la siguiente opci&oacute;n :</STRONG></td>
+		</tr> 
+		
+		<tr id="trMensaje">
+		 <td class ="ca_rojo" COLSPAN="2"><span id="mensajeArchivo">&nbsp;</span></td>
+		</tr> 
+		
+		<tr>
+		 <td class="tit"> Archivo: <INPUT class="INP" TYPE="hidden" value="not_yet" id= "solicitudenviar" name="solicitud"> </td>
+		 <td class="dat"> <INPUT class="INP" TYPE="hidden" name="theFileName">
+						  <INPUT class="INP" TYPE="file" name="upload" size= "80"></td>
+		</tr> 
+		<tr>
+		 <td class="dat2" colspan="2"> 
+		 <INPUT class="INP" TYPE="hidden" name="numeroAnexos" id="numeroAnexos" value="0">
+		 <INPUT class="INP" TYPE="hidden" name="anexosHechos" id="anexosHechos" value="0">
+		 <INPUT class="INP" TYPE="hidden"  id="helpDesk" name="helpDesk" value="0">
+		 <INPUT TYPE="Submit" class="BOT" value="Enviar Solicitud" name="miBoton" onclick="setFileName();"></td>
+		</tr>                     
+		</table>
+	  </form>
+	  
+	  <form name="miForma4" action="CambiarEstadoSolicitud.po" method="post" onsubmit="return SalvarCancelacion();">
+		 Justificaci&oacute;n
+		 <INPUT class="INP" TYPE="Text" NAME="observacion" maxlength="255" size="70" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onpaste="return false;">
+		<INPUT class="INP" TYPE="hidden" value="not_yet" id="solicitudcancelar" name= "solicitud"> 
+		<INPUT class="INP" TYPE="hidden" id= "estadocancelar" name="nuevoestado" value= "no_set"> 
+		<INPUT TYPE="Submit" class="BOT" value= "Cancelar Solicitud"> 
+	  </form>
+		  
+	</div>
+	<br>
+	<br><br>
+	</div>
+   <script TYPE="text/javascript" language="JavaScript" id="JSValfechas">
+   </script>
+    
+  </body>
+</html>

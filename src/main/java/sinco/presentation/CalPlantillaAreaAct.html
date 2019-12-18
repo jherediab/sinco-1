@@ -1,0 +1,211 @@
+<html>
+<head>
+<title>Plantillas Area</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function newSelectUnSelectAll(flag, my_form, field_name ){
+   len     =       my_form.elements.length;
+   var     index   =       0;
+    for( index=0; index < len; index++ )
+    {
+        if( (my_form.elements[index].name).substring(0,field_name.length)== field_name )
+        {
+            my_form.elements[index].checked=flag;
+        }
+    }
+}
+
+function Salvar(){
+   var rta;
+   Ocultar();
+
+  if (document.miForma.ciclo.length==0){
+     mostrar_mensaje("No hay ciclos disponibles para realizar la operación"); 
+     Mostrar(); 
+     return false;
+  }
+   
+  if (document.miForma.ciclo.value=="0"){
+     mostrar_mensaje("Debe seleccionar un ciclo"); 
+     Mostrar(); 
+     return false;
+  }
+
+  if (document.miForma._operacion.value!="RECARGA"){
+    if (document.miForma.plantilla.value=="0"){
+       mostrar_mensaje("Debe seleccionar una plantilla"); 
+       Mostrar(); 
+       return false;
+    }
+  }
+   
+   return true;
+}
+
+function volver(){
+ document.miForma2._operacion.value="RECARGA";
+ document.miForma2.submit();
+ return true;
+}
+
+function Recarga(){
+ document.miForma._operacion.value="RECARGA";
+ document.miForma.submit();
+ return true;
+}
+
+
+</SCRIPT>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<br> 
+
+<div class="container">
+	<div id="trSeleccionar">
+      <FORM name="miForma" ACTION="CalPlantillaAreaAct.po" METHOD="post" onsubmit="return Salvar()">
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Asignacion de Areas a plantilla</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat"><SELECT NAME="ciclo" class="INP" id="idCiclo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"  onchange="Recarga();"></SELECT></td>
+        </tr>
+        
+        <tr>
+           <td class="tit">Plantilla</td>
+           <td class="dat"><SELECT NAME="plantilla" class="INP" id="idPlantilla" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+        <tr>
+          <td class="dat2" colspan="2">
+          <INPUT TYPE="hidden" NAME="_operacion" value="SELAREA">
+          <INPUT class="BOT"  TYPE="Submit"  VALUE="Siguiente" name="miBoton" accesskey="G"></td>
+        </tr>
+       </table>
+      </FORM>
+      <br>
+      <table class="tabf" summary=""  border="0" id="detPlantillas">
+        <tr>
+          <td class="cf2">Plantillas asignadas por ciclo</td>
+          <td class="cf1">N&uacute;mero de areas asignadas</td>
+        </tr>
+        </table>                     
+   </div>
+
+
+	<div id="trAreas">
+      <FORM name="miForma2" ACTION="CalPlantillaAreaAct.po" METHOD="get">
+      <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Asignacion de Areas a plantilla</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat"><span id="nombreCicloA">&nbsp;</span></td>
+        </tr>
+        
+        <tr>
+           <td class="tit">Plantilla</td>
+           <td class="dat"><span id="nombrePlantillaA">&nbsp;</span></td>
+        </tr>
+      
+        <tr>
+           <td class="tit">
+           <INPUT TYPE="hidden" NAME="ciclo"  id="cicloA">
+           <INPUT TYPE="hidden" NAME="plantilla"  id="plantillaA"></td>
+           <td class="dat2">  
+             <INPUT TYPE="hidden" NAME="_operacion" value="BUSCARNUEVAS">
+             <INPUT class="BOT"  TYPE="Submit"  VALUE="Volver" name="miBoton" accesskey="V" onclick="volver();">
+             <INPUT TYPE="text" NAME="filtro"  id="Filtro" maxlength="20" size="20">
+             <INPUT class="BOT"  TYPE="Submit"  VALUE="Agregar Areas"  id="botonAgr" name="miBoton" accesskey="A">
+           </td>
+        </tr>
+      </table>
+      </form>
+        
+      <FORM name="miForma3" ACTION="CalPlantillaAreaAct.po" METHOD="get">
+        <INPUT TYPE="hidden" NAME="ciclo"  id="cicloE">
+        <INPUT TYPE="hidden" NAME="plantilla"  id="plantillaE">        
+        
+        <table class="tabf"  summary=""  border="0" id="detE">
+         <tr>
+          <td>
+           <table class="tabw"  summary=""  border="0" id="detalleE">
+             <caption class="CA">Areas asignadas</caption>
+              <tr>
+               <td class="cf1"><INPUT class="INP" TYPE="checkbox" name= "clickcontrol1"  onclick= "newSelectUnSelectAll(this.checked,self.document.miForma3,'X_')"></td>
+               <td class="CF2">Nombre de &aacute;rea</td>
+               <td class="cf1">Modifica Obj Especificos</td>
+             </tr>
+           </table>                     
+          </td>
+         </tr>
+         <tr id="trEli">
+           <td  class="dat2">Si desea remover areas de la lista use esta opci&oacute;n
+           <INPUT TYPE="hidden" NAME="_operacion" value="ELIMINAR">
+           <INPUT class="BOT"  TYPE="Submit"  VALUE="Eliminar" name="miBoton" accesskey="E">
+           </td>
+        </tr>
+        </table>
+       </FORM>
+      </div>
+
+	<div id="trNuevo">
+      <FORM name="miForma4" ACTION="CalPlantillaAreaAct.po" METHOD="get">
+      <table class="tabf" summary=""  border="0" id="tableN">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Agregar areas a la plantilla</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td colspan="2" class="dat"><span id="nombreCicloN">&nbsp;</span></td>
+        </tr>
+        
+        <tr>
+           <td class="tit">Plantilla</td>
+           <td colspan="2"  class="dat"><span id="nombrePlantillaN">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td class="cf1"><INPUT class="INP" TYPE="checkbox" name= "clickcontrol1"  onclick= "newSelectUnSelectAll(this.checked,self.document.miForma4,'X_')"></td>
+          <td class="CF2">Nombre de &aacute;rea</td>
+          <td class="cf1">Modifica Obj Especificos</td>
+        </tr>
+      </table>                     
+	 <br>
+      <table  class="tabf" summary=""  border="0" id="detalleN">
+         <tr>
+           <td class="dat2">
+           <INPUT TYPE="hidden" NAME="ciclo"  id="cicloN">
+           <INPUT TYPE="hidden" NAME="plantilla"  id="plantillaN">
+           <INPUT TYPE="hidden" NAME="_operacion" value="NUEVOS">
+           <INPUT class="BOT"  TYPE="Submit"  VALUE="Grabar" name="miBoton" accesskey="N">
+           </td>
+        </tr>
+      </table>                     
+      </FORM>
+     </div>
+ </div>
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+<html>
+ <head>
+ <title>Informe auditado</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+ <SCRIPT TYPE="text/javascript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ 
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('ciclo'),"ciclo","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar($('codigoInforme'),"Código Informe","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   return true;
+ }
+
+ function Eliminar(){
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   $('_operacion').value="M";
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="V";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Preguntas(){
+   sVolver="SI";
+   $('_operacion').value="L";
+   document.ff.action="AudBloques.po";
+   return true;
+ }
+ 
+ 
+ function CambioCiclo(){
+   sVolver="SI";
+   $('_operacion').value="L";
+   document.ff.submit();
+   return true;
+ } 
+ 
+
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+ 
+ <div class="container">
+  <FORM name="ff" ACTION="AudResultadosInformes.po" METHOD="post" onsubmit="return Salvar()">
+  <input type="hidden" name="_operacion" id="_operacion" value="X">
+  <table   class="tabf" summary="" width="100%" border="0">
+   <tr>
+ 	  <td class="dat">Resultados Auditoria</td>
+    <td class="datc">
+     <label id="labelNombre" name="labelNombre" align="center"></label>
+    </td>
+ 	  <td class="dat2">
+       <input type="submit" class="BOT"  value= "Consultar" id="btnConsultar" onClick="Consultar();">
+    </td>
+   </tr>
+  </table>
+  
+  <div id="divConsulta">
+   <br>
+   <table width="100%" class="tabf" summary="" border="0">
+    <tr>
+      <td colspan="4" class="ca" width="95%">CONSULTA</td>
+    </tr>
+	
+    <tr>
+     <td class="tit">Ciclo</td>
+     <td class="dat"><SELECT NAME="ciclo" class="INP" id="ciclo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"  onchange="CambioCiclo();"></SELECT></td>
+    </tr>
+	
+    <tr>
+     <td class="tit">Informe</td>
+     <td class="dat"><SELECT NAME="codigoInforme" class="INP" id="codigoInforme" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+    </tr>
+
+    </table>
+   </div>
+
+ <div id="divEdicion">   
+ <div>
+  <br>
+    <table width="100%" class="tabf" summary="">
+     <tr>
+      <td class="tit">Fecha</td>
+      <td class="dat"><span id="fecha">&nbsp;</span></td>
+     </tr>
+     <tr>
+      <td class="tit">Ciclo</td>
+      <td class="dat"><span id="cicloEd">&nbsp;</span></td>
+     </tr>
+     <tr>
+      <td class="tit">Equipo Auditor</td>
+      <td class="dat"><span id="equipoAuditorEd">&nbsp;</span></td>
+     </tr>
+
+     <tr>
+      <td class="tit">Informe</td>
+      <td class="dat"><span id="codigoInformeEd">&nbsp;</span></td>
+     </tr> 
+	 <tr>
+      <td class="tit">&Aacute;rea Responsable</td>
+      <td class="dat"><span id="areaResponsableEd">&nbsp;</span></td>
+     </tr>
+     <tr>
+      <td class="tit">Sistema de Gesti&oacute;n</td>
+      <td class="dat"><span id="tipoAuditoriaEd">&nbsp;</span></td>	  
+     </tr>
+
+     <tr>
+     </tr>
+   </table>
+  </div>
+  
+  <div id="divCreacionRegistro">
+   <br>
+  
+  </div>
+  
+
+ <div>
+  <br>
+    <table width="100%" summary="">
+     <tr>
+      <td>____________________________</td>
+      <td>____________________________</td>
+     </tr>
+     <tr>
+      <td>NOMBRE Y FIRMA DEL AUDITOR</td>
+      <td>PERFIL DEL AUDITOR</td>
+     </tr>
+   </table>
+  </div>  
+  <input type="hidden" name="ciclo" id="cicloKey" value="0">
+  <input type="hidden" name="codigoInforme" id="codigoInformekey" value="0">
+</div>      
+  
+  </FORM>
+
+ </DIV>
+ 
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

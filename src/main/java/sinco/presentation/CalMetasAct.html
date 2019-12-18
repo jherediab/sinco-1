@@ -1,0 +1,382 @@
+<html>
+ <head>
+ <title>Metas</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+ <SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+ <script TYPE="text/javascript" language="JavaScript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <SCRIPT TYPE="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+
+function contarObjetos(my_form, field_name)
+{
+   len     =       my_form.elements.length;
+   var     index   =       0;
+   var cuantos=0;
+   for( index=0; index < len; index++ ){
+     if( (my_form.elements[index].name).substring(0,2)== field_name ){
+        if (my_form.elements[index].checked==true){
+         cuantos++;
+        }
+     }
+   }
+   return cuantos;
+}
+
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+   rta=validar(document.miForma.descripcion,"Descripción","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.valorMeta,"Valor Meta","DEC",2,"OBL","-99999999999999","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   rta=validar(document.miForma.tipoMedicion,"Tipo Medición","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   rta=validar(document.miForma.unidadMedida,"Unidad Medida","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar(document.miForma.valorMinimo,"Valor Inicial de la meta","DEC",2,"OBL","-99999999999999","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+   rta=validar(document.miForma.valorMaximo,"Valor Final de la meta","DEC",2,"OBL","-99999999999999","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+		 
+   rta=validar(document.miForma.estado,"Estado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+
+  if(document.miForma._operacion.value=="M"){
+   rta=validar(document.miForma.justificacion,"Justificacion","ALFA",0,"OBL","0","255");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+  }
+   
+  
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    document.miForma._operacion.value="L";
+    return true;
+ }
+
+ function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+ }
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+   return true;
+ }
+
+function habilitar(){
+   len     =       document.miForma.elements.length;
+   var     index   =       0;
+   for( index=0; index < len; index++ ){
+     if (document.miForma.elements[index].disabled==true){
+        document.miForma.elements[index].disabled=false;
+     }
+   }
+}
+
+function Objetivo(){
+ document.miForma2.action="CalObjetivosAct.po";
+ document.miForma2._operacion.value="P";
+ sVolver2="SI";
+ return true;
+}
+
+
+ 
+
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+ <br>
+ <div class="container">
+  <div id="trConsulta">
+    <form  name="miForma2" action="CalMetasAct.po" method="post" onsubmit="return Salvar2();">
+     <table class="tabf" summary="" border="0" cellspacing="2" cellpadding="2">
+      <tr>
+       <td colspan="2">
+        <table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+         <tr>
+          <td class="ca" width="99%">CONSULTA Metas</td>
+          <td class="ca" width="1%"><a href = "Javascript:show_help('CalMetasAct');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+         </tr>
+        </table>
+       </td>
+       </tr>
+       <tr>
+            <td class="tit">Proceso</td>
+            <td class="dat"> <span id="miProceso">&nbsp;</span></td>
+       </tr>
+
+       <tr>
+            <td class="tit">SubProceso</td>
+            <td class="dat"> <span id="miSubproceso">&nbsp;</span></td>
+       </tr>
+         
+       <tr>
+            <td class="tit">Objetivo</td>
+            <td class="dat"> <span id="miObjetivo">&nbsp;</span></td>
+      </tr>
+      <tr>
+       <td class="dat2" colspan="2">
+        <input type="hidden" name="_operacion" value="L">
+        <INPUT TYPE="hidden" class="INP" NAME="codigoObjetivo" id="codigoObjetivo" value="0">                
+        <INPUT TYPE="Submit" class="BOT" VALUE="Volver al objetivo" name="miBotonO" onClick="Objetivo();" accesskey="O">
+        <input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+        <input type="submit" class="BOT"  value= "Crear" id="btnCrear" onClick="Creacion();">
+       </td>
+      </tr>
+     </table>
+    </form>
+   </div>
+   
+  <div id="trResultados">
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf1">C&oacute;digo</th>
+        <th class="cf2">Descripci&oacute;n</th>
+        <th class="cf1">Justificaci&oacute;n</th>
+        <th class="cf2">Valor Meta</th>
+        <th class="cf1">Unidad Medida</th>
+        <th class="cf2">Valor Minimo</th>
+        <th class="cf1">Valor Maximo</th>
+        <th class="cf2">Tipo Medici&oacute;n</th>
+        <th class="cf1">Estado</th>
+        <th class="cf2">Frecuencia</th>
+        <th class="cf1">Aplica En</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="11">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+   
+  <div id="trCreacionRegistro">
+        <FORM name="miForma" ACTION="CalMetasAct.po" METHOD="post" onsubmit="return Salvar()">
+         <table  class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="99%">Metas</td>
+              <td class="ca" width="1%"><a href = "Javascript:show_help('CalMetasActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+ 
+           <tr>
+              <td class="tit">Descripci&oacute;n</td>
+              <td class="dat" colspan="3"><INPUT TYPE="Text" class="INP" NAME="descripcion" id="descripcion" maxlength="255" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           </tr>
+
+           <tr>
+              <td class="tit">Valor Meta</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMeta" id="valorMeta" maxlength="15" size="35" title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)"></td>
+              <td class="tit">Unidad Medida</td>
+              <td class="dat"><SELECT NAME="unidadMedida" class="INP" id="unidadMedida" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+           </tr>
+		   
+           <tr>
+              <td class="tit">Valor Minimo de la meta</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMinimo" id="valorMinimo" maxlength="15" size="35" title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+              <td class="tit">Valor Maximo de la meta</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="valorMaximo" id="valorMaximo" maxlength="15" size="35" title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)"></td>
+           </tr>
+		   
+           <tr>
+              <td class="tit">Tipo Medici&oacute;n</td>
+              <td class="dat"><SELECT NAME="tipoMedicion" class="INP" id="tipoMedicion" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+              <td class="tit">Aplica en </td>
+              <td class="dat" colspan="3"><SELECT NAME="aplicaEn" class="INP" id="aplicaEn" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+           </tr>
+
+           <tr>
+              <td class="tit">Fuente Dato</td>
+              <td class="dat"><SELECT NAME="fuenteDato" class="INP" id="fuenteDato" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+              <td class="tit">Estado</td>
+              <td class="dat"><SELECT NAME="estado" class="INP" id="estado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+           </tr>
+
+           <tr>
+              <td class="tit">Tipo De Grafico</td>
+              <td class="dat" colspan="3"><SELECT NAME="tipoGrafica" class="INP" id="tipoGrafica" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+           </tr>
+		   
+           <tr>
+                <td class="tit">Justificaci&oacute;n</td>
+                <td class="dat" colspan="3"><INPUT TYPE="Text" class="INP" NAME="justificacion" id="justificacion" maxlength="255" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           </tr>
+		   
+         
+           <tr>
+               <td  colspan="4">
+                 <table summary=""  border="0" class="tabw">
+                  <caption class="ca">Frecuencia Medici&oacute;n</caption>
+                  <tr>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes01" name="mes01" value="S" checked> Enero</td>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes02" name="mes02" value="S" checked> Febrero</td>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes03" name="mes03" value="S" checked> Marzo</td>
+                  </tr>
+                  <tr>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes04" name="mes04" value="S" checked> Abril</td>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes05" name="mes05" value="S" checked> Mayo</td>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes06" name="mes06" value="S" checked> Junio</td>
+                  </tr>
+
+                  <tr>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes07" name="mes07" value="S" checked> Julio</td>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes08" name="mes08" value="S" checked> Agostro</td>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes09" name="mes09" value="S" checked> Septiembre</td>
+                  </tr>
+
+                  <tr>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes10" name="mes10" value="S" checked> Octubre</td>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes11" name="mes11" value="S" checked> Noviembre</td>
+                   <td class="dat"><INPUT TYPE="Checkbox" id="mes12" name="mes12" value="S" checked> Diciembre</td>
+                  </tr>
+
+                  </table>
+              </td>
+             </tr>
+         
+          <tr>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="usuarioInsercion" maxlength="20" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="usuarioModificacion" maxlength="20" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4"><INPUT TYPE="hidden" NAME="_operacion" ID="_operacion" value="C">
+            <INPUT TYPE="hidden" class="INP" NAME="codigoMeta" id="codigoMeta"  value="0">
+            <INPUT TYPE="hidden" class="INP" NAME="codigoObjetivo" id="codigoObjetivoC"  value="0">
+            <INPUT TYPE="hidden" class="INP" NAME="proceso" id="idProceso"  value="X">
+            <INPUT TYPE="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G">
+            <input type="Submit" class="BOT" value= "Salir" onClick="Salir();">
+			</td>
+           </tr>
+          </table>
+         </FORM>
+        </div>
+   </div>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

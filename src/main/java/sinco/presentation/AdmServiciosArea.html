@@ -1,0 +1,248 @@
+<html>
+<head>
+<title>Servicios del area</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" id="elcss" href="media/global.css"  type="text/css">
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+var volver="";
+function Cargue(){
+   try {
+     if (document.forms[0]!=null)
+       document.forms[0].elements[0].focus();
+   }
+   catch(e){}
+   
+   var obj = document.getElementById("trMultiple");
+   obj.style.display = "";
+   var obj = document.getElementById("trEspecializado");
+   obj.style.display = "";
+   
+   if (document.ff.especializado.value!="M" ){
+      var obj = document.getElementById("trMultiple");
+      obj.style.display = "none";
+   }
+   
+   if (document.ff.especializado.value!="S" ){
+      var obj = document.getElementById("trEspecializado");
+      obj.style.display = "none";
+   }
+}
+
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   if (volver=="SI"){
+     return true;
+   }
+
+   if(document.ff.codigoServicio.value==""){
+        Mostrar();
+        alert("Debe seleccionar una Servicio");
+        return false;
+   }
+
+   try{
+     if (parseInt(document.ff.codigoServicio.value) == 0){
+        Mostrar();
+        alert("Debe seleccionar un Servicio");
+        return false;
+     }
+   }
+   catch(e){
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+}
+
+
+
+function InsertarPersona(codigoFuncionario,nombreFuncionario,indice){
+
+  var objeto=document.getElementById('personaCargo');
+  if (indice==0){
+     objeto.length=0;
+  }
+  
+  var optionObj = new Option(nombreFuncionario,codigoFuncionario);
+  objeto.options[indice] = optionObj;
+
+}
+
+
+
+function InsertarMultiple(sValor,sDescripcion,indice){
+
+  var Tabla = document.getElementById("tblMultiple");
+  
+  var tr = document.createElement("tr");
+
+  if (indice % 2 ==0){
+     tr.className="ct1";
+  }
+  else{
+     tr.className="ct2";
+  }
+  td = document.createElement("td");
+
+  input = document.createElement("input");
+  input.type ="checkbox";
+  input.name = sValor;
+  input.id = "A_" + sValor;
+  td.appendChild(input);
+  tr.appendChild(td);
+
+  // Descripcion
+  var txt=document.createTextNode(sDescripcion);
+  td2 = document.createElement("td");
+  td2.appendChild(txt);
+  tr.appendChild(td2);
+  Tabla.tBodies[0].appendChild(tr);
+
+  input5 = document.getElementById('A_' + sValor);
+  input5.checked=true;
+}
+
+function CambioServicio(){
+	if ($('codigoServicio').value.length>0){
+		var url='ConsultasAjax.po?_operacion=personas_area&codigoArea='+$('codigoArea').value;
+		new Ajax.Request(url,{
+          method:'get',  
+             onSuccess: function(transport) {
+              var anchors = transport.responseXML.getElementsByTagName('persona');
+              for (var i=0; i<anchors.length; i++) {
+                var anchor = anchors[i];
+                if ($('especializado').value=='M'||
+					$('especializado').value=='D'||
+					$('especializado').value=='O'){
+					   var sValor = 'M_'+anchor.getAttribute('codigo');
+					   InsertarMultiple(sValor,anchor.getAttribute('nombre'),i);
+				}
+                else if ($('especializado').value=='S'){
+					InsertarPersona(anchor.getAttribute('codigo'),anchor.getAttribute('nombre'),i);				
+				}
+			  } 
+          },     
+          onFailure: function() {
+               alert("Error obteniendo respuesta Ajax");
+          }    
+        }
+      );  
+	}
+}
+
+function Volver(){
+   document.ff.action="Areas.po";
+   document.ff._operacion.value="V";
+   volver="SI";
+   return true;
+}
+
+function Eliminar(){
+   document.ff._operacion.value="E";
+   return true;
+}
+
+</SCRIPT>
+
+</head>
+
+<body class="cb" onLoad="Cargue();">
+<br>
+<table  class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td align="left">
+  <SCRIPT TYPE="text/javascript" language="JavaScript">
+  	new menu (MENU_ITEMS0, MENU_POS0);
+  </script>
+</td> 
+</tr>
+</table>
+
+<br>
+<div class="container">
+
+	<div id="idCreacionRegistro">
+          <FORM name="ff" ACTION="AdmServiciosArea.po" METHOD="get" onsubmit="return Salvar()">
+           <table class="tabf" summary="" border="0" >
+             <tr>
+               <td class ="ca" COLSPAN="4"><STRONG>Servicios del &aacute;rea</STRONG></td>
+             </tr>
+             <tr>
+              <td class="tit">C&oacute;digo Area</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="codigo" id="codigoArea" maxlength="10" size="15" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" readonly></td>
+              <td class="tit">Nombre Area</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nombreArea" id="nombreArea" size="50"  disabled></td>
+             </tr>
+
+             <tr>
+              <td class="tit">C&oacute;digo Servicio</td>
+              <td class="dat"><INPUT TYPE="hidden" NAME="especializado" id="especializado"><SELECT NAME="codigoServicio" class="INP" id="codigoServicio" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="CambioServicio();"></SELECT></td>
+             </tr>
+
+          
+             <tr id="trEspecializado" style="display:none">
+              <td class="tit">Persona Cargo</td>
+              <td class="dat" colspan="3"><SELECT NAME="personaCargo" class="INP" id="personaCargo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+             </tr>
+             
+             <tr id="trMultiple" style="display:none">
+              <td class="tit" colspan="4">
+                 <table summary=""  border="0" align="center" width="100%" id="tblMultiple">
+                  <tr>
+                    <td class="cf1">Marca</td>
+                    <td class="cf2">Funcionario</td>
+                  </table>
+               </td>
+             </tr>
+
+
+             <tr>
+              <td class="tit">Usuario Inserci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="UsuarioInsercion" maxlength="30" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+              <td class="tit">Fecha Inserci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="FechaInsercion" maxlength="10" size="30" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+
+             <tr>
+              <td class="tit">Usuario Modificaci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="UsuarioModificacion" maxlength="30" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+              <td class="tit">Fecha Modificaci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="FechaModificacion" maxlength="10" size="30" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+
+             <tr>
+                <td class="dat2" colspan="4"><INPUT TYPE="hidden" NAME="_operacion" ID="_operacion" value="C">
+                <INPUT TYPE="Submit" class="BOT" VALUE="Grabar" accesskey="G">
+                <INPUT TYPE="Submit" class="BOT"  id="eliminarRegistro" VALUE="Eliminar" onClick="Eliminar();" accesskey="E">
+                <INPUT TYPE="Submit" class="BOT"  VALUE="Volver" onClick="Volver();" accesskey="V">
+				</td>
+              </tr>
+            </table>
+           </FORM>
+     </div>
+
+		   
+     <table summary=""  class="tabf" border="0">
+	   <tr class="tSup">
+		<th class="cf2">Nombre Servicio</th>
+		<th class="cf1">Responsable Area</th>
+	   </tr> 
+	   <tbody id="detalle">
+	   </tbody>
+	   <tfoot>
+		<tr>
+		 <td  class="PIE" colspan="9">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroDetalle">&nbsp;</span></td>
+		</tr>
+	   </tfoot>
+      </table>
+    </div>
+ </body>
+</html>

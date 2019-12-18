@@ -1,0 +1,144 @@
+<html>
+<head>
+<title>Areas de una Persona</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" id="elcss" href="media/global.css"  type="text/css">
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+var vTipoRetorno="";
+function Salvar(){
+   var rta;
+   Ocultar();
+
+   if(vTipoRetorno=='Volver'){
+     return true;
+   }
+   
+   if (document.ff.action=="AdmPersonasAct.po"){
+     return true;
+   }
+
+   if(document.ff.codigoArea.value==""){
+        Mostrar();
+        alert("Debe seleccionar un Area");
+        return false;
+   }
+
+   try{
+     if (parseInt(document.ff.codigo.value) == 0){
+        Mostrar();
+        alert("Debe seleccionar una persona");
+        return false;
+     }
+   }
+   catch(e){
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+}
+
+function Volver(){
+   document.ff.action="Personas.po";
+   document.ff._operacion.value="V";
+   vTipoRetorno="Volver";
+   return true;
+}
+
+function Eliminar(){
+   document.ff._operacion.value="E";
+   return true;
+}
+
+</SCRIPT>
+
+</head>
+
+<body class="cb" onLoad="try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){}">
+<br>
+<table  class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td align="left">
+  <SCRIPT TYPE="text/javascript" language="JavaScript">
+  	new menu (MENU_ITEMS0, MENU_POS0);
+  </script>
+</td> 
+</tr>
+</table>
+
+<br>
+<div class="container">
+
+<div id="idCreacionRegistro">
+	  <FORM name="ff" ACTION="AdmAreasPersona.po" METHOD="get" onsubmit="return Salvar()">
+	   <table summary=""  class="tabf"  border="0" >
+		 <tr>
+		   <td class ="ca" COLSPAN="4"><STRONG>Areas a la que pertenece el funcionario</STRONG></td>
+		 </tr>
+		 
+		 <tr>
+		  <td class="tit">C&oacute;digo Funcionario</td>
+		  <td class="dat"><INPUT TYPE="Text" class="INP" NAME="codigoEmpleado" id="CodigoEmpleado" maxlength="10" size="15"   onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" readonly>
+		  </td>
+		  <td class="tit">Nombre Funcionario</td>
+		  <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nombreFuncionario" id="NombreFuncionario" size="50" disabled></td>
+		 </tr>
+		 
+         <tr>
+            <td class="tit">Area Funcional</td>
+            <td class="dat" colspan="3"><SELECT NAME="codigoArea" class="INP" id="codigoArea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+         </tr>
+
+		 <tr>
+		  <td class="tit">Clase</td>
+		  <td class="dat" colspan="3"><SELECT NAME="clase" class="INP" id="Clase" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+		 </tr>
+
+
+		 <tr>
+		  <td class="tit">Responsable Area</td>
+		  <td class="dat"><INPUT TYPE="CHECKBOX" NAME="responsableArea" id="ResponsableArea" VALUE="S"></td>
+		  <td class="tit">Area Principal</td>
+		  <td class="dat"><INPUT TYPE="CHECKBOX" NAME="areaPrincipal" id="areaPrincipal" VALUE="S"></td>
+		 </tr>
+
+		 <tr>
+		  <td class="tit">Usuario Inserci&oacute;n</td>
+		  <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="UsuarioInsercion" maxlength="30" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		  <td class="tit">Fecha Inserci&oacute;n</td>
+		  <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="FechaInsercion" maxlength="10" size="20" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		 </tr>
+
+		 <tr>
+		  <td class="tit">Usuario Modificaci&oacute;n</td>
+		  <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="UsuarioModificacion" maxlength="30" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		  <td class="tit">Fecha Modificaci&oacute;n</td>
+		  <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="FechaModificacion" maxlength="10" size="20" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		 </tr>
+
+		 <tr>
+			<td class="dat2" colspan="4">
+			<INPUT TYPE="hidden" NAME="_operacion" ID="_operacion" value="C">
+			<INPUT TYPE="Submit" class="BOT" VALUE="Grabar" accesskey="G">
+			<INPUT TYPE="Submit" class="BOT"  id="eliminarRegistro" VALUE="Eliminar" onClick="Eliminar();" accesskey="E">
+			<INPUT TYPE="Submit" class="BOT"  VALUE="Volver" onClick="Volver();" accesskey="V">
+			</td>
+		  </tr>
+		</table>
+	   </FORM>
+       <table summary=""  class="tabf" border="0" id="detalle">
+	   <tr class="tSup">
+		 <td class="cf2">Nombre Funcionario</td>
+		 <td class="cf1">Nombre Clase</td>
+		 <td class="cf2">Responsable Area</td>
+		 <td class="cf1">Area Principal</td>
+	   </tr> 
+	  </table>
+</div>
+</body>
+</html>

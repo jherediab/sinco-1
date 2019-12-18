@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>Pre Promedio Servicios</title>
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+
+<link type="text/css" rel="stylesheet" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   rta=validar(document.miForma.fechaInicial,"Fecha Inicio","FECH",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaFinal,"Fecha Fin","FECH",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }   
+   return true;   
+}
+
+
+function Cargar(){
+
+  try {
+     document.forms[0].fechaInicio.focus()
+  } 
+  catch(e){}
+   
+  try {
+    document.miForma.fechaInicial.value=getCookie("EscSujFechaInicio");
+    document.miForma.fechaFinal.value=getCookie("EscSujFechaFin");
+  }
+  catch(e){
+  }
+  
+  document.miForma.fechaInicio.focus();
+}
+
+function Consultar(){
+   setCookie("EscSujFechaInicio",document.miForma.fechaInicial.value,360);
+   setCookie("EscSujFechaFin",document.miForma.fechaFinal.value,360);
+   return true;
+}
+</SCRIPT>
+
+
+</head>
+
+<body class="cb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  onLoad="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+ <div class="container">
+
+  <form action="RepTiempoPromedioServicios.po" name="miForma" id="forma" method="get" onSubmit="return Salvar();">
+    <table summary=""  class="tabf">
+      <tr>
+       <td class ="ca" COLSPAN="2"><STRONG>REPORTE TIEMPO PROMEDIO DE SERVICIO / Par&aacute;metros de B&uacute;squeda </STRONG></td>
+      </tr> 
+      <tr> 
+        <td class="tit">Su Area </td>
+        <td class="dat"><span  id="suArea">&nbsp;</span></td>
+      </tr>
+      <tr> 
+        <td class="tit"> Actuando como</td>
+        <td class="dat"> 
+          <SELECT class="INP" NAME="rol" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+            <option value="0" selected>Proveedor</option>
+            <option value="1">Cliente</option>
+          </select>
+          </td>
+      </tr>
+      <tr> 
+        <td class="tit">De esta area </td>
+        <td class="dat"><p> <SELECT class="INP" NAME="area" id="idArea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </p> </td>
+      </tr>
+      <tr> 
+        <td class="tit">Fecha Inicial (aaaa-mm-dd):</td>
+        <td class="dat"> <INPUT class="INP" TYPE="Text" name="fechaInicial" id="idFechaInicial"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'FE');"> 
+                     <input TYPE="button" class="BOT" id="bFechaInicio" value="...">
+        </td>
+      </tr>
+      <tr> 
+        <td class="tit">Fecha Final (aaaa-mm-dd)</td>
+        <td class="dat"><INPUT class="INP" TYPE="Text" name="fechaFinal" id="idFechaFinal"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'FE');"> 
+                       <input TYPE="button" class="BOT" id="bFechaFin" value="...">
+        </td>
+      </tr>
+
+      <tr> 
+        <td colspan="2" class="dat2"><INPUT class="INP" TYPE="Hidden" name="miArea" id="idMiArea">
+        <INPUT TYPE="Submit" class="BOT" value="Buscar" name="miBoton"  onClick="Consultar()">
+        </td>
+      </tr>
+      
+    </table>
+   </form>
+ 
+
+</div>
+
+<!-- script que define y configura el calendario-->
+<script type="text/javascript">
+   Calendar.setup({
+    inputField :  "idFechaInicial",  // id del campo de texto
+    ifFormat   :  "%Y-%m-%d",     // formato de la fecha que se escriba en el campo de texto
+    button     :  "bFechaInicio"  // el id del botón que lanzará el calendario
+    });
+    
+   Calendar.setup({
+    inputField :  "idFechaFinal",  // id del campo de texto
+    ifFormat   :  "%Y-%m-%d",         // formato de la fecha que se escriba en el campo de texto
+    button     :  "bFechaFin"          // el id del botón que lanzará el calendario
+    });
+    
+</script>
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+<html>
+ <head>
+ <title>ContImputacionPresupuestal</title>
+
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+
+<script type="text/javascript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar(document.miForma.codigoImputacion,"C&oacute;digo Imputaci&oacute;n","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.descripcion,"Descripci&oacute;n","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.anio,"Anio","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    document.miForma._operacion.value="L";
+    return true;
+ }
+
+ function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+ }
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ </script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" id="mostrarMenu">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+ <div class="container">
+	<div id="trConsulta">
+	 <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+	   <td align="center">
+		<form  name="miForma2" action="ContImputacionPresupuestalAct.po" method="get" onsubmit="return Salvar2();">
+		 <table class="tabf" summary="" border="0" cellspacing="2" cellpadding="2">
+		  
+		    <tr>
+			   <td colspan="4">
+				<table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+				 <tr>
+				  <td class="ca" width="95%">CONSULTA IMPUTACION PRESUPUESTAL</td>
+				  <td class="ca" width="5%"><a href = "Javascript:show_help('ContImputacionPresupuestalAct');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a></td>
+				 </tr>
+				</table>
+				</td>
+		    </tr>
+			
+			<tr>
+			 <td class="tit">C&oacute;digo Imputaci&oacute;n</td>
+			 <td class="dat"> <input type="Text" class="INP" name="codigoImputacion" id="fcodigoImputacion" maxlength="15" size="20" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+		   
+			 <td class="tit">A&ntilde;o</td>
+			 <td class="dat"><input type="Text" class="INP" name="anio" id="fanio" maxlength="4" size="20" onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+			</tr>
+			
+			<tr>
+			 <td class="tit">Descripci&oacute;n</td>
+			 <td class="dat" colspan="3"> <input type="Text" class="INP" name="descripcion" id="fdescripcion" maxlength="50" size="50" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+			</tr>
+
+			<tr>
+			   <td class="dat2" colspan="4">
+				<input type="hidden" name="_operacion" value="L">
+				<input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+				<input type="submit" class="BOT"  value= "Crear" id="btnCrear" onClick="Creacion();">
+			   </td>
+			</tr>
+		 </table>
+		</form>
+	   </td>
+	 </table>
+	</div>
+  
+  
+  <div id="trResultados">
+  
+    <table summary=""  class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf2">C&oacute;digo Imputaci&oacute;n</th>
+        <th class="cf1">Descripci&oacute;n</th>
+        <th class="cf2">A&ntilde;o</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="3">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+  </div>
+  
+  
+  <div id="trCreacionRegistro">
+        <form name="miForma" action="ContImputacionPresupuestalAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">ContImputacionPresupuestal</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContImputacionPresupuestalActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a></td>
+             </tr>
+            </table>
+           </td>
+          </tr>
+		  
+          <tr>
+           <td class="tit">C&oacute;digo Imputaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="INP" name="codigoImputacion" id="codigoImputacion" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+         
+           <td class="tit">A&ntilde;o</td>
+           <td class="dat"><input type="Text" class="INP" name="anio" id="anio" maxlength="4" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+          
+          <tr>
+           <td class="tit">Descripci&oacute;n</td>
+           <td class="dat" colspan="3"> <input type="Text" class="INP" name="descripcion" id="descripcion" maxlength="50" size="50"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+
+          <tr>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="20" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+       
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="20" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+      
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4"><input type="hidden" name="_operacion" ID="_operacion" value="C">
+            <input type="Submit" class="BOT" value= "Salir" onClick="Salir();">
+
+            <input type="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+		   
+		   
+          </table>
+         </form>
+        </div>
+   </div>
+   
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

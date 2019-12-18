@@ -1,0 +1,99 @@
+<html>
+<head>
+<title> Subir Archivo</title>
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+
+<script type="text/javascript">
+     function setFileName() {
+     var theForm = document.myForm;
+     theForm.theFileName.value = theForm.upload.value;
+  }
+</script>
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="try {try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){};}catch(e){}">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);;
+</script>
+<br> 
+<div class="container">
+
+<table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr id="idmostrararchivos">
+ <td>
+  <center>          
+   <table summary="" width="95%" border="0" cellspacing="10" cellpadding="0">
+    <tr>
+     <td>
+      <center>
+       <table summary=""  border="0" id="detalle"  class="tabf">
+       <caption class="ne">Archivos anexos</caption>
+        <tr>
+          <td class="cf1">Archivo</td>
+          <td class="cf2">Fecha de colocaci&oacute;n</td>
+        </tr>
+       </table>
+      </center>
+     </td>
+    </tr> 
+   </table>
+  </center>          
+ </td>
+</tr>
+      
+<tr>
+ <td>
+  <center>
+    <form enctype="multipart/form-data" name="myForm" action="AMArchivos.po" method="post">
+     <table summary=""  border="0" class="tabf">
+      <tr>
+       <td class ="ca" COLSPAN="2"><STRONG>ANEXAR ARCHIVOS EN LA ACCION DE MEJORAMIENTO &nbsp; #<span id= "numero">&nbsp;</span> </STRONG></td>
+      </tr> 
+      <tr>
+        <td class="tit">
+        <INPUT TYPE="hidden" name="numero" id="idNumero">
+        <INPUT TYPE="hidden" name="causa" id="idCausa"> 
+         Nombre de archivo 
+        </td> 
+        <td class="dat"><INPUT TYPE="hidden" name="theFileName"><INPUT class="INP" TYPE="file" name="upload" size="30"></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="dat2"><INPUT class="BOT"  TYPE="Submit" name="miBoton" value="Subir archivo" onClick="Ocultar();setFileName();">
+        </td>
+      </tr>
+      </table>
+     </form>
+ </center>
+</td>
+</tr>
+
+<tr>
+<td>
+  <center>
+  <form name="forma2" action="AMDetalleV2.po" method="GET">
+    <INPUT TYPE="hidden" name="numero" id="idNumeroV"> 
+    <INPUT TYPE="hidden" name="causa" id="idCausaV"> 
+    <INPUT class="BOT"  TYPE="Submit" value="Volver a la acci&oacute;n de mejoramiento"  name="miBoton" onClick="Ocultar();">
+  </form>
+  </center>
+ </td>
+</tr>
+
+<tr>
+   <td class="cp"><img alt="" src="media/z.gif" width="1" height="310"></td>
+</tr>
+
+</table>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,478 @@
+<html>
+ <head>
+ <title>CDP Contrato</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+
+ 
+ <script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver="NO";
+ 
+var totalImputacion = 0;
+ var docCharSet = "";
+
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+    docCharSet = document.characterSet;
+    if (docCharSet === undefined) {
+        docCharSet = document.charset;
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+   
+   rta=totalizarImputacion();
+   if (!rta) { 
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar(document.miForma.codigoCertificado,"Codigo Certificado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.valorCertificado,"Valor Certificado","DEC",2,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaExpedicion,"Fecha Expedicion","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaVencimiento,"Fecha Vencimiento","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   document.miForma.anio.value = document.miForma.fechaExpedicion.value.substring(6,10);
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(){
+	 sVolver="SI";
+	 if(document.miForma.origen.value=="C"){
+		document.miForma.numeroContrato.value="";
+		document.miForma.action="ContContratoAct.po";
+	   	document.miForma._operacion.value="P";
+	    }
+	 else if(document.miForma.origen.value=="A"){
+	  	document.miForma.action="ContAdicionContratoAct.po";
+	   	document.miForma._operacion.value="P";
+	 }
+	 return true;
+}
+ 
+var  sVolver2="NO";
+ 
+function consultarCDP(){
+    var codigo = document.miForma.codigoCertificado.value;
+    var anio = document.miForma.fechaExpedicion.value.substring(6,10);
+    if(codigo.length>0 && anio.length>0){
+        var url='ConsultasAjaxOld.po?_operacion=buscarDatosCdp&cdp='+codigo+'&anio='+anio;
+        new Ajax.Request(url,{
+            method:'get',
+            onLoading: function(){
+                document.getElementById("estadoAjax").innerHTML = "Espere consultando CDP...";
+            }, 
+            onSuccess: function(transport){
+                document.getElementById("estadoAjax").innerHTML = "";
+                mostrarDetalle(transport.responseXML.getElementsByTagName('Cdp'));
+                document.getElementById("estadoAjax").innerHTML = "";                
+            },     
+            onFailure: function() {
+                document.getElementById("estadoAjax").innerHTML = "Error consultando CDP";
+                alert("Ups error en el ajax");
+            }    
+        }   
+        );  
+    }
+}
+
+function mostrarDetalle(registro){
+	var eldato=registro[0].attributes.getNamedItem('valorCertificado').value;
+    document.miForma.valorCertificado.value=eldato;
+    document.miForma.valorCertificado.className="IND";
+    if(navigator.appVersion.indexOf("MSIE")!=-1){
+    	document.miForma.valorCertificado.readOnly;
+    }else{
+        document.miForma.valorCertificado.setAttribute("readOnly","readonly");
+    }
+       
+   eldato=registro[0].attributes.getNamedItem('fechaExpedicion').value;
+   document.miForma.fechaExpedicion.value=eldato;
+   document.miForma.fechaExpedicion.className="IND";
+   if(navigator.appVersion.indexOf("MSIE")!=-1){
+         document.miForma.fechaExpedicion.readOnly;
+         document.getElementById("bfechaExpedicion").disabled;
+   }else{
+       document.miForma.fechaExpedicion.setAttribute("readOnly","readonly");
+       document.getElementById("bfechaExpedicion").setAttribute("disabled",true);
+   }
+  
+   eldato=registro[0].attributes.getNamedItem('fechaVencimiento').value;
+   document.miForma.fechaVencimiento.value=eldato;
+   document.miForma.fechaVencimiento.className="IND";
+   if(navigator.appVersion.indexOf("MSIE")!=-1){
+         document.miForma.fechaVencimiento.readOnly;
+         document.getElementById("bfechaVencimiento").disabled;
+   }else{
+       document.miForma.fechaExpedicion.setAttribute("readOnly","readonly");
+       document.getElementById("bfechaVencimiento").setAttribute("disabled",true);
+   }
+   document.miForma._operacionCDP.value="M";
+}
+
+function converToDate(string) {
+	var date = new Date();
+	var anio = parseInt(string.substring(6, 10));
+	var mes = eval(string.substring(3, 5)-1);
+	var dia = parseInt(string.substring(0, 2));
+	date.setYear(anio);
+	date.setMonth(mes);
+	date.setDate(dia);
+	return date;
+}
+
+function validarFecha(fecha){
+	var hoy = new Date();
+	var fechaHoy = converToDate(document.getElementById(fecha).value);
+	if(hoy.getTime()< fechaHoy.getTime()){
+		alert("La Fecha debe ser anterior o igual a hoy");
+		document.getElementById(fecha).value="";
+	}
+}
+
+function validarFechas(fecha1, fecha2){
+	if(document.getElementById(fecha1).value.length!=0 && document.getElementById(fecha2).value.length!=0){
+	 	var fechaInicio=converToDate(document.getElementById(fecha1).value);
+		var fechaFin=converToDate(document.getElementById(fecha2).value);
+		if(fechaInicio.getTime()>fechaFin.getTime()){
+			alert("La Fecha de Vencimiento debe ser mayor a la Fecha de Expedición");
+			document.getElementById(fecha2).value="";
+			return false;			
+		}
+	}
+}
+
+function  cargarImputaciones(anio,contrato,adicion){
+	    var url='ConsultasAjaxOld.po?_operacion=cargarImputaciones&anio='+anio+'&contrato='+contrato+'&adicion='+adicion+"&charset="+docCharSet;
+	    new Ajax.Request(url,{
+	        method:'get',  
+	        onSuccess: function(transport) {
+	     	   cargarTablaImputaciones(transport.responseXML.getElementsByTagName('imputacion'));
+	        },     
+	        onFailure: function() {
+	        alert("Ups... Error obteniendo respuesta Ajax");
+	        }    
+	    } );  
+	 }
+	 
+	 function cargarTablaImputaciones(imputaciones){
+	 try{
+			var totalImp=0;
+			var total=document.getElementById('TImputacion').rows.length;
+			for(var i=1;i<=total;i++){
+				var temp='FilaImputacion'+(i-1);
+				try{
+					document.getElementById(temp).parentNode.removeChild(document.getElementById(temp));
+				}catch(e){};
+			}
+			
+	 
+			try{
+				document.getElementById(temp).parentNode.removeChild(document.getElementById(temp));
+			}catch(e){};
+		  	 
+			 var tabla=document.getElementById('TImputacion').getElementsByTagName("TBODY")[0];
+			 for (var i=0;i<imputaciones.length;i++){
+			 	var fila = document.createElement("TR"); 
+			    fila.id = "FilaImputacion" + totalImp
+			    var td1 = document.createElement("TD");
+			    var td2 = document.createElement("TD");
+			    var td3 = document.createElement("TD");
+				var chk1   = document.createElement("input");
+			    chk1.name  = "imp"+i;
+			    chk1.id  = "imp"+i;
+			    chk1.type  = "checkbox";
+			    chk1.checked=false;
+			    chk1.value =getNodeValue(imputaciones[i],'codigo');
+		      	td1.appendChild(chk1); 
+				    
+				td2.appendChild(document.createTextNode(getNodeValue(imputaciones[i],'codigo')+'- '+getNodeValue(imputaciones[i],'nombre')));
+					
+			    fila.appendChild(td1); 
+			    fila.appendChild(td2);
+			    fila.appendChild(td3);   
+			    tabla.appendChild(fila);
+			    totalImp=totalImp+1;
+			 }
+			 
+			    document.miForma.cuantosImp.value=totalImp;
+		}catch(e){
+			alert(e);
+		}
+			    
+	}
+	
+	function totalizarImputacion(){
+   var imp="";
+    
+	 for(var i=0;i<document.miForma.cuantosImp.value;i++){ 
+	  if (document.getElementById('imp' + i).checked){
+		  if(imp!=""){
+			  imp = imp + ";";
+		  }
+		  imp=imp+document.getElementById('imp' + i).value+' ';
+      }
+    }
+
+   document.miForma.imputacion.value = imp; 
+   return true;
+}
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+
+ <br>
+ <br>
+ <div class="container">
+ 
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr id="trCreacionRegistro">
+   <td>
+    <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td align="center">
+        <form name="miForma" action="ContCdpContratoAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">CERTIFICADO DE DISPONIBILIDAD PRESUPUESTAL</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContCdpActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">N&uacute;mero Contrato</td>
+           <td class="dat" colspan="3"><input type="Text" class="IND" readonly name="numeroContrato" id="numeroContrato" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">C&oacute;digo Certificado</td>
+           <td class="dat"><input type="Text" class="INP" name="codigoCertificado" id="codigoCertificado" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onChange="consultarCDP();"></td>
+           <td class="tit">Fecha Expedici&oacute;n</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaExpedicion" id="fechaExpedicion" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" 
+           		onchange="validarFecha('fechaExpedicion');consultarCDP();validarFechas('fechaExpedicion','fechaVencimiento'); cargarImputaciones(this.value.substring(6,10),document.miForma.consecutivoContrato.value,document.miForma.consecutivoAdicion.value);">
+           <input type="button" id="bfechaExpedicion" class="btnCalendario">
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Valor Certificado</td>
+           <td class="dat"> <input type="Text" class="INP" name="valorCertificado" id="valorCertificado" maxlength="15" size="20"  onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Vencimiento</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaVencimiento" id="fechaVencimiento" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="validarFechas('fechaExpedicion','fechaVencimiento')">
+           <input type="button" id="bfechaVencimiento" class="btnCalendario">
+           </td>
+          </tr>
+
+	      <tr>
+			 <td class="tit">Imputaci&oacute;n presupuestal</td>
+			 <td class="dat" colspan="3">
+			  <table summary="" border="0" id="TImputacion" name="TImputacion">
+			   <tr>
+				<td class="ca" colspan="4"><strong>Imputaci&oacute;n presupuestal</strong></td>
+			   </tr>
+			   <tr>
+				<td></td>
+			   </tr>
+			  </table>
+			 </td>
+		  </tr>
+
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4">
+            <span id="estadoAjax">&nbsp;</span>
+            <input type="hidden" name="_operacion" ID="_operacion" value="C">
+            <input type="hidden" name="_operacionCDP" ID="_operacionCDP" value="C">
+            <input type="hidden" name="imputacion" id="imputacion" value="">
+            <input type="hidden" name="cuantosImp" id="cuantosImp" value="">
+            <input type="hidden" name="consecutivoAdicion" id="consecutivoAdicion">
+            <input type="hidden" name="origen" id="origen">
+            <input type="hidden" name="anio" id="anio" value="">
+            <input type="hidden" name="consecutivoContrato" ID="consecutivoContrato">
+            <input type="hidden" name="numeroEstudio" ID="numeroEstudio">
+            <input type="Submit" class="BOT" value= "Volver" onClick="Salir();">
+            <input type="Submit" class="BOT" VALUE="Eliminar"   id="btnEliminar" onClick="Eliminar();" accesskey="E">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+        </td>
+       </tr> 
+      </table>
+     </td>
+    </tr>
+    <tr id="trResultados">
+     <td align="center">
+      <table summary=""  class="tabf sortable resizable">
+       <thead>
+        <tr>
+          <th class="cf2">C&oacute;digo Certificado</th>
+          <th class="cf1">Valor Certificado</th>
+          <th class="cf2">Imputacion</th>
+          <th class="cf1">Fecha Expedici&oacute;n</th>
+          <th class="cf2">Fecha Vencimiento</th>
+        </tr>
+       </thead>
+       <tbody id="detalle">
+       </tbody>
+       <tfoot>
+        <tr>
+         <td  class="PIE" colspan="5">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+        </tr>
+       </tfoot>
+      </table>
+     </td>
+    </tr>
+   </table>
+ </div>
+
+<script type="text/javascript">
+     if(document.miForma.anio.value!=""){
+        var rango = new Array(2);
+        rango[0] = document.miForma.anio.value;
+        rango[1] = document.miForma.anio.value;
+     	Calendar.setup({
+       		inputField :  'fechaExpedicion',
+       		ifFormat   :  '%Y-%m-%d',
+       		range      :  rango,
+       		button     :  'bfechaExpedicion'
+      	});
+     }else{
+     	Calendar.setup({
+       		inputField :  'fechaExpedicion',
+       		ifFormat   :  '%Y-%m-%d',
+       		button     :  'bfechaExpedicion'
+      	});
+     }
+     Calendar.setup({
+       inputField :  'ffechaExpedicionDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaExpedicionDesde'
+      });
+     Calendar.setup({
+       inputField :  'ffechaExpedicionHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaExpedicionHasta'
+      });
+     Calendar.setup({
+       inputField :  'fechaVencimiento',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaVencimiento'
+      });
+     Calendar.setup({
+       inputField :  'ffechaVencimientoDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaVencimientoDesde'
+      });
+     Calendar.setup({
+       inputField :  'ffechaVencimientoHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaVencimientoHasta'
+      });
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

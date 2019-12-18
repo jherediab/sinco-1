@@ -1,0 +1,176 @@
+<html>
+<head>
+<title>Acciones No Efectivas</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<style type="text/css">
+<!--
+.blanco {
+  color: #FFFFFF;
+  font-style: bold;
+  font-weight: bold;  
+  fONT-SIZE: 8PT;
+}
+-->
+</style>
+
+
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="try {try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){};}catch(e){}">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+<div class="container">
+
+   <table summary="" width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+    <tr>
+        <td>
+         <center>
+          <FORM name="miForma" ACTION="AMNoEfectivas.po" METHOD="get">
+           <table summary=""  border="0" class="tabf">
+            <tr>
+             <td class ="ca" COLSPAN="4"><STRONG>Consolidado de acciones, causas y correcciones</STRONG></td>
+            </tr> 
+
+            <tr>
+               <td class="tit">Area</td>
+               <td class="tit" colspan="3"><SELECT class="INP" NAME="area" id="idArea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+            </tr>
+
+            
+            <tr>
+               <td class="tit">Fecha Desde (AAAA-MM-DD)</td>
+               <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaDesde" id="fechaDesde" maxlength="10" size="15" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+                          <INPUT TYPE="button" class="BOT" id="bfechaDesde" value="...">
+               </td>
+               <td class="tit">Fecha Hasta (AAAA-MM-DD)</td>
+               <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaHasta" id="fechaHasta" maxlength="10" size="15" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+                          <INPUT TYPE="button" class="BOT" id="bfechaHasta" value="...">
+
+               </td>
+            </tr>
+
+            <tr>
+              <td class="dat2" colspan="4">
+              <INPUT class="INP" TYPE="hidden" NAME="_operacion" value="Listar">
+              <INPUT class="BOT"  TYPE="Submit" VALUE="Listar"  name="miBoton" onClick="Ocultar();"></td>
+             </tr>
+            </table>
+          </FORM>
+     </center>
+    </td>
+   </tr> 
+  </table>
+
+  <table summary=""  class="tabf sortable resizable"  width="100%" border="0" id="tblDetalle">
+        <tr>
+           <th class="cf1">Area</th>
+           <th class="cf2">No. Acci&oacute;n</th>
+           <th class="cf1">Fecha Cierre</th>
+           <th class="cf2">Originada por</th>
+           <th class="cf1">Tipo de acci&oacute;n</th>
+           <th class="cf2">an&aacute;lisis causa del imcumplimiento</th>
+           <th class="cf1">Funcionario que cerro la acci&oacute;n</th>
+           <th class="cf2">Observaciones</th>
+           <th class="cf1">Fecha de registro</th>
+        </tr>
+        
+    <tbody id="detalleD">
+    </tbody>
+    <tfoot>
+      <tr> 
+        <td class="PIE" colspan="9">Numero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td> 
+      </tr>
+    </tfoot>
+  </table>
+     
+  <table summary="" width="100%" class="tabf sortable resizable"  id="tblResultados">
+     <thead>
+      <tr>
+           <th class="cf2">Area</th>
+           <th class="cf1"># de Acciones de Mejora</th>
+           <th class="cf2"># de causas</th>
+           <th class="cf1">Correctivas No Efectiva</th>
+           <th class="cf2">Preventivas No Efectiva</th>
+           <th class="cf1">Correciones No Efectiva</th>
+           <th class="cf2">Causas Cerradas Satisfactoriamente</th>
+           <th class="cf1">Causas Cerradas InSatisfactoriamente</th>
+     </tr>
+     </thead>
+     <tbody id="detalleR">
+     </tbody>
+     <tfoot>
+      <tr>
+           <td class="PIE">Totales</td>
+           <td class="PIED"><span id="TNroAcciones">&nbsp;</span></td>
+           <td class="PIED"><span id="TNroCausas">&nbsp;</span></td>
+           <td class="PIED"><span id="TCorrectivas">&nbsp;</span></td>
+           <td class="PIED"><span id="TPreventivas">&nbsp;</span></td>
+           <td class="PIED"><span id="TCorrecciones">&nbsp;</span></td>
+           <td class="PIED"><span id="TSatisfactorias">&nbsp;</span></td>
+           <td class="PIED"><span id="TInSatisfactorias">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+  </table>
+</div>    
+
+   <script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaDesde'
+      });
+     Calendar.setup({
+       inputField :  'fechaHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaHasta'
+      });
+   </script>
+
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+
+</body>
+</html>
+

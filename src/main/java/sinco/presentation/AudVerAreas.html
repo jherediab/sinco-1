@@ -1,0 +1,111 @@
+<html>
+<head>
+<title>Area Auditadas</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script>
+<SCRIPT TYPE="text/javascript">
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+ 
+ 
+ function Listar(){
+   $('_operacion').value="L";
+   return true;
+ }
+ </SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<br>
+
+ <div class="container">
+    <form action="AudVerAreas.po" method="post" id="forma">
+	 <input type="hidden" name="_operacion" id="_operacion" value="X">
+     <table summary="" class="tabf" border="0" cellspacing="0" cellpadding="0">
+         <tr>
+          <td class ="ca" COLSPAN="2"><STRONG>AREAS AUDITADAS <span id="nombreCiclo">&nbsp;</span></STRONG></td>
+         </tr> 
+        <tr> 
+          <td class="dat">AREA</td>
+          <td class="tit"><SELECT class="INP" NAME="idArea" id="idArea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select> </td>
+        </tr>
+        <tr> 
+          <td class="tit">
+             <INPUT class="INP" TYPE="hidden" id="ciclo" name="ciclo">
+          </td>
+          <td class="dat2"><INPUT class="BOT"  TYPE="Submit" value="Listar" name="miBoton" onClick="Listar();"></td>
+        </tr>
+      </table>
+	  
+	    <div id="divResultados">
+	 <br>
+	   <table summary=""  class="tabf sortable resizable">
+		<thead>
+		 <tr>
+			<th class="cf1">Ciclo</th>
+			<th class="cf2">Nombre</th>
+			<th class="cf1">Coordinador Auditoria</th>
+			<th class="cf2">Equipo Auditor</th>
+			<th class="cf1">Asociado a</th>
+		 </tr>
+		</thead>
+	   <tbody id="detalle">
+	   </tbody>
+	  </table>
+    </div>	
+    </form>
+  </div>
+  
+   <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+</body>
+</html>
+

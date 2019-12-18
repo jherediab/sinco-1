@@ -1,0 +1,165 @@
+<html>
+<head>
+<title>Actualizar causas</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script type="text/javascript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+
+function carga(){
+   try {
+     if (document.forms[0]!=null) 
+       document.forms[0].elements[0].focus();
+    }
+    catch(e){}
+}
+
+function Salvar(){
+ var rta;
+ Ocultar();;
+
+ var today = getFechaActual();
+ rta=validar($('fechaEstimadaTerminacion'),"fecha estimada","FEC",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+ var laFechaTerminacion = crearDate($('fechaEstimadaTerminacion').value);
+
+ if (laFechaTerminacion.getTime() < today.getTime())  {
+   mostrar_mensaje("La fecha estimada de terminación  no puede ser anterior a la fecha del dia");
+   Mostrar();
+   return false;
+ }
+ 
+ rta=validar($('porque'),"Porque","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ rta=validar($('accion'),"acción","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ rta=validar($('beneficio'),"Justifición del beneficio","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ var resp = confirm('Esta seguro de realizar esta operación?'); 
+ if(!resp) Mostrar(); 
+
+ return true;
+}
+</SCRIPT>
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  onLoad="carga()">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+<br> 
+
+ <div class="container">
+	<div id="creacion">
+        <FORM name="miForma" ACTION="AMActCausasV2.po" METHOD="post" onsubmit="return Salvar();">
+         <table summary="" border="0"  class="tabf">
+          <tr>
+           <td class ="ca" COLSPAN="2">Causa Número <span id="numeroCausa">&nbsp;</span></td>
+          </tr> 
+          <tr>
+            <td class="tit">Escriba una de las causas por las que se presenta o se puede presentar este problema</td>
+            <td class="dat">
+              <TEXTAREA NAME="porque" id="porque" ROWS="3" COLS="80" onkeypress="validarTecla(event, 'AL');"  onkeyDown="textCounter(porque,txtContPorque,4000);" onkeyup="textCounter(porque,txtContPorque,4000);" onpaste="textCounter(porque,txtContPorque,4000);"></TEXTAREA>
+              <INPUT TYPE="hidden" name="txtContPorque" value="0">
+            </td>
+           </tr>
+
+           <tr>
+            <td class="tit">La acci&oacute;n que se propone realizar es</td>
+            <td class="dat">
+              <TEXTAREA NAME="accion" id="accion" ROWS="3" COLS="80" onkeypress="validarTecla(event, 'AL');"  onkeyDown="textCounter(accion,txtContAccion,4000);" onkeyup="textCounter(accion,txtContAccion,4000);" onpaste="textCounter(accion,txtContAccion,4000);"></TEXTAREA>
+              <INPUT TYPE="hidden" name="txtContAccion" value="0">
+             </td>
+           </tr>
+
+          <tr>
+             <td class="tit">Justifique el beneficio</td>
+             <td class="dat">
+              <TEXTAREA NAME="beneficio" id="beneficio" ROWS="3" COLS="80" onkeypress="validarTecla(event, 'AL');"  onkeyDown="textCounter(beneficio,txtContBeneficio,4000);" onkeyup="textCounter(beneficio,txtContBeneficio,4000);" onpaste="textCounter(beneficio,txtContBeneficio,4000);"></TEXTAREA>
+              <INPUT TYPE="hidden" name="txtContBeneficio" value="0">
+             </td>
+          </tr>
+
+          <tr>
+             <td class="tit">Responsable de implementarla</td>
+             <td class="dat"><SELECT class="INP" NAME="responsable" id="responsable" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+          </tr>
+
+          <tr>
+             <td class="tit">Fecha estimada de terminaci&oacute;n (aaaa-mm-dd)</td>
+             <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaEstimadaTerminacion" id="fechaEstimadaTerminacion" maxlength="10" size="15" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+                             <INPUT TYPE="button" class="BOT" id="bfechaEstimadaTerminacion" value="..."> 
+             </td>
+          </tr>
+
+          <tr>
+          <td class="tit">
+                <INPUT TYPE="hidden" NAME="_operacion"  id="_operacion" value="C">
+                <INPUT TYPE="hidden" NAME="numero" id="numero">
+                <INPUT TYPE="hidden" NAME="causa" id="causa" value="1">
+                <INPUT TYPE="hidden" NAME="estado" id="estado" value="0">
+                </td>
+                <td  class="dat2"><INPUT class="BOT" TYPE="Submit" VALUE="Grabar" name="miBoton"></td>
+            </tr>
+          </table>
+         </FORM>
+       </div> 
+	   
+	   
+      <div id="trAgregarArchivo">  
+          <form action="AMPreArchivos.po" method="post">
+              <INPUT TYPE="hidden" name="numero" id="numeroAr">
+              <INPUT TYPE="hidden" name="causa" id="causaAr" value="0">
+              <INPUT class="BOT" TYPE="Submit" value="Anexar Archivos" name="miBoton" >
+         </form>
+	</div>
+ </div>
+
+  <script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaEstimadaTerminacion',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaEstimadaTerminacion'
+      });
+  </script>
+   
+
+</body>
+</html>
+

@@ -1,0 +1,313 @@
+<html>
+<head>
+<title>Entrada solicitar</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<script TYPE="text/javascript" language="JavaScript" src="media/prototype.js"></script>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+
+function filtroAreas(){
+
+    var url='ConsultasAjax.po?_operacion=buscarAreas&nombreArea='+$('filtro').value;
+    new Ajax.Request(url,{
+          method:'get',  
+           onSuccess: function(transport) {
+             llenarBlancoAtr($('areaBA'),transport.responseXML.getElementsByTagName('area'),'codigo','nombre');
+          },     
+          onFailure: function() {
+               alert("Error obteniendo respuesta Ajax");
+          }    
+        }
+     );  
+}
+
+function filtroServicios(){
+
+    var url='ConsultasAjax.po?_operacion=buscarServicios&nombreServicio='+$('filtroServicio').value;
+    new Ajax.Request(url,{
+          method:'get',  
+             onSuccess: function(transport) {
+               llenarBlancoAtr($('servicioBS'),transport.responseXML.getElementsByTagName('servicio'),'codigo','nombre');
+          },     
+          onFailure: function() {
+               alert("Error obteniendo respuesta Ajax");
+          }    
+        }
+     );  
+}
+
+
+function cambioArea(){
+
+	$('personaBA').length=0; 
+	$('servicioBA').length=0; 
+	if ($('areaBA').value.length>0){
+		var url='ConsultasAjax.po?_operacion=buscarServiciosArea&area='+$('areaBA').value;
+		new Ajax.Request(url,{
+			  method:'get',  
+				onSuccess: function(transport) {
+				 llenarBlancoAtr(document.ff.servicioBA,transport.responseXML.getElementsByTagName('servicio'),'codigo','nombre');
+			  },     
+			  onFailure: function() {
+				   alert("Error obteniendo respuesta Ajax");
+			  }    
+			}
+		 );  
+	}
+}
+
+function cambioServicio(){
+
+	var codigoArea=$('areaBA').value;
+	var codigoServicio=$('servicioBA').value;
+	var comboPersonas=$('personaBA');
+
+    comboPersonas.length=0;
+	if (codigoServicio.length>0){
+      var url='ConsultasAjax.po?_operacion=buscarResponsablesServicio&area='+codigoArea+"&servicio="+codigoServicio;
+      new Ajax.Request(url,{
+          method:'get',  
+            onSuccess: function(transport) {
+             llenarBlancoAtr(comboPersonas,transport.responseXML.getElementsByTagName('personas'),'codigo','nombre');
+          },     
+          onFailure: function() {
+               alert("Error obteniendo respuesta Ajax");
+          }    
+        }
+      );  
+	}
+}
+
+function cambioAreaBS(){
+    $('personaBS').length=0;
+	if ($('areaBS').value.length>0){
+      var url='ConsultasAjax.po?_operacion=buscarResponsablesServicio&area='+$('areaBS').value+"&servicio="+$('servicioBS').value;
+      new Ajax.Request(url,{
+          method:'get',  
+            onSuccess: function(transport) {
+             llenarBlancoAtr($('personaBS'),transport.responseXML.getElementsByTagName('personas'),'codigo','nombre');
+          },     
+          onFailure: function() {
+               alert("Error obteniendo respuesta Ajax");
+          }    
+        }
+      );  
+	}
+}
+
+function cambioServicioBS(){
+	$('personaBS').length=0; 
+	$('areaBS').length=0; 
+	
+	if ( $('servicioBS').value.length>0){
+		var url='ConsultasAjax.po?_operacion=buscarAreasServicio&servicio='+$('servicioBS').value;
+		new Ajax.Request(url,{
+			  method:'get',  
+				onSuccess: function(transport) {
+				 llenarBlancoAtr(document.ff.areaBS,transport.responseXML.getElementsByTagName('area'),'codigo','nombre');
+			  },     
+			  onFailure: function() {
+				   alert("Error obteniendo respuesta Ajax");
+			  }    
+			}
+		 );  
+	}
+}
+
+function procesarParametros(){
+ if ($('optArea').checked==true){
+   $('area').value=$('areaBA').value;
+   $('servicio').value=$('servicioBA').value;
+   $('persona').value=$('personaBA').value;
+ }
+ else if ($('optServicio').checked==true){
+   $('area').value=$('areaBS').value;
+   $('servicio').value=$('servicioBS').value;
+   $('persona').value=$('personaBS').value;
+ }
+ 
+ try {
+  if ($('encuesta').checked){
+    document.ff.action="PreCrearEncuesta.po";
+  }
+ }
+ catch(e){
+ } 
+}
+
+function Salvar(){
+ var rta;
+ Ocultar();
+
+ if ($('optArea').checked==true){
+   rta=validar($('areaBA'),"Area responsable","ENT",0,"OBL","0","999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('servicioBA'),"Servicio Solicitado","ENT",0,"OBL","0","999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('personaBA'),"Proveedor","ENT",0,"OBL","0","9999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+ }
+ else if ($('optServicio').checked==true){
+   rta=validar($('servicioBS'),"Servicio Solicitado","ENT",0,"OBL","0","999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar($('areaBS'),"Area responsable","ENT",0,"OBL","0","999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }   
+   rta=validar($('personaBS'),"Proveedor","ENT",0,"OBL","0","9999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+ }
+ 
+ var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+ if(!resp)  Mostrar(); 
+   return resp;
+}
+
+function ActivarServicio(){
+  $('divServicios').show();
+  $('divAreas').hide();
+}
+function ActivarArea(){
+  $('divServicios').hide();
+  $('divAreas').show();
+}		 
+		 
+</SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+<br>
+
+ <div class="container">
+  <form name="ff" action="CrearSolicitud.po" method="post" onsubmit="return Salvar();">
+   <INPUT class="INP" TYPE="hidden" id="padre" name="padre" value="-1">
+   <INPUT class="INP" TYPE="hidden" name="_operacion" value="3">
+   <INPUT class="INP" TYPE="hidden" name="tipoSol" id="tipoSol" value="1">
+  
+	<table summary="" border="0" cellpadding="0" class="tabf">
+	  <tr>
+	   <td class ="ca" align="center" COLSPAN="2"><STRONG>Tipo de B&uacute;squeda </STRONG></td>
+	  </tr>
+	  
+	  <tr>
+	  <td class="dat">Por area<INPUT class="INP" TYPE="Radio" name="busqueda" value="A" id="optArea" checked onclick="ActivarArea();"></td>
+	  <td class="dat">Por Servicio<INPUT class="INP" TYPE="Radio" name="busqueda" id="optServicio" value="S"  onclick="ActivarServicio();"></td>
+	  </tr>
+	 </table>
+	  
+    <br>
+	<div id="divMensaje" class="error"><span id="mensaje">&nbsp;</span><br></div>	  
+	  
+    <div  id="divAreas">
+    <table summary="" border="0" class="tabf">
+     <tr>
+      <td class ="ca" COLSPAN="2"><STRONG>Selecci&oacute;n por &aacute;reas</STRONG></td>
+     </tr> 
+	 
+     <tr> 
+      <td class="tit" width="20%" ><b>Filtro Busqueda &aacute;rea</b></td>
+      <td class="dat" width="80%"><INPUT class="INP" TYPE="text" name="filtro" id="filtro" maxlength="30" size="70" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"  onBlur="filtroAreas();"> </td>
+     </tr>	 
+     <tr> 
+      <td class ="tit">Area Responsable del Servicio</td>
+      <td class ="dat"><SELECT class="INP" NAME="areaBA" id="areaBA" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioArea()"></select></td>
+     </tr>
+	 
+     <tr id="trServicio"> 
+      <td class ="tit">Servicio a Solicitar</td>
+      <td class ="dat"><SELECT class="INP" NAME="servicioBA" id="servicioBA" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioServicio()"></select></td>
+     </tr>
+ 
+     <tr id="trPersona"> 
+	  <td class="tit">Proveedor</td>
+	  <td class="dat"><SELECT class="INP" NAME="personaBA" id="personaBA" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+	 </tr>
+	 
+    </table>
+  </div>
+  
+ <div  id="divServicios" style="display:none">
+    <table summary="" border="0" class="tabf">
+     <tr>
+      <td class ="ca" COLSPAN="2"><STRONG>Selecci&oacute;n por Servicio</STRONG></td>
+     </tr> 
+	 
+     <tr> 
+      <td class="tit" width="20%" ><b>Filtro Busqueda Servicio</b></td>
+      <td class="dat" width="80%"><INPUT class="INP" TYPE="text" name="filtroServicio" id="filtroServicio" maxlength="30" size="70" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"  onBlur="filtroServicios();"> </td>
+     </tr>	 
+	 
+     <tr> 
+      <td class ="tit">Servicio a Solicitar</td>
+      <td class ="dat"><SELECT class="INP" NAME="servicioBS" id="servicioBS" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioServicioBS()"></select></td>
+     </tr>
+     <tr> 
+      <td class ="tit">Area Responsable del Servicio</td>
+      <td class ="dat"><SELECT class="INP" NAME="areaBS" id="areaBS" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioAreaBS()"></select></td>
+     </tr>
+ 
+     <tr> 
+	  <td class="tit">Proveedor</td>
+	  <td class="dat"><SELECT class="INP" NAME="personaBS" id="personaBS" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"> </select> </td>
+	 </tr>
+	 
+     <tr id="idEncuesta"> 
+		<td class="tit"> Generar Servicio M&uacute;ltiple</td>
+		<td class="dat"><INPUT class="INP" TYPE="Checkbox" NAME="encuesta" id="encuesta" value="S"></td>
+	 </tr>
+	 
+	 
+    </table>
+  </div>  
+  
+  <br>
+  <table summary="" border="0" class="tabf">
+    <tr>
+     <td class ="ca" COLSPAN="2"><STRONG>Operaci&oacute;n a realizar</STRONG></td>
+    </tr> 
+	
+	 <tr id="trAreaCliente"> 
+	  <td class="tit" >Esta realizando la solicitud con esta Area como cliente</td>
+	  <td class="dat" ><SELECT class="INP" NAME="areaCliente" id="areaCliente" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+	 </tr>
+
+     <tr>
+      <td  class ="dat2" colspan="2"> 
+	    <INPUT class="INP" TYPE="hidden" id="area" name="area" value="">
+		<INPUT class="INP" TYPE="hidden" id="servicio" name="servicio" value="">
+		<INPUT class="INP" TYPE="hidden" id="persona" name="persona" value="">
+        <INPUT TYPE="Submit" class="BOT" value="Escoger" onclick="procesarParametros();">
+      </td>
+     </tr>
+	 
+    </table>
+  
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<html>
+<head>
+<title>Crear acci&oacute;n de mejora</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<script type="text/javascript" language="JavaScript" src="media/prototype.js"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+
+ function EstadoSesion(flag,seccion){
+   var obj = document.getElementById(seccion);
+   if (flag==true){
+     obj.style.display = "";
+   }
+   else{
+     obj.style.display = "none";
+   }
+ }
+
+function contarObjetos(my_form, field_name)
+{
+   len     =       my_form.elements.length;
+   var     index   =       0;
+   var cuantos=0;
+   for( index=0; index < len; index++ ){
+     if( (my_form.elements[index].name).substring(0,2)== field_name ){
+         cuantos++;
+     }
+   }
+   return cuantos;
+}
+
+
+
+function Salvar(){
+ var rta;
+ Ocultar();
+
+ 
+ rta=validar($('objetivo'),"objetivo","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+ rta=validar($('norma'),"Norma","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ rta=validar($('origen'),"Origen","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ rta=validar($('proceso'),"Proceso","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+
+ rta=validar($('subproceso'),"subproceso","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+ rta=validar($('descripcion'),"Descripción","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+ 
+ 
+ rta=validar($('tema'),"Tema","ALFA",0,"OBL","0","99999");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+ 
+ if ($('origen').value.length>0){
+   if ($('origen').options[$('origen').selectedIndex].text.endsWith("-SI")){
+    rta=validar($('numeral'),"Numeral","ALFA",0,"OBL","0","9999999");
+    if(!rta){
+      Mostrar();
+      return false;
+    }
+   }
+ }    
+ 
+ if ($('_operacion').value=='M'){
+   rta=validar(document.ff.justificacion,"Justificación","ALFA",0,"OBL","0","99");
+   if(!rta){
+    Mostrar();
+    return false;
+   }
+ }
+ 
+ if ($('impacto').value=="V"){
+   var cuantos;
+   cuantos=contarObjetos(self.document.ff,'A_');
+   if (cuantos==0){
+     mostrar_mensaje("Debe seleccionar como mínimo un area");
+     Mostrar(); 
+     return false;
+   }
+ }
+ if ($('_operacion').value=='C'){ 
+	 rta=validar($('accion'),"Accion","ALFA",0,"OBL","0","99");
+	 if(!rta){
+	   Mostrar();
+	   return false;
+	 }
+	 rta=validar($('beneficio'),"Beneficio","ALFA",0,"OBL","0","99");
+	 if(!rta){
+	   Mostrar();
+	   return false;
+	 }
+
+	 rta=validar($('responsable'),"Responsable","ENT",0,"OBL","0","9999999999");
+	 if(!rta){
+	   Mostrar();
+	   return false;
+	 }
+	 
+	 rta=validar($('fechaEstimadaTerminacion'),"Fecha Estimada Terminacion","FECH",0,"OBL","0","9999999999");
+	 if(!rta){
+	   Mostrar();
+	   return false;
+	 }
+  }
+  
+  
+ var resp = confirm('Esta seguro de realizar esta operación?'); 
+ if(!resp) Mostrar(); 
+ return resp;
+}
+
+function cambioImpacto(){
+  if (document.ff.impacto.value=="V"){
+      EstadoSesion(true,'trAreas');
+  }  
+  else {
+      EstadoSesion(false,'trAreas');
+  }
+
+  if (document.ff.impacto.value=="A"){
+     document.getElementById('dArea').innerHTML  ="Se impacta al area";
+  }
+  else {
+     document.getElementById('dArea').innerHTML  ="Se Origina en ";
+  }
+}
+
+
+function fAyuda(){
+
+  if (document.ff.accion.value=="C"){
+      document.getElementById('ayuda').innerHTML="Acción Correctiva: conjunto de actividades emprendidas para eliminar la causa de algo que no ha salido bien. Una acción correctiva es en cierta forma un proyecto de mejora, es un reto que se plantea la organización para no volver a incurrir en los mismos errores.";
+  }
+  else if (document.ff.accion.value=="P"){
+      document.getElementById('ayuda').innerHTML="Acción Preventiva: conjunto de actividades emprendidas para eliminar la causa de una situación que aunque no se ha presentado,  podría no salir bien.";
+  }
+  else if (document.ff.accion.value=="R"){
+      document.getElementById('ayuda').innerHTML="Corrección: conjunto de actividades realizadas para eliminar o subsanar lo que no ha salido bien (no conformidad). Una corrección ataca directamente al problema. No ocurre lo mismo con las acciones correctivas.";
+  }
+  else {
+    document.getElementById('ayuda').innerHTML="";
+  }
+}
+
+function consultaResp(){
+  window.open('AMCapturaAreas.po','Areas'); 
+}
+
+
+function CambioOrigen(){
+
+  if ($('origen').value.length>0){
+   $('tiNumeral').hide();
+   $('numeral').hide();
+               
+   if ($('origen').options[$('origen').selectedIndex].text.endsWith("-SI")){
+	   $('tiNumeral').show();
+	   $('numeral').show();
+   }
+  }   
+}
+
+function carga(){
+   try {
+     if (document.forms[0]!=null) 
+       document.forms[0].elements[0].focus();
+    }
+    catch(e){}
+    
+    cambioImpacto();
+}
+
+function Recargar(){
+	$('recarga').value=1;
+	document.ff.submit();
+}
+
+</SCRIPT>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="carga()">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+<br> 
+
+ <div class="container">
+   <FORM name="ff" ACTION="AMActV2.po" METHOD="post"  onsubmit="return Salvar();">
+       <table summary=""  border="0" id="detalle" class="tabf">
+           <tr>
+               <td class ="ca" COLSPAN="4">Acci&oacute;n de mejoramiento o Correcci&oacute;n Nro <span id="numeroAccion">&nbsp;</span></td>
+              </tr> 
+            <tr>
+               <td class="tit">Impacto</td>
+               <td class="dat" colspan="3"><SELECT class="INP" NAME="impacto" id="impacto" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="cambioImpacto();" onChange="Recargar();"></SELECT></td>
+            </tr>
+            <tr>
+               <td class="tit"><div id="dArea">La acci&oacute;n de mejora impacta a</div></td>
+               <td class="dat" colspan="3"><SELECT class="INP" NAME="area" id="area" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+            </tr>
+            <tr>
+               <td class="tit">El objetivo</td>
+               <td class="dat"><SELECT class="INP" NAME="objetivo" id="objetivo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="fAyuda();"></SELECT></td>
+               <td class="tit" colspan="2"><span id="ayuda">&nbsp;</span></td>
+            </tr>
+
+            <tr>
+               <td class="tit">La Acci&oacute;n se origina</td>
+               <td class="dat" colspan="3"><SELECT class="INP" NAME="origen" id="origen" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onChange="CambioOrigen();"></SELECT></td>
+            </tr>
+            
+            <tr>
+               <td class="tit">Pertenece al proceso</td>
+               <td class="dat"><SELECT class="INP" NAME="proceso" id="proceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="Recargar();"></SELECT></td>
+               <td class="tit">Subproceso</td>
+               <td class="dat"><SELECT class="INP" NAME="subproceso" id="subproceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+            </tr>
+
+            <tr>
+               <td class="tit">Normatividad</td>
+               <td class="dat"><SELECT class="INP" NAME="norma" id="norma" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+               <td class="tit"><div style="display:none" id="tiNumeral">Numeral</div>&nbsp;</td>
+               <td class="dat"><INPUT style="display:none" class="INP" TYPE="Text" NAME="numeral" id="numeral" maxlength="20" size="30" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onpaste="return false;">&nbsp;</td>
+            </tr>
+
+            <tr>
+               <td class="tit">Problema o situaci&oacute;n a mejorar</td>
+               <td class="dat" colspan="3">
+               <TEXTAREA class="INP" NAME="descripcion" id="descripcion" ROWS="4" COLS="150" onkeypress="validarTecla(event, 'AL');"  onkeyDown="textCounter(descripcion,txtContDescripcion,4000);" onkeyup="textCounter(descripcion,txtContDescripcion,4000);" onpaste="textCounter(descripcion,txtContDescripcion,4000);"></TEXTAREA>
+               <INPUT TYPE="hidden" name="txtContDescripcion" value="0">
+               </td>
+            </tr>
+
+            <tr>
+               <td class="tit">Tema de la Acci&oacute;n</td>
+               <td class="dat" colspan="3"><INPUT class="INP" TYPE="Text" id="tema" name="tema" maxlength="60" size="100" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"></td>
+            </tr>
+
+            
+            <tr id="trModificacion">
+               <td class="tit">Justificaci&oacute;n de la modificaci&oacute;n</td>
+               <td class="dat" colspan="3"><INPUT class="INP" TYPE="Text" NAME="justificacion" maxlength="255" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onpaste="return false;"></td>
+            </tr>            
+            
+            <tr id="trAreas" style="display:none">
+              <td colspan="4">
+                  <table summary=""  border="0"  class="tabw" id="detalleRes">
+                    <tr>
+                      <td width="25%" class="cf2">Incluir Todos&nbsp;<INPUT class="INP" TYPE="checkbox" name= "clickcontrol2" onclick= "fMarcar(this.checked,self.document.ff,'A_')" checked></td>
+                      <td width="75%" class="cf1">Areas</td>
+                    </tr> 
+                   </table>
+                 <INPUT TYPE="button" class="BOT" VALUE="Areas" onClick="consultaResp();">
+             </td>
+            </tr>
+          </table>
+
+		 <table summary=""  border="0" id="tblCausa" class="tabf">			
+          <tr>
+           <td class ="ca" COLSPAN="4">Causa que genera la acci&oacute;n <span id="numeroCausa">&nbsp;</span></td>
+          </tr> 
+          <tr>
+            <td class="tit">Escriba una de las causas por las que se presenta o se puede presentar este problema</td>
+            <td class="dat" colspan="3">
+              <TEXTAREA class="INP"  NAME="porque" id="porque" ROWS="3" COLS="130" onkeypress="validarTecla(event, 'AL');"  onkeyDown="textCounter(porque,txtContPorque,4000);" onkeyup="textCounter(porque,txtContPorque,4000);" onpaste="textCounter(porque,txtContPorque,4000);"></TEXTAREA>
+              <INPUT TYPE="hidden" name="txtContPorque" value="0">
+            </td>
+           </tr>
+
+           <tr>
+            <td class="tit">La acci&oacute;n que se propone realizar es</td>
+            <td class="dat" colspan="3">
+              <TEXTAREA class="INP"  NAME="accion" id="accion" ROWS="3" COLS="130" onkeypress="validarTecla(event, 'AL');"  onkeyDown="textCounter(accion,txtContAccion,4000);" onkeyup="textCounter(accion,txtContAccion,4000);" onpaste="textCounter(accion,txtContAccion,4000);"></TEXTAREA>
+              <INPUT TYPE="hidden" name="txtContAccion" value="0">
+             </td>
+           </tr>
+
+          <tr>
+             <td class="tit">Justifique el beneficio</td>
+             <td class="dat" colspan=3">
+              <TEXTAREA class="INP"  NAME="beneficio" id="beneficio" ROWS="3" COLS="130" onkeypress="validarTecla(event, 'AL');"  onkeyDown="textCounter(beneficio,txtContBeneficio,4000);" onkeyup="textCounter(beneficio,txtContBeneficio,4000);" onpaste="textCounter(beneficio,txtContBeneficio,4000);"></TEXTAREA>
+              <INPUT TYPE="hidden" name="txtContBeneficio" value="0">
+             </td>
+          </tr>
+
+          <tr>
+             <td class="tit">Responsable de implementarla</td>
+             <td class="dat"><SELECT class="INP" NAME="responsable" id="responsable" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+             <td class="tit">Fecha estimada de terminaci&oacute;n (aaaa-mm-dd)</td>
+             <td class="dat"><INPUT class="INP" TYPE="Text" NAME="fechaEstimadaTerminacion" id="fechaEstimadaTerminacion" maxlength="10" size="15" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+                             <INPUT TYPE="button" class="BOT" id="bfechaEstimadaTerminacion" value="..."> 
+             </td>
+          </tr>
+          </table>
+
+		 <table summary=""  border="0" class="tabf">			
+          <tr>
+              <td class="tit" >
+                <INPUT TYPE="hidden" NAME="recarga" id="recarga" value="0">
+                <INPUT TYPE="hidden" NAME="ciclo" id="ciclo" value="">
+                <INPUT TYPE="hidden" NAME="meta" id="meta" value="">
+                <INPUT TYPE="hidden" NAME="plan" id="plan" value="">
+                <INPUT TYPE="hidden" NAME="asociado" id="asociado" value="">				
+                <INPUT TYPE="hidden" NAME="numero" id="idNumero" value="0">
+                <INPUT TYPE="hidden" NAME="codigoLogro" id="codigoLogro" value="">
+                <INPUT TYPE="hidden" NAME="_operacion" id="_operacion" value="C">
+              </td>
+              <td class="dat2" colspan="3">
+              <INPUT class="BOT" TYPE="Submit" VALUE="Grabar"  name="miBoton"></td>
+           </tr>
+          </table>
+        </FORM>
+     </div>
+  <script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaEstimadaTerminacion',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaEstimadaTerminacion'
+      });
+  </script>
+	 
+  </body>
+  
+  
+</html>
+

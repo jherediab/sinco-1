@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>Sistema de Solicitud de Servicios</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  onLoad="document.forms[0].filtro.focus()">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+<br>
+ <div class="container">
+
+    <form action="EscogerArea.po" method="get" id="formaFiltro">
+      <table summary="" border="0" class="tabf">
+        <tr>
+          <td class ="ca" COLSPAN="2"><STRONG>Areas de la Organizaci&oacute;n</STRONG></td>
+        </tr> 
+                  
+        <tr> 
+          <td class="tit"><b>Nombre del &aacute;rea</b></td>
+          <td class="dat"> <INPUT class="INP" TYPE="text" name="filtro" maxlength="30"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'AL');"> </td>
+        </tr>
+        <tr>
+         <td class="tit">&nbsp;</td>
+          <td  class="dat2" > 
+            <INPUT class="INP" TYPE="hidden" name="tipo" value="1">
+            <INPUT class="INP" TYPE="hidden" id="idServicio" name="servicio" value="-1">
+            <INPUT class="INP" TYPE="hidden" id="idGemela" name="gemela" value="-1">
+            <INPUT class="INP" TYPE="hidden" id="idPadre" name="padre" value="-1">
+            <INPUT TYPE="Submit" class="BOT" value="Buscar"  name="miBoton" onClick="Ocultar();">
+          </td>
+        </tr>
+      </table>
+     </form>
+	<div id="seleccion">
+    <form action="EscogerArea.po" method="get" id="forma">
+     <table summary="" border="0" class="tabf">
+        <tr>
+          <td class ="ca" COLSPAN="2"><STRONG>Areas de la Organizaci&oacute;n</STRONG></td>
+        </tr> 
+      <tr> 
+          <td class="tit">Seleccione el área de esta lista</td>
+          <td class="dat"> 
+            <SELECT class="INP" NAME="area" id="idarea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select>
+          </td>
+      </tr>
+      <tr>
+          <td  class="tit" align="right"> 
+            <INPUT class="INP" TYPE="hidden" id="idServicio2" name="servicio" value="-1">
+            <INPUT class="INP" TYPE="hidden" id="idGemela2" name="gemela" value="-1">
+            <INPUT class="INP" TYPE="hidden" id="idPadre2" name="padre" value="-1"></td>
+          <td class="dat2"> 
+            <INPUT TYPE="Submit" class="BOT" value="Escoger" name="miBoton" onClick="document.forms[1].miBoton.style.display='none'">
+          </td>
+       </tr>
+      </table>
+     </form>
+    </div>
+   </div>
+ </body>
+</html>
+

@@ -1,0 +1,316 @@
+<html>
+<head>
+<title> index.htm </title>
+<link rel="stylesheet" href="media/global.css" type= "text/css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<SCRIPT TYPE="text/javascript"  language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+<link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+
+<script type="text/javascript" language="JavaScript">
+function setFileName() {
+      var theForm = document.myForm;
+      theForm.theFileName.value = theForm.upload.value;
+}
+
+
+  function buscarAnidadas(nombreCar,valorCar,carAnidada){
+	   var combo= document.getElementById(carAnidada);  
+	   combo.length=0
+	   
+	   if (valorCar.length==0){
+		 return true;
+	   }
+	   var url="ConsultasAjax.po?_operacion=caracteristicasAnidadas&caracteristica="+nombreCar+"&valor="+valorCar;
+	   new Ajax.Request(url,{
+		   method:'get',  
+			onSuccess: function(transport) {
+			 llenarBlancoAtr(combo,transport.responseXML.getElementsByTagName('caracteristica'),'codigo','nombre');
+			},     
+			onFailure: function() {
+			 alert("Ups... Error obteniendo respuesta Ajax");
+			}    
+		}
+	   );  
+  }
+
+  function SalvarCar(){
+   var rta;
+
+   var inputs = document.miForma.getElementsByTagName("input");
+
+   Ocultar(); 
+   
+   for (i = 0; i < inputs.length; i++) {
+        var obliga=inputs[i].getAttribute('obliga');
+  	if (obliga=="S" && inputs[i].value.length>0){
+  	   
+           var tipocampo=inputs[i].getAttribute('tipo');
+           var asociado=inputs[i].name;
+  	   if (tipocampo=="3"){
+              rta=validar(inputs[i],asociado,"DEC",2,"OBL","0","999999999999999999");
+           }
+  	   else if (tipocampo=="4"){
+              rta=validar(inputs[i],asociado,"FEC",0,"OBL","0","999999999999999999");
+           }
+           else {
+              rta=validar(inputs[i],asociado,"ALFA",0,"OBL","0","999999999999999999");
+           }
+           
+           if(!rta){
+              Mostrar();
+              return false;
+           }
+  	}
+  	
+   }	
+   return true;
+  }
+  
+  
+  
+   function ejecutarProcedimiento(nombreCar,valorCar,proceso,carAnidada){
+       if (valorCar.length==0){
+         return true;
+       }
+	   var combo;
+	   var existeCombo=false;
+	   if (parseInt(carAnidada)>0){
+         combo= document.getElementById(carAnidada);  
+	     combo.length=0
+		 existeCombo=true;
+	   }	   
+	   var labelmsg='msg'+nombreCar;
+	   $(labelmsg).innerHTML="";
+	   
+       var url="ConsultasAjax.po?_operacion=ejecutarProcedimiento"+
+	                        "&solicitud=0"+
+	                        "&caracteristica="+nombreCar+
+							"&valor="+valorCar+
+							"&proceso="+proceso+
+							"&anidada="+carAnidada;
+       new Ajax.Request(url,{
+           method:'get',  
+            onSuccess: function(transport) {
+			if (existeCombo!=false){
+               llenarBlancoAtr(combo,transport.responseXML.getElementsByTagName('caracteristica'),'codigo','nombre');
+		    }
+            var anchors = transport.responseXML.getElementsByTagName('reg');
+             for (var i=0; i<anchors.length; i++) {
+                var anchor = anchors[i];
+				
+				$(labelmsg).innerHTML= " " + anchor.getAttribute("msg");
+				
+				if  (anchor.getAttribute("estado")=="N"){
+		           $(nombreCar).value="";
+				}
+				
+             }
+            },     
+            onFailure: function() {
+             alert("Ups... Error obteniendo respuesta Ajax");
+            }    
+        }
+       );  
+   }
+
+   
+</script>
+</head>
+
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+ <br>
+  <div class="container">
+
+  <table summary="" border="0" class="tabf">
+   <tr> 
+	  <td class="tit">SERVICIO MULTIPLE #</td>
+	  <td class="dat"><span id="numeroEncuesta">0</span>
+	</td>
+  
+	<tr> 
+	  <td class="tit">Servicio: </td>
+	  <td class="dat"><span id="servicio">&nbsp;</span> 
+	</td>
+	</tr>
+	<tr> 
+	  <td class="tit">Estado: </td>
+	  <td class="dat"><span id="estado">&nbsp;</span> 
+		</td>
+	</tr>
+  </table>
+  <br>
+  
+    <form name="miForma" action="AnadirDetalleEncuesta.po" method="post"  onsubmit="return SalvarCar();">
+     <div id="nueva" class="ne"> 
+		 <INPUT class="INP" TYPE="hidden" value="not_yet" id="encuesta" name="encuesta"> 
+		 <INPUT class="INP" TYPE="hidden" value="LlenarEncuesta.po" name="pagina"> 
+			 
+		<table summary=""  class="tabf sortable resizable">
+			<caption class="ca">Caracter&iacute;sticas</caption>
+			<thead>
+			 <tr>
+				<th class="cf1" align="center">Caracter&iacute;stica</th>
+				<th class="cf2" align="center">Descripci&oacute;n</th>
+			 </tr>
+			</thead>
+			<tbody id="caracteristicas">
+			</tbody>
+			<tfoot>
+			<tr>
+			 <td  class="PIED" colspan="2"><INPUT TYPE="Submit" class="BOT" value="Guardar Caracter&iacute;sticas"  name="miBoton">		 
+			 </td>
+			</tr>
+			</tfoot>
+		</table>
+		<small>Los campos marcados con * son obligatorios</small>
+      </div>
+    </form>
+   
+   <div id="extender" align="center">
+      Extender Caracter&iacute;sticas<br>
+	  <form name="miForma2" action="ExtenderDetalleEncuesta.po" method= "post">
+		<INPUT class="INP" TYPE="hidden" value="not_yet" id= "idEncuestaExtender" name="encuesta"> 
+		<INPUT class="INP" TYPE="hidden" value="LlenarEncuesta.po" name= "pagina"> 
+		<SELECT class="INP" NAME="extensiones" id= "extensiones"> </select><br>
+		<INPUT class="INP" TYPE="Text" name="observacion" maxlength= "200" size="70" onkeypress="validarTecla(event, 'AL');"><br>
+		<INPUT TYPE="Submit" class="BOT" value= "Extender Caracter&iacute;tica"  name="miBoton" onClick="document.miForma2.miBoton.style.display='none'">
+	  </form>
+   </div>
+
+   <div id="divPersonas" align="center">
+      Estas son las personas a las cuales se les generará la solicitud de servicio.<br>
+      Si desea borrar algunas de ellas, seleccionelas y luego haga click en el botón al final de la lista "Borrar Personas".<br>               
+	  <form name="gmm_form" action="ResponsablesEncuesta.po" method="post">
+		<INPUT class="INP" TYPE="hidden" value="B" name="accion">
+		<INPUT class="INP" TYPE="hidden" id="idEncuestaBorrar" name= "encuesta"> 
+		
+		<table summary=""  class="tabf sortable resizable">
+			<caption class="ca">Responsables</caption>
+			<thead>
+			 <tr>
+				<th class="cf2"> Marca <INPUT class="INP" TYPE='checkbox' onclick= "fMarcar(this.checked,self.document.gmm_form,'E_')"></th>
+				<th class="cf1">Area Proveedor </th>
+				<th class="cf2">Apellidos </th>
+				<th class="cf1">Nombres </th>
+				<th class="cf2">Clase</th>
+			</tr>
+			</thead>
+			<tbody id="detalle">
+			</tbody>
+			<tfoot>
+			<tr>
+			 <td  class="PIED" colspan="5"><INPUT TYPE="Submit" class="BOT" value= "Borrar personas">
+			 </td>
+			</tr>
+			</tfoot>
+		</table>
+	  </form>
+    </div>
+
+    <form action="ResponsablesEncuesta.po" method="post">
+	  <table summary="" border="0" class="tabf">
+		<tr> 
+		  <td class="ca" colspan="2">Incluir</td>
+		</tr>
+		
+		<tr> 
+		  <td class="tit">Incluir Todos los que presten el servicio</td>
+		  <td class="dat"><INPUT class="INP" TYPE="Radio" name="accion" value="T"> </td>
+		</tr>
+		<tr> 
+		  <td class="tit">Incluir Jefes de &aacute;rea </td>
+		  <td class="dat"><INPUT class="INP" TYPE="Radio" name="accion" value="J" checked> </td>
+		</tr>
+		<tr> 
+		  <td class="tit">Area espec&iacute;fica </td>
+		  <td class="dat"><INPUT class="INP" TYPE="Radio" name="accion" value="A"> </td>
+		</tr>
+		<tr> 
+		  <td class="tit">Personas </td>
+		  <td class="dat"><INPUT class="INP" TYPE="Radio" name="accion" value="P"> </td>
+		</tr>
+		<tr id="convocatoria"> 
+		  <td class="tit">Auditores</td>
+		  <td class="dat"><INPUT class="INP" TYPE="Radio" name="accion" value="CA"> </td>
+		</tr>
+
+		<tr id="auditoria"> 
+		  <td class="tit">Auditores lideres</td>
+		  <td class="dat"><INPUT class="INP" TYPE="Radio" name="accion" value="SA"> </td>
+		</tr>
+
+		<tr> 
+		  <td class="dat2" colspan="2">
+			<INPUT class="INP" TYPE="hidden" value="not_yet" id= "idEncuestaPersonas" name="encuesta">
+			<INPUT class="INP" TYPE= "hidden" value="LlenarEncuesta.po" name= "pagina_siguiente"> 
+			<INPUT TYPE="Submit" class="BOT" value= "Incluir personas">
+		  
+		  </td>
+		</tr>
+
+		
+	  </table>
+	</form>
+	<table summary="" align="center">
+	  <tr>
+		<td>
+		  <div id="idModCaracteristica">
+			 <form action="PreModificarDetalleEncuesta.po" method="post">
+			  <INPUT class="INP" TYPE="hidden" value= "LlenarEncuesta.po" id="pagina_siguiente" name="pagina_siguiente"> 
+		      <INPUT class="INP" TYPE= "hidden" value="not_yet" id= "idEncuestaModificar" name="encuesta">
+			  <INPUT TYPE="Submit" class="BOT" value= "Modificar Caracter&iacute;tica">
+			</form>
+		  </div>
+		</td>
+		<td>
+		  <form action="CrearEncuesta.po" method="post">
+			<INPUT class="INP" TYPE="hidden" value= "LlenarEncuesta.po" name="pagina_siguiente">
+			<INPUT class="INP" TYPE="hidden" value="not_yet" id= "idEncuestaCancelar" name="encuesta"> 
+			<INPUT class="INP" TYPE="hidden" name="nuevoestado" value="4">
+			<INPUT TYPE="Submit" class="BOT" value="Cancelar servicio m&uacute;ltiple">
+		  </form>
+		</td>
+	  </tr>
+    </table>
+      
+    <div align="center">
+	   <form enctype="multipart/form-data" name= "myForm" action="EnviarEncuesta.po" method= "post">
+		 <INPUT class="INP" TYPE="hidden" value="not_yet" id= "idEncuestaEnviar" name="encuesta">
+		 <table summary="">
+		   <tr>
+			<td class="tit" colspan="2">Si desea anexar un archivo a su solicitud, use la siguiente opci&oacute;n :</td>
+		   </tr>
+		   
+		   <tr>
+			 <td class="tit"><INPUT class="INP" TYPE="hidden" name="theFileName">Archivo:</td>
+			 <td class="dat"><INPUT class="INP" TYPE="file" name="upload" size= "30"></td>
+		   </tr>
+		   
+		   <tr>
+			  <td  class="dat2" colspan="2" align="right"><INPUT TYPE="Submit" class="BOT" name="miBoton" value="Enviar Servicio M&uacute;ltiple" onclick="setFileName()"></td>
+		   </tr>
+		   
+		   </table>
+		  </form>
+    </div>
+	</div>    
+   <script TYPE="text/javascript" language="JavaScript" id="JSValfechas">
+   </script>
+    
+  </body>
+</html>

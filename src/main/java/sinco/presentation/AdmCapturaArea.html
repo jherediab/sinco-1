@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>Responsables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" id="elcss" href="media/global.css"  type="text/css">
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+function Incluir(){
+ try {
+ 
+   if(document.miForma2._operacion.value=="ACEPTO"){
+      Ocultar();
+      var list = document.miForma2.areas;
+
+      window.opener.document.miForma.codigoArea.value = list.options[list.selectedIndex].value;
+      window.opener.document.miForma.nombreArea.value = list.options[list.selectedIndex].text;
+     
+      var i=0;
+      
+      if (document.miForma2.especializado.value=="S" ){
+      
+        //var objeto=self.opener.document.getElementById('personaCargo');// window.opener.document.getElementById('');
+        //objeto.length=0;
+        
+        var objOrigen=document.miForma2.personas;
+        for (i=0; i<objOrigen.length; i++){
+        
+           var anchor = objOrigen[i];        
+           window.opener.InsertarPersona(anchor.value,anchor.text,i);
+        
+         /*
+          var option = self.opener.document.createElement("OPTION");
+          option.value = objOrigen.options(i).value;
+          option.text = objOrigen.options(i).text;
+          objeto.options[i] = option ;  
+          */          
+        } 
+      }
+      else if (document.miForma2.especializado.value=="M"
+	  ||document.miForma2.especializado.value=="D"
+	  ||document.miForma2.especializado.value=="O"
+	  ){
+
+          var objOrigen=document.miForma2.personas;
+          for (i=0; i<objOrigen.length; i++){
+      
+           var anchor = objOrigen[i];        
+      
+            var sValor       = 'M_'+anchor.value;
+           window.opener.InsertarMultiple(sValor,anchor.text,i);
+            
+        }
+    }
+    
+    CerrarVentana();    
+   }
+  }
+  catch (e){}
+  return true;
+}
+
+</SCRIPT>
+</head>
+<body class="cb" onLoad="Incluir()">
+<br> 
+
+<div class="container">
+	<div id="trAreas">
+      <FORM name="miForma1" ACTION="AdmCapturaArea.po" METHOD="post">
+       <table class="tabf" summary=""  border="0">
+          <tr>
+           <td class ="ca"><STRONG>Seleccionar area</STRONG></td>
+          </tr> 
+          <tr>
+           <td class="dat2">  
+             <INPUT TYPE="text" NAME="descripcion" maxlength="20" size="20">
+             <INPUT TYPE="hidden" NAME="especializado" id="especializado">
+             <INPUT TYPE="hidden" NAME="codigoServicio" id="codigoServicio">
+            <INPUT class="BOT" TYPE="Submit"  VALUE="Filtro selecci&oacute;n &aacute;rea"  id="botonAgr" name="miBoton" accesskey="A">
+           </td>
+          </tr>
+       </table>
+      </form>
+     </div>      
+
+	<div id="trNuevo">
+      <FORM name="miForma2" METHOD="get" action="AdmCapturaArea.po">
+        <table  class="tabf" summary=""  border="0">
+          <tr>
+            <td class="tit">Area</td>
+            <td class="dat"> 
+              <SELECT class="INP" NAME="areas" id="areas"></select>
+            </td>
+          </tr>
+          <tr id="funcionario">
+            <td class="tit">Funcionarios</td>
+            <td class="tit"> 
+              <SELECT class="INP" NAME="personas" id="personas"></select>
+            </td>
+          </tr>
+          <tr>
+             <td class="dat2" colspan="2">  
+               <INPUT TYPE="hidden" NAME="codigoServicio" id="codigoServicio2">
+               <INPUT TYPE="hidden" NAME="especializado" id="especializado2">
+               <INPUT TYPE="hidden" NAME="_operacion" id="_operacion" value="SEL">
+               <input type=submit value="Seleccionar"> 
+             </td>
+          </tr>                         
+       </table> 
+      </FORM>
+     </div>
+</div>
+</body>
+</html>

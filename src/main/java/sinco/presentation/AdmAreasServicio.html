@@ -1,0 +1,221 @@
+<html>
+<head>
+<title>Areas del servicio</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" id="elcss" href="media/global.css"  type="text/css">
+<script type="text/javascript" src="media/prototype.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+
+<SCRIPT TYPE="text/javascript"language="JavaScript">
+var sVolver="NO";
+var iFilaLineas=1;
+function Salvar(){
+   var rta;
+   Ocultar();
+   
+   if (sVolver=="SI"){
+     return true;   
+   }
+   rta=validar(document.ff.codigo,"Codigo Servicio","ENT",0,"OBL","0","99999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   rta=validar(document.ff.codigoArea,"Codigo Area","ENT",0,"OBL","0","99999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+}
+function Eliminar(){
+   document.ff._operacion.value="E";
+   return true;
+}
+
+function Volver(){
+   document.ff._operacion.value="V";
+   document.ff.action="Servicios.po";
+   sVolver="SI";
+   return true;
+}
+
+function InsertarPersona(codigoFuncionario,nombreFuncionario,indice){
+
+  var objeto=document.getElementById('personaCargo');
+  if (indice==0){
+     objeto.length=0;
+  }
+  
+  var optionObj = new Option(nombreFuncionario,codigoFuncionario);
+  objeto.options[indice] = optionObj;
+
+}
+
+
+
+function InsertarMultiple(sValor,sDescripcion,indice){
+
+  var Tabla = document.getElementById("tblMultiple");
+  
+  var tr = document.createElement("tr");
+
+  if (indice % 2 ==0){
+     tr.className="ct1";
+  }
+  else{
+     tr.className="ct2";
+  }
+  td = document.createElement("td");
+
+  input = document.createElement("input");
+  input.type ="checkbox";
+  input.name = sValor;
+  input.id = "A_" + sValor;
+  td.appendChild(input);
+  tr.appendChild(td);
+
+  // Descripcion
+  var txt=document.createTextNode(sDescripcion);
+  td2 = document.createElement("td");
+  td2.appendChild(txt);
+  tr.appendChild(td2);
+  Tabla.tBodies[0].appendChild(tr);
+
+  input5 = document.getElementById('A_' + sValor);
+  input5.checked=true;
+}
+
+
+function CambioArea(){
+
+
+ //var Tabla = document.getElementById("tblMultiple");
+// Tabla.tBodies[0].removeChild(document.getElementById(obj.idFila));
+  	if(iFilaLineas>1){	
+		for(i=1; i<iFilaLineas;i++){
+			document.getElementById("tblMultiple").deleteRow(1);	
+		}	
+		iFilaLineas=1;		
+	}
+ 
+	if ($('codigoArea').value.length>0){
+		var url='ConsultasAjax.po?_operacion=personas_area&codigoArea='+$('codigoArea').value;
+		new Ajax.Request(url,{
+          method:'get',  
+             onSuccess: function(transport) {
+              var anchors = transport.responseXML.getElementsByTagName('persona');
+              for (var i=0; i<anchors.length; i++) {
+                var anchor = anchors[i];
+                if ($('especializado').value=='M'||
+					$('especializado').value=='D'||
+					$('especializado').value=='O'){
+					   var sValor = 'M_'+anchor.getAttribute('codigo');
+					   InsertarMultiple(sValor,anchor.getAttribute('nombre'),i);
+					   iFilaLineas = iFilaLineas +1;
+				}
+                else if ($('especializado').value=='S'){
+					InsertarPersona(anchor.getAttribute('codigo'),anchor.getAttribute('nombre'),i);				
+				}
+			  } 
+          },     
+          onFailure: function() {
+               alert("Error obteniendo respuesta Ajax");
+          }    
+        }
+      );  
+	}
+}
+
+
+</SCRIPT>
+</head>
+<body class="cb" onLoad="try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){}">
+<table  class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td align="left">
+  <SCRIPT TYPE="text/javascript" language="JavaScript">
+  	new menu (MENU_ITEMS0, MENU_POS0);
+  </script>
+</td> 
+</tr>
+</table>
+<br>
+<div class="container">
+	<div id="idCreacionRegistro">
+          <FORM name="ff" ACTION="AdmAreasServicio.po" METHOD="get" onsubmit="return Salvar()">
+           <table summary=""  class="tabf"  border="0">
+             <tr>
+               <td class ="ca" COLSPAN="4">Areas asociadas al servicio</td>
+             </tr>
+             
+             <tr>
+              <td class="tit">C&oacute;digo Servicio</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="codigo" id="codigoServicio" size="15" readonly></td>
+              <td class="tit">Nombre Servicio</td>
+              <td class="dat"><INPUT TYPE="Text" class="INP" NAME="nombreServicio" size="80" id="nombreServicio" readonly></td>
+             </tr>
+
+             <tr>
+              <td class="tit">Area Funcional</td>
+              <td class="dat" colspan="3"><SELECT NAME="codigoArea" class="INP" id="codigoArea" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="CambioArea();"></SELECT></td>
+             </tr>
+
+             <tr id="trEspecializado">
+              <td class="tit">Persona Cargo</td>
+              <td class="dat" colspan="3"><SELECT NAME="personaCargo" class="INP" id="personaCargo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+             </tr>
+             
+             <tr id="trMultiple">
+              <td class="tit" colspan="4">
+                 <table summary=""  border="0" align="center" width="100%" id="tblMultiple">
+                  <tr>
+                    <td class="cf1">Marca</td>
+                    <td class="cf2">Funcionario</td>
+                  </table>
+               </td>
+             </tr>
+
+             <tr>
+              <td class="tit">Usuario Inserci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioInsercion" id="UsuarioInsercion" maxlength="30" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+              <td class="tit">Fecha Inserci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaInsercion" id="FechaInsercion" maxlength="10" size="20" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+
+             <tr>
+              <td class="tit">Usuario Modificaci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="usuarioModificacion" id="UsuarioModificacion" maxlength="30" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+              <td class="tit">Fecha Modificaci&oacute;n</td>
+              <td class="dat"><INPUT TYPE="Text" class="IND" NAME="fechaModificacion" id="FechaModificacion" maxlength="10" size="20" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+             </tr>
+
+             <tr>
+                <td class="dat2" colspan="4">
+                <INPUT TYPE="hidden" NAME="especializado" ID="especializado" value="C">
+                <INPUT TYPE="hidden" NAME="_operacion" ID="_operacion" value="C">
+                <INPUT TYPE="Submit" class="BOT" VALUE="Grabar"  accesskey="G">
+                <INPUT TYPE="Submit" class="BOT"  id="eliminarRegistro" VALUE="Eliminar" onClick="Eliminar();" accesskey="E">
+                <INPUT TYPE="Submit" class="BOT"  VALUE="Volver al Servicio" onClick="Volver();" accesskey="V">
+				</td>
+              </tr>
+            </table>
+           </FORM>
+     </div>
+     <table summary=""  class="tabf" border="0" id="detalle">
+           <tr class="tSup">
+             <td class="cf2">Area</td>
+             <td class="cf1">Persona Cargo</td>
+           </tr> 
+     </table>
+</div>
+</body>
+</html>

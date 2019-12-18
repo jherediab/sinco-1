@@ -1,0 +1,155 @@
+<html>
+<head>
+<title>Estadistica Acciones de mejora</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<link type="text/css" rel="stylesheet" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+<script type="text/javascript" src="media/calendar.js"></script>
+<script type="text/javascript" src="media/calendar-es.js"></script>
+<script type="text/javascript" src="media/calendar-setup.js"></script>
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+
+function Salvar(){
+ var rta;
+ 
+ Ocultar();
+ if (document.miForma.fechaDesde.value.length>0){
+    rta=validar(document.miForma.fechaDesde,"Fecha Desde","FEC",0,"OBL","0","99");
+    if(!rta){
+      Mostrar();
+      return false;
+    }
+ }
+ 
+ if (document.miForma.fechaHasta.value.length>0){
+    rta=validar(document.miForma.fechaHasta,"Fecha Hastta","FEC",0,"OBL","0","99");
+    if(!rta){
+      mostrar();
+      return false;
+    }
+ }
+
+ if (document.miForma.fechaDesde.value.length>0 && document.miForma.fechaHasta.value.length>0){
+   var laFechaD = crearDate(document.miForma.fechaDesde.value);
+   var laFechaH = crearDate(document.miForma.fechaHasta.value);
+   if (laFechaD>laFechaH){
+    alert("La fecha Desde no puede ser posterior a la Fecha Hasta");
+    Mostrar();
+    return false;
+   }
+ } 
+ return true;
+}
+
+function Procesos(){
+ var rta;
+ rta=Salvar();
+ if (rta)
+   document.miForma._operacion.value='AMEstadisticaProcesos.po';
+ return rta;
+}
+
+function Consolidado(){
+ var rta;
+ rta=Salvar();
+ if (rta)
+   document.miForma._operacion.value='AMEstadisticaAcciones.po';
+ return rta;
+}
+</SCRIPT>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="try {try {if (document.forms[0]!=null) document.forms[0].elements[0].focus();}catch(e){};}catch(e){}">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);;
+</script>
+<br> 
+
+<div class="container">
+<table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+  <td>
+   <FORM name="miForma" ACTION="AMEstadistica.po" METHOD="post">
+     <table summary=""  border="0" id="detalle" align="center" class="tabf">
+      <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Estadistica acciones de mejora</STRONG></td>
+        </tr> 
+      <tr>
+         <td class="tit">Se implantar&aacute; en</td>
+         <td class="dat"><SELECT class="INP" NAME="areaImplanta" id="idAreaImplanta" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+         <td class="tit">Formato</td>
+         <td class="dat"><SELECT class="INP" NAME="tipo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+           <OPTION VALUE="1">Detalle</OPTION>
+           <OPTION VALUE="0">Resumen</OPTION>
+         </SELECT></td>
+      </tr>
+      
+
+      <tr>
+         <td class="tit">Acci&oacute;n</td>
+         <td class="dat"><SELECT class="INP" NAME="accion" id="idAccion" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+         <td class="tit">Origen</td>
+         <td class="dat"><SELECT class="INP" NAME="origen" id="idOrigen" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+      </tr>
+
+      <tr>
+         <td class="tit">Proceso</td>
+         <td class="dat"><SELECT class="INP" NAME="proceso" id="idProceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+         
+         <td class="tit">Norma</td>
+         <td class="dat"><SELECT class="INP" NAME="norma" id="idNorma" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+         
+      </tr>
+      
+      <tr>
+         <td class="tit">Codigo Estado</td>
+         <td class="dat" colspan="3"><SELECT class="INP" NAME="codigo_estado" id="idCodigo_estado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+      <tr>
+         <td class="tit">Fecha Desde  (AAAA-MM-DD)</td>
+         <td class="dat">
+                      <INPUT class="INP" TYPE="Text" NAME="fechaDesde" id="fechaDesde" maxlength="10" size="20"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'FE');">
+                      <INPUT id="bFechaDesde" TYPE="button" class="BOT" value="...">
+         </td>
+         <td class="tit">Fecha Hasta  (AAAA-MM-DD)</td>
+         <td class="dat">
+                      <INPUT class="INP" TYPE="Text" NAME="fechaHasta" id="fechaHasta" maxlength="10" size="20"  onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onkeypress="validarTecla(event, 'FE');">
+                      <INPUT id="bFechaHasta" TYPE="button" class="BOT" value="..."></td>
+      </tr>
+      <tr>
+        <td class="tit" colspan="2"><INPUT TYPE="hidden" NAME="_operacion" value="X"></td>
+        <td class="dat2" align="right"><INPUT class="BOT"  TYPE="Submit" VALUE="Procesos Impactados" name="miBoton" onclick="var resp = Procesos();return resp;"></td>
+        <td class="dat2" align="right"><INPUT class="BOT"  TYPE="Submit" VALUE="Consolidado de Acciones" name="miBoton2" onclick="var resp = Consolidado(); return resp;"></td>
+       </tr>
+      </table>
+    </FORM>
+  </td>
+ </tr>
+</table>
+</div>
+
+<!-- script que define y configura el calendario-->
+<script type="text/javascript">
+   Calendar.setup({
+    inputField :  "fechaDesde",  // id del campo de texto
+    ifFormat   :  "%Y-%m-%d",         // formato de la fecha que se escriba en el campo de texto
+    button     :  "bFechaDesde"          // el id del botón que lanzará el calendario
+    });
+   Calendar.setup({
+    inputField :  "fechaHasta",  // id del campo de texto
+    ifFormat   :  "%Y-%m-%d",         // formato de la fecha que se escriba en el campo de texto
+    button     :  "bFechaHasta"          // el id del botón que lanzará el calendario
+    });
+</script>
+
+</body>
+</html>

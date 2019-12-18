@@ -1,0 +1,601 @@
+<html>
+ <head>
+ <title>Sub Procesos</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript" language="JavaScript" src="media/menu.js"></script>
+ <script type="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script type="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script type="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver2="NO";
+ var sVolver="NO";
+ var iFilaLineas=1;
+ var cargarDocs=false;
+ var diseño = false;
+ var adicionarServ = false;
+ var nuevaOperacion="";
+
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+
+   rta=validar($('subproceso'),"Subproceso","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar2();
+      return false;
+   }
+   rta=validar($('descripcion'),"Descripción","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar2();
+      return false;
+   }
+   rta=validar($('estado'),"Estado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar2();
+      return false;
+   }
+   rta=validar($('factor'),"Factor","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar2();
+      return false;
+   }
+   
+    var sumaFactor=0;
+    try {
+      sumaFactor=parseInt($('factor').value); 
+    }
+    catch(e){
+	}
+     
+    if (parseInt($('suma').value)+sumaFactor>100){
+      Mostrar2_mensaje("La suma de factores de subprocesos es posterior a 100.");
+      Mostrar2();
+      return false;
+    }  
+	 
+   var resp = confirm('Esta seguro de realizar esta operaci\xf3n?'); 
+   if(!resp)  Mostrar2(); 
+      return resp;
+ }
+
+ function Eliminar(){
+  nuevaOperacion = $('_operacion').value;
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+ if($('_operacion').value=="E"){
+ 
+ $('_operacion').value=nuevaOperacion;
+ }
+ 
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function PreparaVolver(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="V";
+   document.ff.action="CalProcesosAct.po";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="L";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    $('_operacion').value="L";
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   	document.getElementById("descripcion").disabled = false;
+		document.getElementById("estado").disabled = false;
+		document.getElementById("factor").disabled = false;
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+ 
+ function ConsultarDoc(){
+
+   sVolver2="SI";
+   sVolver="SI";
+   var proceso = document.getElementById("procesoHidden").value;
+   var subproceso = document.getElementById("subproceso").value;
+   
+   document.ff.action="CalDocumentosAct.po?_operacion=L&proceso="+proceso+"&subProcesoC="+subproceso;
+   return true;
+	//EliminarFilas();
+	//AdicionarFilas();
+
+ }
+ 
+ function EliminarFilas(){
+
+ 	if(iFilaLineas>1){	
+		for(i=1; i<iFilaLineas;i++){
+			document.getElementById("tblServicios").deleteRow(1);	
+		}	
+		iFilaLineas=1;		
+	}	
+	return true;
+ }
+ 
+ function AdicionarFilas(){
+	cargarDocs=true;
+	CargarServicios();
+
+ }
+ 
+   function InsertarReferencia(servicio,descripcion,estado,proceso,subproceso){
+        var TablaLineas=document.getElementById('tblServicios').getElementsByTagName("TBODY")[0];
+     	var tr = document.createElement("tr");
+		var enlace = document.createElement("a");
+		var donde = document.createAttribute("href");
+		var rowodd = document.createAttribute("class");
+		rowodd.value="rowodd";			
+		var roweven = document.createAttribute("class");
+		roweven.value="roweven";
+		
+		
+		
+		
+		donde.value="CalDocumentosAct.po?_operacion=L&proceso="+proceso+"&subProcesoC="+subproceso+"&unidadServicioC="+servicio;
+     	tr.id = "FilaLineas" + iFilaLineas;
+			
+		// codigo
+     	td = document.createElement("td");
+     	var input1 = document.createTextNode(servicio);
+		
+		enlace.appendChild(input1);
+		enlace.setAttributeNode(donde);
+		
+		var atrib = document.createAttribute("class");
+		atrib.value="ctd";	
+		
+		td.appendChild(enlace); 	
+		td.setAttributeNode(atrib);			
+     	tr.appendChild(td);
+		
+		// descripcion
+     	td = document.createElement("td");
+     	var input2 = document.createTextNode(descripcion);
+		var atrib2 = document.createAttribute("class");
+		atrib2.value="ctd";	
+		
+		td.appendChild(input2); 
+		td.setAttributeNode(atrib2); 	
+     	tr.appendChild(td);
+		
+		// estado
+     	td = document.createElement("td");
+     	var input3 = document.createTextNode(estado);  	
+		var atrib3 = document.createAttribute("class");
+		atrib3.value="ctd";	
+		
+		
+		td.appendChild(input3);
+		td.setAttributeNode(atrib3);			
+		tr.appendChild(td);
+
+		
+		// EliminarLinea
+		td = document.createElement("td");
+     	var input4 = document.createTextNode("Eliminar");  	
+		var atrib4 = document.createAttribute("class");
+		atrib4.value="ctd";	
+		
+		
+		td.appendChild(input4);
+		td.setAttributeNode(atrib4);			
+		
+
+		tr.appendChild(td);
+		if(diseño==false){
+			tr.setAttributeNode(rowodd);
+			diseño=true;
+		}else{
+			tr.setAttributeNode(roweven);
+			diseño=false;
+		}
+		
+
+		iFilaLineas=iFilaLineas+1;
+		TablaLineas.appendChild(tr);
+     	
+     	return;
+   }
+   
+  function PrepararLinea(){
+	
+	if(cargarDocs==true){
+	
+		EliminarFilas();	
+		cargarDocs=false;
+		CargarServicios();
+		
+	}else{
+		InsertarLinea('','','A');
+	}
+	
+	if(document.getElementById("tblServicios").rows.length==1){
+	
+		InsertarLinea('','','A');
+	
+	}
+	return;
+  }
+ 
+ 
+  function InsertarLinea(servicio,descripcion,estado){
+        var TablaLineas=document.getElementById('tblServicios').getElementsByTagName("TBODY")[0];
+     	var tr = document.createElement("tr");
+     	tr.id = "FilaLineas" + iFilaLineas;
+     	tr.className="FOS";
+     	
+     	// codigo
+     	td = document.createElement("td");
+     	var input1 = document.createElement("input");
+     	input1.id = "_S_"+iFilaLineas;
+      	input1.name = "_S_"+iFilaLineas;
+    	input1.size = "10";
+    	if (servicio.length>0){
+         	input1.value=servicio;
+     	}
+     	input1.maxLength = "20";
+     	input1.dato="ALFA";
+     	input1.onkeypress = validarTecla2;
+     	input1.className="INP";
+
+     	td.appendChild(input1);    	
+     	tr.appendChild(td);
+     	
+     	
+     	// descripcion
+     	td = document.createElement("td");
+     	var input2 = document.createElement("input");
+     	input2.id = "_D_"+iFilaLineas;
+      	input2.name = "_D_"+iFilaLineas;
+    	input2.size = "70";
+    	if (descripcion.length>0){
+         	input2.value=descripcion;
+     	}
+     	input2.maxLength = "120";
+     	input2.dato="ALFA";
+     	input2.onkeypress = validarTecla2;
+     	input2.className="INP";
+
+     	td.appendChild(input2); 
+     	tr.appendChild(td);
+     	
+     	
+    	// estado
+     	td = document.createElement("td");
+     	var input3 = document.createElement("select");
+     	input3.id = "_E_"+iFilaLineas;
+      	input3.name = "_E_"+iFilaLineas;      	
+      	
+        opt = document.createElement('option');
+        opt.value = "A";
+        opt.innerHTML = "Activo";
+        if (estado=="A"){
+             opt.selected = "true";
+        }
+        input3.appendChild(opt);
+      	
+        opt2 = document.createElement('option');
+        opt2.value = "I";
+        if (estado=="I"){
+             opt2.selected = "true";
+        }
+        opt2.innerHTML = "Inactivo";
+        input3.appendChild(opt2);
+      	
+     	input3.onkeypress = validarTecla2;
+     	input3.className="INP";
+     	td.appendChild(input3);
+     	tr.appendChild(td);
+
+     	// EliminarLinea
+     	td = document.createElement("td");
+     	input = document.createElement("input");
+     	input.id = "EliminarLinea";
+     	input.idFila = "FilaLineas" + iFilaLineas;
+     	input.name = "EliminarLinea";
+     	input.type = "button";
+     	input.value = "Eliminar";
+     	input.className="BOT";
+     	input.onclick = BorrarLinea;
+     	td.appendChild(input);
+     	tr.appendChild(td);
+     	
+     	TablaLineas.appendChild(tr);
+     	iFilaLineas=iFilaLineas+1;
+        input1.focus();	
+     	return;
+   }
+
+   function BorrarLinea(e){
+      var Tabla = document.getElementById("tblServicios");
+
+      var obj;
+
+      if (Rutinas.Browser.IE){
+         obj=window.event.srcElement;
+      }       
+      else {
+        obj=e.target;
+      }
+      Tabla.tBodies[0].removeChild(document.getElementById(obj.idFila));
+	  iFilaLineas=iFilaLineas-1;
+      return;
+   } 
+   
+   function  CargarServicios(){
+
+      var url="ConsultasAjax.po?_operacion=serviciosSubproceso&estado=T&proceso="+$('procesoHidden').value+"&subproceso="+$('subproceso').value;
+          /* borrar el contenido del combo de municipios */
+          if ($('subproceso').value.length>0){
+           new Ajax.Request(url,{
+               method:'get',  
+                onSuccess: function(transport) {
+                   var servicios = transport.responseXML.getElementsByTagName('servicios');                   
+                   for (var i=0;i<servicios.length;i++){
+                        var anchor = servicios[i];
+						if(cargarDocs==false){
+						InsertarLinea(anchor.getAttribute('servicio'),anchor.getAttribute('descripcion'),anchor.getAttribute('estado'));
+						}else{
+						InsertarReferencia(anchor.getAttribute('servicio'),anchor.getAttribute('descripcion'),anchor.getAttribute('estado'),$('procesoHidden').value,$('subproceso').value);
+						}
+                        
+                   }
+                   
+                },     
+                onFailure: function() {
+                 Mostrar2_mensaje("Ups... Error obteniendo respuesta Ajax");
+                }    
+             }
+           );  
+         }
+     }
+   
+
+function Cargar(){
+      try {
+        if (document.forms[0]!=null){
+          document.forms[0].elements[0].focus();
+        }
+      }
+      catch(e){
+      }
+       // programar el poblado de los segmentos
+       setTimeout("CargarServicios()",100);    
+	   
+     }
+	 
+	 
+    function EditarRegistros(){
+
+		if(cargarDocs==true){
+		
+			EliminarFilas();	
+			cargarDocs=false;
+			//CargarServicios();
+			
+		}
+		document.getElementById("descripcion").readOnly = false;
+		document.getElementById("estado").disabled = false;
+		document.getElementById("factor").readOnly = false;
+		
+		
+		document.getElementById("btnGrabar").style.display = "inline";
+		document.getElementById("btnEliminar").style.display = "inline";
+		document.getElementById("btnEditar").style.display = "none";
+		//document.getElementById("btnAdicionarServicio").style.display = "inline";
+		
+
+     }
+	 
+ </script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0">
+  <tr>
+   <td>
+     <script type="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+ 
+ <div class="container">
+ <form name="ff" action="CalSubProcesosAct.po" method="post" onsubmit="return Salvar()">
+    <input type="hidden" name="_operacion" id="_operacion" value="X">
+    <input type="hidden" name="proceso" id="procesoHidden">
+	<input type="hidden" name="objetivoHidden" id="objetivoHidden">
+    <table   class="tabf" summary="" width="100%" border="0" align="center">
+     <tr>
+ 	  <td class="titulo"><span id="miProceso">&nbsp;</span></td>
+      <td class="datc">
+       <label id="labelNombre" name="labelNombre" align="center"></label>
+      </td>
+ 	    <td class="dat2">
+       <input type="submit" class="BOT" value= "Regresar" id="btnVolver"  onClick="PreparaVolver();">
+       <input type="submit" class="BOT" value= "Consultar SubProceso" id="btnConsultar"  onClick="PreparaConsulta();">
+       <input type="submit" class="BOT" value= "Nuevo SubProceso" id="btnCrear" onClick="Nuevo();">
+       <input type="Button" class="BOT" value= "Ayuda" id="btnAyuda" onClick="show_help('CalSubProcesos');">
+ 	    </td>
+     </tr>
+    </table>
+  
+  <div id="trResultados">
+    <table summary="" class="tabf sortable resizable">
+     <thead>
+      <tr>
+        <th class="cf1">Subproceso</th>
+        <th class="cf2">Descripci&oacute;n</th>
+        <th class="cf1">Estado</th>
+        <th class="cf2">Factor</th>
+     </tr>
+     </thead>
+     <tbody id="detalle">
+     </tbody>
+     <tfoot>
+      <tr>
+       <td  class="PIE" colspan="3">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+	   <td  class="PIE"><span id="sumatoria">&nbsp;</span></td>
+      </tr>
+     </tfoot>
+    </table>
+   </div>
+   
+   
+ <div id="trCreacionRegistro">
+ <table class="tabf" summary=""  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+	  <td colspan="2" class="ca" width="98%">Creaci&oacute;n / Modificaci&oacute;n</td>
+  </tr>
+  <tr>
+   <td class="tit">Subproceso</td>
+   <td class="dat"> <input type="text" class="INP" name="subproceso" id="subproceso" maxlength="20" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Descripci&oacute;n</td>
+   <td class="dat"> <input type="text" class="INP" name="descripcion" id="descripcion" maxlength="120" size="100" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Estado</td>
+   <td class="dat"> <select name="estado" class="INP" id="estado" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Factor</td>
+   <td class="dat"><input type="text" class="INP" name="factor" id="factor" maxlength="3" size="20" onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Usuario Inserci&oacute;n</td>
+   <td class="dat"> <input type="text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Fecha Inserci&oacute;n</td>
+   <td class="dat"> <input type="text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Usuario Modificaci&oacute;n</td>
+   <td class="dat"> <input type="text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="20" size="50" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+
+  <tr>
+   <td class="tit">Fecha Modificaci&oacute;n</td>
+   <td class="dat"> <input type="text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="50" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+  </tr>
+  
+  
+  <!--
+  <tr>
+   <td class="tit" colspan="2">
+	<table summary="" border="0" cellpadding="1" cellspacing="1" class="tabf" id="tblServicios">
+	 <caption class="ca">Unidad / Servicio</caption>
+	  <tbody>
+	   <tr>
+		<td class="cf1">C&oacute;digo</td>
+		<td class="cf2">Descripci&oacute;n</td>
+		<td class="cf1">Estado</td>
+		<td class="cf2">Borrar</td>
+	   </tr>   
+	  </tbody>
+	  </table>
+   </td>
+  </tr>-->
+
+   <tr>
+	<td class="dat2" colspan="2">
+	  <INPUT TYPE="hidden" id="suma" name="suma" value="0">
+	  <input type="button" class="BOT" value="Editar" id="btnEditar" onclick="EditarRegistros();" style="display: none">
+	  <input type="submit" class="BOT" value="Doc. Procedimientos" id="btnConsultarDocs" onclick="ConsultarDoc();">
+	  <input type="submit" class="BOT" value="Guardar Cambios"   id="btnGrabar" onclick="Grabar();">
+	  <input type="submit" class="BOT" value="Eliminar" id="btnEliminar" onclick="Eliminar();" style="display: none">
+  <!--    <input type="button" class="BOT" value= "Adicionar Unidad/Servicio" id="btnAdicionarServicio" onclick="PrepararLinea();">-->
+	  <input type="submit" class="BOT" value="Salir"   id="btnSalir" onclick="Salir();">
+	</td>
+   </tr>
+  </table>
+ </div>
+ </form>
+ </div>
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+
+ </body>
+</html>

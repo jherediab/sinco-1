@@ -1,0 +1,329 @@
+<html>
+ <head>
+ <title>Gesti&oacute;n de Certificados de Disponibilidad Presupuestal </title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+
+ 
+ <script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+   rta=validar(document.miForma.codigoCertificado,"Codigo Certificado","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.valorCertificado,"Valor Certificado","DEC",2,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaExpedicion,"Fecha Expedicion","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaVencimiento,"Fecha Vencimiento","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   document.miForma.anio.value = document.miForma.fechaExpedicion.value.substring(6,10);
+   var resp = confirm('Esta seguro de realizar esta operacion?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(){
+    	sVolver="SI";
+    	document.miForma._operacion.value="L";
+    	return true;
+ }
+ 
+
+ var  sVolver2="NO";
+ 
+function converToDate(string) {
+	var date = new Date();
+	var anio = parseInt(string.substring(6, 10));
+	var mes = eval(string.substring(3, 5)-1);
+	var dia = parseInt(string.substring(0, 2));
+	date.setYear(anio);
+	date.setMonth(mes);
+	date.setDate(dia);
+	return date;
+}
+
+ function validarFecha(fecha){
+	var hoy = new Date();
+	var fechaHoy = converToDate(document.getElementById(fecha).value);
+	if(hoy.getTime()< fechaHoy.getTime()){
+		alert("La Fecha debe ser anterior o igual a hoy");
+		document.getElementById(fecha).value="";
+	}
+ }
+
+ function validarFechas(fecha1, fecha2){
+	if(document.getElementById(fecha1).value.length!=0 && document.getElementById(fecha2).value.length!=0){
+	 	var fechaInicio=converToDate(document.getElementById(fecha1).value);
+		var fechaFin=converToDate(document.getElementById(fecha2).value);
+		if(fechaInicio.getTime()>fechaFin.getTime()){
+			alert("La Fecha de Vencimiento debe ser mayor a la Fecha de Expedición");
+			document.getElementById(fecha2).value="";
+			return false;			
+		}
+	}
+ }
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+ <br>
+ <br>
+ <div class="container">
+ 
+
+	<div id="trCreacionRegistro">
+        <form name="miForma" action="ContCdpAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">CERTIFICADO DE DISPONIBILIDAD PRESUPUESTAL</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContCdpAct');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">C&oacute;digo Certificado</td>
+           <td class="dat"><input type="Text" class="INP" name="codigoCertificado" id="codigoCertificado" maxlength="10" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onChange="consultarCDP();"></td>
+           <td class="tit">Fecha Expedici&oacute;n</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaExpedicion" id="fechaExpedicion" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="validarFecha('fechaExpedicion')validarFechas('fechaExpedicion','fechaVencimiento');">
+           <input type="button" id="bfechaExpedicion" class="btnCalendario">
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Valor Certificado</td>
+           <td class="dat"> <input type="Text" class="INP" name="valorCertificado" id="valorCertificado" maxlength="15" size="20"  onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Vencimiento</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaVencimiento" id="fechaVencimiento" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="validarFechas('fechaExpedicion','fechaVencimiento')">
+           <input type="button" id="bfechaVencimiento" class="btnCalendario">
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4">
+            <input type="hidden" name="_operacion" ID="_operacion" value="C">
+            <input type="hidden" name="anio" id="anio" value="">
+            <input type="Submit" class="BOT" value= "Volver" onClick="Salir();">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+     </div>
+    
+    <div id="trConsulta">
+      <form  name="miForma2" action="ContCdpAct.po" method="get" onsubmit="return true;">
+       <table class="tabf" summary="" border="0" cellspacing="2" cellpadding="2">
+        <tr>
+         <td colspan="4">
+          <table class="tabw" summary=""  border="0" cellspacing="0" cellpadding="0">
+           <tr>
+            <td class="ca" width="95%">CONSULTA CERTIFICADO DE DISPONIBILIDAD PRESUPUESTAL</td>
+            <td class="ca" width="5%"><a href = "Javascript:show_help('ContCdpAct');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+           </tr>
+          </table>
+         </td>
+        </tr>
+        <tr>
+         <td class="tit">C&oacute;digo Certificado</td>
+         <td class="dat" colspan="3"> <input type="Text" class="INP" name="codigoCertificado" id="fcodigoCertificado" maxlength="10" size="20" onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+        </tr>
+
+        <tr>
+         <td class="tit">Fecha Expedici&oacute;n Desde</td>
+         <td class="dat"><input type="Text" class="INP" name="fechaExpedicionDesde" id="ffechaExpedicionDesde" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+         <input type="button" id="bffechaExpedicionDesde" class="btnCalendario"></td>
+         <td class="tit">Fecha Expedici&oacute;n Hasta</td>
+         <td class="dat"> <input type="Text" class="INP" name="fechaExpedicionHasta" id="ffechaExpedicionHasta" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+         <input type="button" id="bffechaExpedicionHasta" class="btnCalendario"></td>
+        </tr>
+
+        <tr>
+         <td class="tit">Fecha Vencimiento Desde</td>
+         <td class="dat"><input type="Text" class="INP" name="fechaVencimientoDesde" id="ffechaVencimientoDesde" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+         <input type="button" id="bffechaVencimientoDesde" class="btnCalendario"></td>
+         <td class="tit">Fecha Vencimiento Hasta</td>
+         <td class="dat"> <input type="Text" class="INP" name="fechaVencimientoHasta" id="ffechaVencimientoHasta" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);">
+         <input type="button" id="bffechaVencimientoHasta" class="btnCalendario"></td>
+        </tr>
+ 
+        <tr>
+         <td class="dat2" colspan="4">
+         <input type="hidden" name="_operacion" value="L">
+	     <INPUT TYPE="hidden" class="INP" NAME="tipo" id="tipo"  value="">
+	     <input type="submit" class="BOT"  value= "Consultar" onClick="Consultar();">
+        </tr>
+       </table>
+      </form>
+     </div>
+	 
+    <div id="trResultados">
+      <table summary=""  class="tabf sortable resizable">
+       <thead>
+        <tr>
+          <th class="cf2">C&oacute;digo Certificado</th>
+          <th class="cf1">Fecha Expedici&oacute;n</th>
+          <th class="cf2">Fecha Vencimiento</th>
+          <th class="cf1">Valor Certificado</th>
+        </tr>
+       </thead>
+       <tbody id="detalle">
+       </tbody>
+       <tfoot>
+        <tr>
+         <td  class="PIE" colspan="5">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+        </tr>
+       </tfoot>
+      </table>
+     </div>
+    </div>
+
+
+<script type="text/javascript">
+     if(document.miForma.anio.value!=""){
+        var rango = new Array(2);
+        rango[0] = document.miForma.anio.value;
+        rango[1] = document.miForma.anio.value;
+     	Calendar.setup({
+       		inputField :  'fechaExpedicion',
+       		ifFormat   :  '%Y-%m-%d',
+       		range      :  rango,
+       		button     :  'bfechaExpedicion'
+      	});
+     }else{
+     	Calendar.setup({
+       		inputField :  'fechaExpedicion',
+       		ifFormat   :  '%Y-%m-%d',
+       		button     :  'bfechaExpedicion'
+      	});
+     }
+     Calendar.setup({
+       inputField :  'ffechaExpedicionDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaExpedicionDesde'
+      });
+     Calendar.setup({
+       inputField :  'ffechaExpedicionHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaExpedicionHasta'
+      });
+     Calendar.setup({
+       inputField :  'fechaVencimiento',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaVencimiento'
+      });
+     Calendar.setup({
+       inputField :  'ffechaVencimientoDesde',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaVencimientoDesde'
+      });
+     Calendar.setup({
+       inputField :  'ffechaVencimientoHasta',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bffechaVencimientoHasta'
+      });
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

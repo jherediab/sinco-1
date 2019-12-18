@@ -1,0 +1,303 @@
+<html>
+ <head>
+ <title>Contratacion - Liquidacion Contrato</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+ <script TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+
+ 
+ <script type="text/javascript" language="JavaScript" id="elMenu"></script>
+ <script type="text/javascript" language="JavaScript" src="media/template.js"></script>
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript"language="JavaScript">
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+    calcularSaldo();
+  }
+   catch(e){}
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+   
+   rta=validar(document.miForma.fechaLiquidacion,"Fecha Liquidacion","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   
+   if(!calcularSaldo()){
+   	  Mostrar();
+   	  alert("El contrato no se puede liquidar hasta que los valores no queden equilibrados");
+      return false;
+   }
+   
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+ }
+
+ function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Salir(){
+ 	sVolver="SI";
+ 	document.miForma.numeroContrato.value="";
+    document.miForma.action="ContContratoAct.po";
+    document.miForma._operacion.value="P";
+    return true;
+}
+
+function converToDate(string) {
+	var date = new Date();
+	var anio = parseInt(string.substring(6, 10));
+	var mes = eval(string.substring(3, 5)-1);
+	var dia = parseInt(string.substring(0, 2));
+	date.setYear(anio);
+	date.setMonth(mes);
+	date.setDate(dia);
+	return date;
+}
+
+function validarFecha(fecha){
+	var hoy = new Date();
+	var fechaHoy = converToDate(document.getElementById(fecha).value);
+	if(hoy.getTime()< fechaHoy.getTime()){
+		alert("La Fecha de Liquidación debe ser anterior o igual a hoy");
+		document.getElementById(fecha).value="";
+	}
+}
+
+function calcularSaldo(){
+	var vrContrato = 0;
+	
+	if(isNumber(desformatnum(document.miForma.valorContrato.value))){
+		vrContrato = parseFloat(desformatnum(document.miForma.valorContrato.value));
+	}
+	var vrCancelado = 0;
+	if(isNumber(desformatnum(document.miForma.valorCancelado.value))){
+		vrCancelado = parseFloat(desformatnum(document.miForma.valorCancelado.value));
+	}
+	var vrLiquidacion = 0;
+	if(isNumber(desformatnum(document.miForma.valorLiquidacion.value))){
+	 	vrLiquidacion = parseFloat(desformatnum(document.miForma.valorLiquidacion.value));
+	}
+	var vrSaldo = 0;
+	
+	document.miForma.valorSaldo.value=(vrContrato-vrCancelado-vrLiquidacion);
+	if(isNumber(desformatnum(document.miForma.valorSaldo.value))){
+		vrSaldo = parseFloat(desformatnum(document.miForma.valorSaldo.value));
+	}
+	if(vrContrato != (vrSaldo+vrCancelado+vrLiquidacion)){
+		alert("Las sumas no son iguales");
+		return false;
+	}
+	document.getElementById('valorHaber').innerHTML = formatnum(""+vrContrato);
+	return true;
+	
+}
+
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+ <br>
+ <br>
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr id="trCreacionRegistro">
+   <td>
+    <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td align="center">
+        <form name="miForma" action="ContContratoLiquidacionAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">Liquidaci&oacute;n de Contrato</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContContratoLiquidacionActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">N&uacute;mero Contrato</td>
+           <td class="dat"> <input type="Text" class="IND" name="numeroContrato" id="numeroContrato" maxlength="25" size="25" readonly></td>
+           <td class="tit">Fecha Liquidaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaLiquidacion" id="fechaLiquidacion" maxlength="10" size="20" onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="validarFecha('fechaLiquidacion')">
+           <input type="button" id="bfechaLiquidacion" class="btnCalendario"></td>
+          </tr>
+		 
+		  <tr id="trCuentas" style="display: none">
+            <td align="center" colspan="4" class="dat">
+             <table summary=""  class="tabf sortable resizable" id="cuentas">
+              <thead>
+              <tr>
+                <th class="cf2">No. Rad.</th>
+                <th class="cf1">No. Fact.</th>
+                <th class="cf2">Mes Facturado</th>
+                <th class="cf1">Vr. Factura</th>
+                <th class="cf2">Vr. Objeci&oacute;n</th>
+                <th class="cf1">Vr. Copagos</th>
+                <th class="cf2">Vr. Dctos.</th>
+                <th class="cf1">Vr. Avalado</th>
+                <th class="cf2">Vr. Pagado</th>
+                <th class="cf1">Vr. Saldo</th>
+              </tr>
+             </thead>
+             <tbody id="detalleCuentas">
+             </tbody>
+             <tfoot>
+              <tr>
+               <td class="PIE" colspan="3">TOTALES &nbsp;&nbsp;</td>
+               <td class="PIED">$ &nbsp;&nbsp;<span id="totalFacturas">&nbsp;</span></td>
+               <td class="PIED">$ &nbsp;&nbsp;<span id="totalObjecion">&nbsp;</span></td>
+               <td class="PIED">$ &nbsp;&nbsp;<span id="totalCopago">&nbsp;</span></td>
+               <td class="PIED">$ &nbsp;&nbsp;<span id="totalDescuentos">&nbsp;</span></td>
+               <td class="PIED">$ &nbsp;&nbsp;<span id="totalAvalado">&nbsp;</span></td>
+               <td class="PIED">$ &nbsp;&nbsp;<span id="totalPagado">&nbsp;</span></td>
+               <td class="PIED">$ &nbsp;&nbsp;<span id="totalSaldo">&nbsp;</span></td>
+              </tr>
+              </tfoot>
+             </table>
+            </td>
+          </tr>
+		  
+		  
+          <tr>
+            <td align="center" colspan="4" class="dat">
+             <center>
+             <table summary="">
+              <thead>
+              <tr>
+                <th class="cf2" colspan="3">TABLA DE LIQUIDACI&Oacute;N</th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr>
+              	<td class="tit">Total Contratado</td>
+                <td class="dat"><input type="Text" class="INPD" name="valorContrato" id="valorContrato" size="25" value="" onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)" readonly></td>
+                <td class="dat">&nbsp;</td>
+              </tr>
+              <tr>
+              	<td class="tit">Valor Cancelado a la Fecha</td>
+                <td class="dat">&nbsp;</td>
+                <td class="dat"><input type="Text" class="INPD" name="valorCancelado" id="valorCancelado" maxlength="25" size="25" title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="calcularSaldo();" onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)"></td>
+              </tr>
+              <tr>
+              	<td class="tit">Valor a Cancelar</td>
+                <td class="dat">&nbsp;</td>
+                <td class="dat"><input type="Text" class="INPD" name="valorLiquidacion" id="valorLiquidacion" maxlength="25" size="25" title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="calcularSaldo();"onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)"></td>
+              </tr>
+              <tr>
+              	<td class="tit">Saldo</td>
+                <td class="dat">&nbsp;</td>
+                <td class="dat"><input type="Text" class="INPD" name="valorSaldo" id="valorSaldo" maxlength="25" size="25" title="numero" onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="calcularSaldo();" onFocus="this.value=desformatnum(this.value)" onBlur="this.value=formatnum(this.value)"></td>
+              </tr>
+               
+             </tbody>
+             <tfoot>
+              <tr>
+               <td class="PIE">SUMAS IGUALES &nbsp;&nbsp;</td>
+               <td class="PIED">$ &nbsp;&nbsp;<span id="valorDebe">&nbsp;</span></td>
+               <td class="PIED">$ &nbsp;&nbsp;<span id="valorHaber">&nbsp;</span></td>
+              </tr>
+              </tfoot>
+             </table>
+             </center>
+            </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="6"><input type="hidden" name="_operacion" ID="_operacion" value="C">
+ 			<input type="hidden" name="origen" ID="origen">
+ 			<input type="hidden" name="consecutivoContrato" ID="consecutivoContrato">
+ 			<input type="Submit" class="BOT" value= "Volver Al contrato" onClick="Salir();">
+ 			<input type="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+            <input type="Button" class="BOT" VALUE="Agregar" id="Agregar" onClick="agregar();" accesskey="E" style="display:none">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+        </td>
+       </tr> 
+      </table>
+     </td>
+    </tr>
+    </table>
+
+<script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaLiquidacion',
+       ifFormat   :  '%d/%m/%Y',
+       button     :  'bfechaLiquidacion'
+      });
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

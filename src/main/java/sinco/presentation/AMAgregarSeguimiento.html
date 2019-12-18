@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>Detalle Causa</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+<script type="text/javascript" language="JavaScript" src="media/prototype.js"></script>
+
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+
+
+
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+
+function carga(){
+   try {
+     if (document.forms[0]!=null) 
+       document.forms[0].observacion.focus();
+    }
+    catch(e){}
+}
+
+function Salvar1(){
+ var rta;
+ Ocultar();
+
+ rta=validar($('observacion'),"Observacion","ALFA",0,"OBL","0","99");
+ if(!rta){
+   Mostrar();
+   return false;
+ }
+ return true;
+}
+
+
+</SCRIPT>
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="carga()">
+ <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript"  >
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+
+<br> 
+
+
+<div class="container">
+
+	<div id="trNuevaAtencion">
+	
+    <form action="AMAgregarSeguimiento.po" method="post" onsubmit="return Salvar1();">
+		<table summary=""  border="0" id="detalle" class="tabf">		
+		 <tr>
+		  <td class ="ca"><STRONG>Actualizar Seguimiento</STRONG></td>
+		 </tr> 
+		 <tr>
+		  <td class ="dat">
+			<TEXTAREA NAME="observacion" id="observacion" ROWS="3" COLS="130" onkeypress="validarTecla(event, 'AL');"  onkeyDown="textCounter(observacion,txtContObservacion,512);" onkeyup="textCounter(observacion,txtContObservacion,512);" onpaste="textCounter(observacion,txtContObservacion,512);"></TEXTAREA>
+          <INPUT TYPE="hidden" name="txtContObservacion" value="0">		  
+		  </td>
+		 </tr> 
+		
+		 <tr>
+		  <td class ="dat2">
+          <INPUT TYPE="hidden" id="numero" name="numero"> 
+          <INPUT TYPE="hidden" id="causa" name="causa"> 
+          <INPUT TYPE="hidden" id="consecutivo" name="consecutivo"> 
+          <INPUT TYPE="hidden" value="ActSeg" id="_operacion" name="_operacion">   
+           <INPUT class="BOT" TYPE="Submit" value="Actualizar Seguimiento"><br>
+		  </td>
+		 </tr> 
+		 </table> 
+        </form>
+    </div>
+
+	</div>
+ </body>
+</html>
+

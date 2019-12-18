@@ -1,0 +1,342 @@
+<html>
+<head>
+<title>Estadistica</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="media/favicon.ico" rel="icon" type="image/x-icon">
+<link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="media/global.css" type="text/css">
+<SCRIPT TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></SCRIPT>
+<script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+<SCRIPT TYPE="text/javascript" language="JavaScript">
+
+function Salvar(){
+  var rta;
+  Ocultar();
+  if (document.miForma.ciclo.length==0){
+     mostrar_mensaje("No hay ciclos disponibles para realizar la operación"); 
+     Mostrar(); 
+     return false;
+  }
+  if (document.miForma.ciclo.value==0){
+     mostrar_mensaje("Debe seleccionar un ciclo"); 
+     Mostrar(); 
+     return false;
+  }
+  return true;
+}
+
+function Recarga(){
+ //if (document.miForma.ciclo.value>0){
+ // openPG('ConsultasVarias.po?_operacion=AreasDelCiclo&ciclo='+document.miForma.ciclo.value);
+ //}
+ if (document.miForma.ciclo.value>0){
+    document.miForma.operacion.value="RECARGA";
+    document.miForma.submit();
+ } 
+}
+
+function VerGrafica(){
+   document.forms[0].operacion.value="GRAFICA";
+   document.forms[0].reporte.value="subprocesos";
+}
+
+function VerDetalle(){
+   document.forms[0].operacion.value="VER";
+   document.forms[0].reporte.value="areas";
+   document.forms[0].target="";
+}
+
+</SCRIPT>
+
+</head>
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <table  summary="" class="tabw" border="0"  id="mostrarMenu">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript" language="JavaScript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<br> 
+
+  <div class="container">
+
+	<div id="trSeleccionar">
+      <FORM name="miForma" ACTION="CalEstadistica.po" METHOD="get" onsubmit="return Salvar();">
+      
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Generación de estadisticas</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat" colspan="3"><SELECT NAME="ciclo" class="INP" id="idCiclo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"  onchange="Recarga();"></SELECT></td>
+        </tr>
+        
+        <tr id="trArea"> 
+           <td class="tit">Area</td>
+           <td class="dat" colspan="3"><SELECT NAME="area" class="INP" id="area" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+
+        <tr> 
+           <td class="tit">Proceso</td>
+           <td class="dat" colspan="3"><SELECT NAME="proceso" class="INP" id="proceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+
+        <tr> 
+          <td class="tit">Tipo Proceso</td>
+          <td class="dat" colspan="3"><SELECT NAME="tipoProceso" class="INP" id="idTipoProceso" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+        
+        <tr> 
+           <td class="tit">Incluir Sub Areas</td>
+           <td class="dat" colspan="3"><INPUT class="INP" TYPE="Checkbox" NAME="areasHijas" VALUE="1" id="checkBox" checked></td>
+        </tr>         
+
+        <tr> 
+           <td class="tit">Periodo Inicial</td>
+           <td class="dat"><SELECT NAME="periodo1" class="INP" id="periodo1" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+           <td class="tit">Periodo Final</td>
+           <td class="dat"><SELECT NAME="periodo2" class="INP" id="periodo2" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></SELECT></td>
+        </tr>
+        
+        <tr>
+          <td class="dat2" colspan="4">
+          <INPUT TYPE="hidden" NAME="reporte" id="reporte" value="">
+          <INPUT TYPE="hidden" NAME="operacion" value="VER">
+          <INPUT class="BOT"  TYPE="Submit"  VALUE="Siguiente" name="miBoton" accesskey="G"></td>
+        </tr>
+       </table>
+      </FORM>
+     </div>
+
+	<div id="trEstArea">
+      <FORM name="miForma3" target="_blank" ACTION="CalEstadistica.po" METHOD="get">
+        <INPUT TYPE="hidden" NAME="ciclo"  id="cicloEA">
+        <INPUT TYPE="hidden" NAME="plan"  id="planEA">
+        <INPUT TYPE="hidden" NAME="area"  id="areaEA">
+        <INPUT TYPE="hidden" NAME="proceso"  id="procesoEA">
+        
+
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Estad&iacute;stica Plan de calidad</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat" colspan="3"> <span id="nombreCicloEA">&nbsp;</span></td>
+        </tr>
+        
+        <tr> 
+           <td class="tit">Periodo Inicial</td>
+           <td class="dat"> <span id="nombrePeriodo1EA">&nbsp;</span></td>
+           <td class="tit">Periodo Final</td>
+           <td class="dat"> <span id="nombrePeriodo2EA">&nbsp;</span></td>
+        </tr>
+        
+        <tr>
+           <td class="tit">Area</td>
+           <td class="dat" colspan="3"><span id="nombreAreaEA">&nbsp;</span></td>
+        </tr>
+        
+       </table> 
+       <br>
+	   <table class="tabf"  summary=""  border="0" id="tblEstArea">
+		 <tr>
+		  <td class="cf2" width="15%" >Nombre del area</td>
+		  <td class="cf1">Cifras</td>
+		  <td class="cf1" width="4%">Meta</td>
+		  <td class="cf1" width="4%">Vr alcanzado</td>
+		  <td class="cf1" width="4%">Diferencia</td>
+		  <td class="cf1" id="trTit1" width="4%" title="Porcentaje de Eficacia">% Eficacia</td>
+		  <td class="cf2" id="trTit2" width="4%">Factor</td>
+		</tr>
+	   </table>                     
+       </FORM>
+	</div>
+ 
+	<div id="trProcesos">
+      <FORM name="miForma3" target="_blank" ACTION="CalEstadistica.po" METHOD="get">
+        <INPUT TYPE="hidden" NAME="ciclo"  id="cicloPRO">
+        <INPUT TYPE="hidden" NAME="plan"  id="planPRO">
+        <INPUT TYPE="hidden" NAME="area"  id="areaPRO">
+        <INPUT TYPE="hidden" NAME="periodo1"  id="periodo1PRO">
+        <INPUT TYPE="hidden" NAME="periodo2"  id="periodo2PRO">
+        <INPUT TYPE="hidden" NAME="proceso"  id="procesoPRO">
+        <INPUT TYPE="hidden" NAME="areasHijas" id="areasHijasPRO">
+        <INPUT TYPE="hidden" NAME="tipoProceso" id="tipoProcesoPRO">
+
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Consolidado por Procesos</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat" colspan="3"><span id="nombreCicloPRO">&nbsp;</span></td>
+        </tr>
+
+        <tr> 
+           <td class="tit">Periodo Inicial</td>
+           <td class="dat"> <span id="nombrePeriodo1PRO">&nbsp;</span></td>
+           <td class="tit">Periodo Final</td>
+           <td class="dat"> <span id="nombrePeriodo2PRO">&nbsp;</span></td>
+        </tr>        
+        
+        <tr>
+           <td class="tit">Area</td>
+           <td class="dat" colspan="3"><span id="nombreAreaPRO">&nbsp;</span></td>
+        </tr>
+
+       </table> 
+       <br>
+	   <table class="tabf" summary=""  border="0" id="tblPRO">
+		 <tr>
+		  <td class="cf2" width="80%">Proceso</td>
+		  <td class="cf1">Metas medidas</td>
+		  <td class="cf2">Metas Cumplidas</td>
+		  <td class="cf1">Porcentaje Cumplimiento de metas</td>
+		  <td class="cf2" id="trEfPRO1">Porcentaje de Eficacia</td>
+		  <td class="cf1" id="trEfPRO2">Factor</td>
+		</tr>
+	   </table>                     
+
+	   <table class="tabf" summary=""  border="0">
+		 <tr>
+          <td class="dat2">
+             <INPUT TYPE="hidden" NAME="operacion" value="GRAFICA">
+             <INPUT TYPE="hidden" NAME="reporte" value="procesos">
+             <INPUT class="BOT"  TYPE="Submit" value="Ver Detalle" onclick="VerDetalle();">
+             <INPUT class="BOT"  TYPE="Submit"  VALUE="Ver grafica" name="miBoton" accesskey="G">
+          </td>
+         </tr>
+        </table>
+       </FORM>
+	</div>
+ 
+	<div id="trSubprocesos">
+      <FORM name="miForma3" target="_blank" ACTION="CalEstadistica.po" METHOD="get">
+        <INPUT TYPE="hidden" NAME="ciclo"  id="cicloSUB">
+        <INPUT TYPE="hidden" NAME="plan"  id="planSUB">
+        <INPUT TYPE="hidden" NAME="area"  id="areaSUB">        
+        <INPUT TYPE="hidden" NAME="periodo1"  id="periodo1SUB">
+        <INPUT TYPE="hidden" NAME="periodo2"  id="periodo2SUB">
+        <INPUT TYPE="hidden" NAME="proceso"  id="procesoSUB">
+        <INPUT TYPE="hidden" NAME="areasHijas" id="areasHijasSUB">
+        <INPUT TYPE="hidden" NAME="tipoProceso" id="tipoProcesoSUB">
+
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Consolidado por subprocesos</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat" colspan="3"> <span id="nombreCicloSUB">&nbsp;</span></td>
+        </tr>
+        
+        <tr> 
+           <td class="tit">Periodo Inicial</td>
+           <td class="dat"> <span id="nombrePeriodo1SUB">&nbsp;</span></td>
+           <td class="tit">Periodo Final</td>
+           <td class="dat"> <span id="nombrePeriodo2SUB">&nbsp;</span></td>
+        </tr>
+        
+        <tr>
+           <td class="tit">Area</td>
+           <td class="dat" colspan="3"><span id="nombreAreaSUB">&nbsp;</span></td>
+        </tr>
+        
+       </table> 
+       <br>
+	  <table align="center" summary=""  border="0" id="tblSUB">
+		 <tr>
+		  <td class="cf2" width="80%">Subproceso</td>
+		  <td class="cf1">Metas medidas</td>
+		  <td class="cf2">Metas Cumplidas</td>
+		  <td class="cf1">Porcentaje Cumplimiento de metas</td>
+		  <td class="cf2" id="trEfSUB1">Porcentaje de Eficacia</td>
+		  <td class="cf1" id="trEfSUB2">Factor</td>
+		</tr>
+	   </table>                     
+	   <br>
+		<table class="tabf" summary=""  border="0">
+         <tr>
+          <td class="dat2">
+             <INPUT TYPE="hidden" NAME="operacion" value="GRAFICA">
+             <INPUT TYPE="hidden" NAME="reporte" value="subprocesos">
+             <INPUT class="BOT"  TYPE="Submit" value="Ver Detalle" onclick="VerDetalle();">
+             <INPUT class="BOT"  TYPE="Submit"  VALUE="Ver grafica" onclick="VerGrafica();" accesskey="G">
+          </td>
+         </tr>
+        </table>
+       </FORM>
+      </div>
+
+	<div id="trEstRES">
+
+	<FORM target="_blank" ACTION="CalEstadistica.po" METHOD="get">
+        <INPUT TYPE="hidden" NAME="ciclo"  id="cicloRES">
+        <INPUT TYPE="hidden" NAME="plan"  id="planRES">
+        <INPUT TYPE="hidden" NAME="area"  id="areaRES">
+        <INPUT TYPE="hidden" NAME="periodo1"  id="periodo1RES">
+        <INPUT TYPE="hidden" NAME="periodo2"  id="periodo2RES">
+        <INPUT TYPE="hidden" NAME="proceso"  id="procesoRES">
+        <INPUT TYPE="hidden" NAME="areasHijas" id="areasHijasRES">
+        <INPUT TYPE="hidden" NAME="tipoProceso" id="tipoProcesoRES">
+        
+
+       <table class="tabf" summary=""  border="0">
+        <tr>
+         <td class ="ca" COLSPAN="4"><STRONG>Estad&iacute;stisca Plan de calidad</STRONG></td>
+        </tr> 
+        <tr>
+           <td class="tit">Ciclo</td>
+           <td class="dat" colspan="3"> <span id="nombreCicloRES">&nbsp;</span></td>
+        </tr>
+        
+        <tr> 
+           <td class="tit">Periodo Inicial</td>
+           <td class="dat"> <span id="nombrePeriodo1RES">&nbsp;</span></td>
+           <td class="tit">Periodo Final</td>
+           <td class="dat"> <span id="nombrePeriodo2RES">&nbsp;</span></td>
+        </tr>
+        
+        <tr>
+           <td class="tit">Area</td>
+           <td class="dat" colspan="3"><span id="nombreAreaRES">&nbsp;</span></td>
+        </tr>
+        
+       </table> 
+       <br>
+
+	   <table class="tabf" summary=""  border="0" id="tblEstRES">
+         <tr>
+         <td class="cf2" >Nombre del area</td>
+         <td class="cf2" title="Porcentaje de cumplimiento">Porc. Cumpl.</td>
+         </tr>
+       </table>                     
+	   
+	   <br>
+       <table class="tabf" border="0" summary="">
+            <tr>
+              <td class="PIE">Cumplimiento Total: &nbsp;&nbsp;<span id="cumplimiento">&nbsp;</span></td>
+            </tr>
+            <tr>
+            <td class="dat2">
+             <INPUT TYPE="hidden" NAME="operacion" value="GRAFICA">
+             <INPUT TYPE="hidden" NAME="reporte" value="resumen">
+             <INPUT class="BOT"  TYPE="Submit"  VALUE="Ver grafica" name="miBoton" accesskey="G">
+          </td>
+         </tr>
+        </table>
+       </FORM>
+      </div>
+	</div>
+
+</body>
+</html>

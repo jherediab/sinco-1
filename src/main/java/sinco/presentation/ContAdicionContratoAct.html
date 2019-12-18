@@ -1,0 +1,603 @@
+ <html>
+ <head>
+ <title>Adicion Contrato</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="media/global.css" type="text/css">
+
+ <link rel="stylesheet" type="text/css" media="all" href="media/calendar-green.css" title="win2k-cold-1">
+ <script type="text/javascript" src="media/calendar.js"></script>
+ <script type="text/javascript" src="media/calendar-es.js"></script>
+ <script type="text/javascript" src="media/calendar-setup.js"></script>
+
+ 
+ <script TYPE="text/javascript"  language="JavaScript" src="media/menu.js"></script>
+<script TYPE="text/javascript" language="JavaScript" id="elMenu"></script>
+<script TYPE="text/javascript" language="JavaScript" src="media/template.js"></script>
+<link  type="text/css" rel="stylesheet" href="media/menu.css">
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" language="JavaScript" src="media/rutinas.js"></script>
+
+ <script type="text/javascript"language="JavaScript">
+ var totalClausulas=0;
+ var filas;
+ var sVolver="NO";
+ var docCharSet = "";	 
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+    activarCampos(document.miForma.tipoAdicion.value);
+  }
+  catch(e){}
+  
+  try {
+     for (i=0; i<arrClausulas.length; i++){
+         agregarClausula(arrClausulas[i]);
+     }
+  } catch(exception){}
+ }
+
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if (sVolver=="SI"){
+      return true;
+   }
+   totalizarClausulas();
+   rta=validar(document.miForma.tipoAdicion,"Tipo Adici&oacute;n","ENT",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   if(document.miForma.tipoAdicion.value=="3"||document.miForma.tipoAdicion.value=="1"){
+	   rta=validar(document.miForma.plazoAdicionado,"Plazo Adicionado","ALFA",0,"OBL","0","999999999999999");
+	   if(!rta){
+	      Mostrar();
+	      return false;
+	   }
+	   rta=validar(document.miForma.unidadPlazo,"Unidad Plazo","ALFA",0,"OBL","0","999999999999999");
+	   if(!rta){
+	      Mostrar();
+	      return false;
+	   }
+   }
+   if(document.miForma.tipoAdicion.value=="4"||document.miForma.tipoAdicion.value=="1"){
+	   rta=validar(document.miForma.valorAdicionado,"Valor Adicionado","DEC",2,"OBL","0","999999999999999");
+	   if(!rta){
+	      Mostrar();
+	      return false;
+	   }
+   }
+   if(document.miForma.tipoAdicion.value=="2"){
+	   rta=validar(document.miForma.valorAdicionado,"Valor Adicionado","DEC",2,"OBL","0","999999999999999");
+	   if(!rta){
+	      Mostrar();
+	      return false;
+	   }
+	   rta=validar(document.miForma.serviciosTxt,"Servicio(s) Adicionado(s)","ALFA",0,"OBL","0","999999999999999");
+	   if(!rta){
+	      Mostrar();
+	      return false;
+	   }
+   }
+   rta=validar(document.miForma.consecutivoContrato,"Consecutivo Contrato","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.numCertificacionAdd,"Número de Certificación de Adición","ALFA",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.fechaCertificacionAdd,"Fecha de Certificación de Adición","FEC",0,"OBL","0","999999999999999");
+   if(!rta){
+      Mostrar();
+      return false;
+   }
+   rta=validar(document.miForma.justificacion,"Justificación","ALFA",0,"OBL","0","999999999999999");
+     if(!rta){
+       Mostrar();
+       return false;
+     }
+   if(totalClausulas==0  && document.miForma.tipoAdicion.value=="4"){
+   	 rta=validar(document.miForma.clausulas,"Cláusulas","ALFA",0,"OBL","0","999999999999999");
+     if(!rta){
+       Mostrar();
+       return false;
+     }
+   }else if(totalClausulas==0){
+      var rta = confirm('El campo Modificatorio esta en blanco, desea continuar?');  
+   	   if(!rta)  Mostrar(); 
+   }
+   var resp = confirm('Esta seguro de realizar esta operación?'); 
+   if(!resp)  Mostrar(); 
+      return resp;
+   }
+
+ function Eliminar(){
+   document.miForma._operacion.value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   document.miForma2._operacion.value="L";
+   return true;
+ }
+
+ function Salir(){
+	 sVolver="SI";
+	 document.miForma.numeroContrato.value="";
+	 document.miForma.action="ContContratoAct.po";
+     document.miForma._operacion.value="P";
+	 return true;
+}
+
+ function Creacion(){
+   sVolver2="SI";
+   document.miForma2._operacion.value="Nuevo";
+   return true;
+ }
+ 
+var  sVolver2="NO";
+
+
+function  CargarServicios(){
+	docCharSet = document.characterSet;
+    if (docCharSet == undefined) {
+        docCharSet = document.charset;
+    }	    
+    var url='ConsultasAjaxOld.po?_operacion=cargarServicioPorFiltro&filtroServicio='+document.miForma.filtroServicio.value+"&charset="+docCharSet;
+     new Ajax.Request(url,{
+        method:'get',  
+        onSuccess: function(transport) {
+    	 llenarComboBlancoXML(document.getElementById('servicioAdicionado'), transport.responseXML.getElementsByTagName('servicio'),'codigo','nombre');
+         document.miForma.codigoServicio.value="";
+		 },     
+        onFailure: function() {
+          //alert("Ups... Error obteniendo respuesta Ajax");
+        }    
+    }
+   );  
+}
+
+function Nuevo(){
+	 sVolver="SI";
+	 document.miForma._operacion.value="Nuevo";
+	 return true;
+}
+ 
+function AgregarRp(){
+	sVolver="SI";
+	document.miForma.numeroAdicion.value=document.miForma.consecutivoAdicion.value;
+	document.miForma.valorContrato.value=document.miForma.valorAdicionado.value;
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContRpAct.po";
+}
+
+function AgregarCdp(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContCdpContratoAct.po";
+}
+
+function GenerarAdicion(){
+	document.miForma._operacion.value="GenerarAdicion";
+}
+
+function AgregarPoliza(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContPolizaAct.po";
+}
+
+function AgregarImpuesto(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContImpuestoAct.po";
+}
+
+function AgregarServicios(){
+	sVolver="SI";
+	document.miForma._operacion.value="Nuevo";
+	document.miForma.action="ContEstudioPrevioServiciosAct.po";
+}
+
+function converToDate(string) {
+	var date = new Date();
+	var anio = parseInt(string.substring(6, 10));
+	var mes = eval(string.substring(3, 5)-1);
+	var dia = parseInt(string.substring(0, 2));
+	date.setYear(anio);
+	date.setMonth(mes);
+	date.setDate(dia);
+	return date;
+}
+
+function validarFecha(fecha){
+	var hoy = new Date();
+	var fechaHoy = converToDate(document.getElementById(fecha).value);
+	if(hoy.getTime()< fechaHoy.getTime()){
+		alert("La Fecha debe ser anterior o igual a hoy");
+		document.getElementById(fecha).value="";
+	}
+}
+
+function totalizarClausulas(){
+	var clausulas="";
+	for(i=1;i<document.getElementById("tbClausulas").rows.length;i++){
+		if(clausulas!=""){
+			clausulas+="~";
+		}
+		clausulas+=document.getElementById("tbClausulas").rows[i].cells[1].innerHTML;
+	}
+	document.miForma.clausulas.value=clausulas;
+}
+
+function FaddTarifa(){
+	 document.miForma._operacion.value="L";
+	 document.miForma.action="ContEstudioPrevioTarifasAct.po";
+	 return true;
+	}
+
+function activarCampos(tipoAdicion){
+	if(tipoAdicion=="1"){
+		document.getElementById('valorAdicionado').className='INP';
+		document.getElementById('valorAdicionado').readOnly=false;
+		document.getElementById('plazoAdicionado').className='INP';
+		document.getElementById('plazoAdicionado').readOnly=false;
+		document.getElementById('unidadPlazo').className='INP';
+		document.getElementById('unidadPlazo').readOnly=false;
+		document.getElementById('addServicios').disabled=true;
+		document.getElementById('addTarifa').disabled=true;
+	}else if(tipoAdicion=="2"){
+	    document.getElementById('valorAdicionado').className='INP';
+		document.getElementById('valorAdicionado').readOnly=false;
+		document.getElementById('plazoAdicionado').className='IND';
+		document.getElementById('plazoAdicionado').readOnly=true;
+		document.getElementById('unidadPlazo').className='IND';
+		document.getElementById('unidadPlazo').readOnly=true;
+		document.getElementById('addServicios').disabled=false;
+		document.getElementById('addTarifa').disabled=false;
+	}
+	else if(tipoAdicion=="3"){
+	    document.getElementById('valorAdicionado').className='IND';
+		document.getElementById('valorAdicionado').readOnly=true;
+		document.getElementById('plazoAdicionado').className='INP';
+		document.getElementById('plazoAdicionado').readOnly=false;
+		document.getElementById('unidadPlazo').className='INP';
+		document.getElementById('unidadPlazo').readOnly=false;
+		document.getElementById('addServicios').disabled=true;
+		document.getElementById('addTarifa').disabled=true;
+	}
+	else if(tipoAdicion=="4"){
+	    document.getElementById('valorAdicionado').className='INP';
+		document.getElementById('valorAdicionado').readOnly=false;
+		document.getElementById('plazoAdicionado').className='IND';
+		document.getElementById('plazoAdicionado').readOnly=true;
+		document.getElementById('unidadPlazo').className='IND';
+		document.getElementById('unidadPlazo').readOnly=true;
+		document.getElementById('addServicios').disabled=true;
+		document.getElementById('addTarifa').disabled=true;
+	}else{
+	    document.getElementById('valorAdicionado').className='IND';
+		document.getElementById('valorAdicionado').readOnly=true;
+		document.getElementById('plazoAdicionado').className='IND';
+		document.getElementById('plazoAdicionado').readOnly=true;
+		document.getElementById('unidadPlazo').className='IND';
+		document.getElementById('unidadPlazo').readOnly=true;
+		document.getElementById('addServicios').disabled=true;
+		document.getElementById('addTarifa').disabled=true;
+	}
+}
+
+function agregarClausula(texto){
+  var txt = "";
+  if(document.miForma.clausulasTxt.value.length>0 && typeof(texto)=='undefined'){
+  	txt = document.miForma.clausulasTxt.value;
+  	document.miForma.clausulasTxt.value="";
+  }else{
+  	txt = texto;
+  }
+  
+  if(txt.length>0){
+  	var tabla = document.getElementById("tbClausulas").getElementsByTagName("tbody")[0];
+  	var fila = document.createElement("tr");
+  	var col = document.createElement("td");
+  	
+  	var img = document.createElement("img");
+  	img.src = "media/up.gif";
+  	img.onclick = function(){moverFila(this,-1)};
+  	col.appendChild(img);
+  	
+  	img = document.createElement("img");
+  	img.src = "media/down.gif";
+  	img.onclick = function(){moverFila(this,1)};
+  	col.appendChild(img);
+  	fila.appendChild(col);
+  	
+  	col = document.createElement("td");
+  	col.appendChild(document.createTextNode(txt));
+  	fila.appendChild(col);
+  	
+  	col = document.createElement("td");
+  	var input = document.createElement("input");
+  	input.idFila = "clausula"+totalClausulas;
+  	input.value = "Eliminar";
+  	input.type = "button";
+  	input.className="submitLink";
+  	input.onclick = eliminarClausula;
+  	fila.appendChild(input);
+  	
+  	fila.id = "clausula"+totalClausulas;
+  	tabla.appendChild(fila);
+  	totalClausulas++;
+  }else{
+    alert("Debe ingresar la descripción de la Clausula");
+  }
+}
+
+function eliminarClausula(e){
+	var tabla = document.getElementById("tbClausulas");
+  	var obj;
+  	if (navigator.appVersion.indexOf("MSIE")!=-1){
+      obj=window.event.srcElement;
+    }       
+    else if(navigator.userAgent.indexOf("Firefox")!=-1){
+      obj=e.target;
+    }
+    tabla.tBodies[0].removeChild(document.getElementById(obj.idFila));
+    totalClausulas--;
+    return;
+}
+
+function moverFila(obj,num){
+  var tabla = document.getElementById("tbClausulas");
+  var fila = obj.parentNode.parentNode;
+  filas = tabla.tBodies[0].getElementsByTagName("tr");
+  for (i=0; ele = tabla.getElementsByTagName("tr")[i]; i++)
+    if (ele == fila) {numFila=i; break}
+  copia = filas[numFila].cloneNode(true);
+  copia.getElementsByTagName('img')[0].onclick = function() { moverFila(this,-1) }
+  copia.getElementsByTagName('img')[1].onclick = function() { moverFila(this,1) }
+  copia.getElementsByTagName('input')[0].onclick = eliminarClausula;
+  var idFila = filas[numFila].getElementsByTagName('input')[0].idFila
+  copia.getElementsByTagName('input')[0].idFila = idFila;
+
+  tabla.tBodies[0].removeChild(filas[numFila]);
+  numFila += num;
+  if (numFila > filas.length-1) 
+    tabla.tBodies[0].appendChild(copia);
+  else
+    tabla.tBodies[0].insertBefore(copia,filas[numFila]);
+  mostrarOcultar();
+}
+
+function mostrarOcultar(){
+  filas = tabla.tBodies[0].getElementsByTagName("tr");
+  for (i=0; ele = filas[i]; i++) {
+    ele.getElementsByTagName('img')[0].style.visibility = (i==0) ? 'hidden' : 'visible';
+    ele.getElementsByTagName('img')[1].style.visibility = (i==filas.length-1) ? 'hidden' : 'visible';
+  }
+}
+</script>
+</head>
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+
+<SCRIPT TYPE="text/javascript" language="JavaScript"  id="mostrarMenu">
+	new menu (MENU_ITEMS0, MENU_POS0);
+</script>
+
+
+ <br>
+ <br>
+<div class="container">
+  
+ <table  summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+  <tr id="trCreacionRegistro">
+   <td>
+    <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0">
+     <tr>
+      <td align="center">
+        <form name="miForma" action="ContAdicionContratoAct.po" METHOD="get" onsubmit="return Salvar()">
+         <table class="tabf" summary=""  border="0" cellspacing="2" cellpadding="2">
+          <tr>
+           <td colspan="4">
+            <table width="100%" summary=""  border="0" cellspacing="0" cellpadding="0">
+             <tr>
+              <td class="ca" width="98%">Adici&oacute;n/Modificatorio Contrato</td>
+              <td class="ca" width="2%"><a href = "Javascript:show_help('ContAdicionContratoActDetalle');"><img height="18" valign="middle" src="media/helps.gif" border="0" alt="Help"></a>
+             </tr>
+            </table>
+           </td>
+          </tr>
+          <tr>
+           <td class="tit">Consecutivo Adici&oacute;n</td>
+           <td class="dat"><input type="Text" class="IND" readonly name="consecutivoAdicion" id="consecutivoAdicion" maxlength="10" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">N&uacute;mero Contrato</td>
+           <td class="dat"> <input type="Text" readonly class="IND" name="numeroContrato" id="numeroContrato" maxlength="15" size="20"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+          
+          <tr>
+           <td class="tit">Tipo Adici&oacute;n</td>
+           <td class="dat" colspan="3"><select name="tipoAdicion" class="INP" id="tipoAdicion" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="activarCampos(this.value);">
+           </select></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Valor Adicionado</td>
+           <td class="dat" colspan="3"><input type="Text" class="INP" name="valorAdicionado" id="valorAdicionado" maxlength="10" size="20"  onkeypress="validarTecla(event, 'DE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Plazo Adicionado</td>
+           <td class="dat"><input type="Text" class="INP" name="plazoAdicionado" id="plazoAdicionado" maxlength="8" size="20"  onkeypress="validarTecla(event, 'EN');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Unidad Plazo</td>
+           <td class="dat"> <select name="unidadPlazo" class="INP" id="unidadPlazo" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></select></td>
+          </tr>
+
+          <tr>
+           <td class="tit">N&uacute;mero Certificaci&oacute;n de Adici&oacute;n</td>
+           <td class="dat"> <input type="Text" class="INP" name="numCertificacionAdd" id="numCertificacionAdd" maxlength="25" size="25"  onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Certificaci&oacute;n de Adici&oacute;n</td>
+           <td class="dat"> <input type="Text" class="INP" name="fechaCertificacionAdd" id="fechaCertificacionAdd" maxlength="10" size="20"  onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);" onchange="validarFecha('fechaCertificacionAdd')">
+           <input type="button" id="bfechaCertificacionAdd" class="btnCalendario">
+           </td>
+          </tr>
+          
+          <tr>
+           <td class="tit">Justificaci&oacute;n</td>
+           <td class="dat" colspan="3"><textarea name="justificacion" id="justificacion" class="INP" cols="120" rows="6"  onkeypress="validarTecla(event, 'ALSE');"></textarea></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Servicios a Adicionar</td>
+		   <td class="dat" colspan="3">
+		    <table summary="" border="0" id="TSrvc" name="TSrvc">
+			 <tr>
+			  <td class="ca" colspan="6"><strong>SERVICIOS</strong></td>
+			 </tr>
+			 <tr>
+			  <td class="tit">C&oacute;digo Servicio</td>
+			  <td class="tit">Nombre Servicio</td>
+			  <td class="tit">Municipio</td>
+			  <td class="tit">Porcentaje</td>
+			  <td class="tit">Afiliados</td>
+			  <td class="tit">Valor mensual</td>
+			 </tr>
+			</table>
+			<br />
+			<input type="submit" class="BOT" id="addServicios" value="Agregar Servicios" onclick="AgregarServicios();">	
+			<input type="Submit" class="BOT" id="addTarifa" value="Tarifas" onclick="FaddTarifa();"> 
+			<br /><br/>
+			Especificaci&oacute;n de Servicios	
+			<br />
+			<textarea name="servicioAdicionado" id="servicioAdicionado" class="INP" cols="120" rows="6" onkeypress="validarTecla(event, 'ALSE');" onkeydown="textCounter(this,txtCont,1000);" onkeyup="textCounter(this,txtCont,1000);"></textarea>	
+			<input type="hidden" name="txtCont" value="0"> 
+		   </td>
+		  </tr>
+		
+          <tr>
+           <td class="tit">Cl&aacute;usulas</td>
+           <td class="dat" colspan="3">
+             <textarea name="clausulasTxt" id="clausulasTxt" class="INP" cols="120" rows="6"  onkeypress="validarTecla(event, 'ALSE');"></textarea>
+             <br />
+             <input type="button" class="bot" id="btnAgregarClausula" value="Agregar" onClick="agregarClausula();">
+             <table summary="" width="100%" border="0" cellspacing="0" cellpadding="0" id="tbClausulas">
+			  <tr class="tit">
+			   <td width="5%"></td>
+			   <td width="90%">Cl&aacute;usula</td>
+			   <td width="5%">Eliminar</td>
+			  </tr>
+			 </table>
+           </td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioInsercion" id="usuarioInsercion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Inserci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaInsercion" id="fechaInsercion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="tit">Usuario Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="usuarioModificacion" id="usuarioModificacion" maxlength="60" size="25" disabled onkeypress="validarTecla(event, 'AL');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+           <td class="tit">Fecha Modificaci&oacute;n</td>
+           <td class="dat"> <input type="Text" class="IND" name="fechaModificacion" id="fechaModificacion" maxlength="10" size="25" disabled onkeypress="validarTecla(event, 'FE');" onkeydown="return f_salto2(event);" onkeyup="return f_salto(event);"></td>
+          </tr>
+
+          <tr>
+           <td class="dat2" colspan="4"><input type="hidden" name="_operacion" ID="_operacion" value="C">
+            <input type="hidden" name="consecutivoContrato" id="consecutivoContrato"> 
+            <input type="hidden" name="valorContrato" ID="valorContrato">
+            <input type="hidden" name="numeroEstudio" ID="numeroEstudio">
+            <input type="hidden" name="origen" ID="origen" value="A">
+			<input type="hidden" name="numeroAdicion" ID="numeroAdicion" value="">
+            <input type="hidden" name="clausulas" ID="clausulas" value="">
+            <input type="Submit" class="BOT" value= "Volver Al Contrato" onClick="Salir();">
+            <input type="Submit" class="BOT" id="agregarCdp" value="Agregar CDP" onClick="AgregarCdp();">
+		    <input type="Submit" class="BOT" id="btnCodigoRp" VALUE="Agregar RP" onClick="AgregarRp();" accesskey="G">
+			<input type="Submit" class="BOT" id="polizas" value="Polizas" onClick="AgregarPoliza();">
+		    <input type="Submit" class="BOT" id="impuestos" value="Impuestos" onClick="AgregarImpuesto();">
+		    <input type="Submit" class="BOT" id="generarAdicion" value="Generar Adición/Modificatorio" onClick="GenerarAdicion();">
+		    <input type="Submit" class="BOT" id="btnNuevo" value="Nuevo" onClick="Nuevo();">
+		    <input type="Submit" class="BOT" VALUE="Eliminar" id="btnEliminar" onClick="Eliminar();" accesskey="E">
+            <input type="Submit" class="BOT" VALUE="Grabar"   id="btnGrabar" onClick="Grabar();" accesskey="G"></td>
+           </tr>
+          </table>
+         </form>
+        </td>
+       </tr> 
+      </table>
+     </td>
+    </tr>
+    
+    <tr id="trResultados">
+     <td align="center">
+      <table summary=""  class="tabf sortable resizable">
+       <thead>
+        <tr>
+         <th class="cf1">Tipo Adici&oacute;n</th>
+         <th class="cf2">Fecha Certificaci&oacute;n</th>
+         <th class="cf1">Adicional/Modificartorio</th>
+        </tr>
+       </thead>
+       <tbody id="detalle">
+       </tbody>
+       <tfoot>
+        <tr>
+         <td  class="PIE" colspan="3">N&uacute;mero de Registros: &nbsp;&nbsp;<span id="nroRegistros">&nbsp;</span></td>
+        </tr>
+       </tfoot>
+      </table>
+     </td>
+    </tr>
+   </table>
+ </div>
+   
+  <script TYPE="text/javascript"  language="JavaScript"  id="scriptClausulas"></script>
+  <script type="text/javascript">
+     Calendar.setup({
+       inputField :  'fechaCertificacionAdd',
+       ifFormat   :  '%Y-%m-%d',
+       button     :  'bfechaCertificacionAdd'
+      });
+   </script>
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+ </body>
+</html>

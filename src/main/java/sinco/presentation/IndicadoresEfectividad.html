@@ -1,0 +1,344 @@
+<html>
+ <head>
+ <title>Indicadores efectividad</title>
+ <link rel="shortcut icon" href="media/logo_favicon.gif" type="image/x-icon">
+ <link href="media/favicon.ico" rel="icon" type="image/x-icon">
+ <link href="media/favicon.ico" rel="shortcut icon" type="image/x-icon">
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <link rel="stylesheet" href="media/global.css" type="text/css"/>
+ <link  type="text/css" rel="stylesheet" href="media/menu.css"/>
+
+ <script type="text/javascript" src="media/prototype.js"></script>
+ <SCRIPT TYPE="text/javascript" src="media/rutinas.js"></SCRIPT>
+
+ <script type="text/javascript" src="media/tablekit.js"></script>
+ <script TYPE="text/javascript" src="media/menu.js"></script>
+ <script TYPE="text/javascript" id="elMenu"></script>
+ <script TYPE="text/javascript" src="media/template.js"></script> 
+ 
+
+ <SCRIPT TYPE="text/javascript">
+ 
+ 
+ var sVolver2="NO";
+ var sVolver="NO";
+ function Cargar(){
+  try {
+    if (document.forms[0]!=null){
+      document.forms[0].elements[0].focus();
+    }
+  }
+   catch(e){
+   }
+ }
+
+ function Salvar2(){
+   Ocultar();
+   if (sVolver2=="SI"){
+      return true;
+   }
+
+   return true;
+ }
+ function Salvar(){
+   var rta;
+   Ocultar();
+   if ($('_operacion').value=="L"){
+      return Salvar2();
+   }
+
+   if (sVolver=="SI"){
+      return true;
+   }
+   
+   
+ }
+
+ function Eliminar(){
+   $('_operacion').value="E";
+   return true;
+ }
+
+ function Grabar(){
+   limpieza();
+   return true;
+ }
+
+ function Consultar(){
+   $('_operacion').value="tablero";
+   return true;
+ }
+
+ function PreparaConsulta(){
+   sVolver2="SI";
+   sVolver="SI";
+   $('_operacion').value="X";
+   return true;
+ }
+
+ function Salir(){
+    sVolver="SI";
+    if ($('_operacion').value=="M"){
+      $('_operacion').value="V";
+    }
+    else {
+      $('_operacion').value="X";
+    }
+    return true;
+ }
+
+ function Nuevo(){
+   sVolver="SI";
+   $('_operacion').value="Nuevo";
+   return true;
+ }
+
+ function Modificar(){
+   sVolver="SI";
+   $('_operacion').value="P";
+   return true;
+ }
+ 
+ function principal(){
+			   document.ff.action = "Principal.po";
+			   return true;
+			 }
+
+ 
+   
+   
+
+ </SCRIPT>
+ 
+
+ 
+ 
+
+<body class="cb" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="Cargar();">
+ <table  summary="" width="100%" border="0">
+  <tr>
+   <td>
+     <SCRIPT TYPE="text/javascript">
+       new menu (MENU_ITEMS0, MENU_POS0);
+     </script>
+   </td> 
+  </tr>
+ </table>
+<div class="container">
+ <FORM name="ff" ACTION="IndicadoresEfectividad.po" METHOD="post" onsubmit="return Salvar()">
+  <input type="hidden" name="_operacion" id="_operacion" value="X">
+  
+  <table   class="tabf" summary="" width="100%" border="0">
+   <tr>
+ 	  <td class="dat">Indicadores Efectividad Ciclo  <span id="cicloEd">&nbsp;</span></td>
+    <td class="datc">
+     <label id="labelNombre" name="labelNombre" align="center"></label>
+	 <input type="submit" class="BOB"  value= "Salir" id="btnPrincipal" onClick="principal();">
+    </td>
+ 	
+   </tr>
+  </table>
+  
+  <div id="divConsulta">
+  <br>
+   <table width="100%" class="tabf" summary="" border="0">
+    <tr>
+      <td colspan="4" class="ca" width="95%">Indicadores Efectividad </td>
+    </tr>
+	 <tr>
+         <td class="tit">Indicador</td>
+         <td class="dat"><SELECT NAME="findicador" class="INP" id="findicador" onkeydown="return f_salto2(event);" onkeyup="return 
+f_salto(event);"></td>
+        </tr>
+       
+      <tr>
+       <td class="dat2" colspan="4">
+        <input type="submit" class="BOT"  value= "Ver indicadores" onClick="Consultar();">
+       </td>
+      </tr>
+      </table>
+     </div>
+  
+ <div id="divTableroControl">
+  <br>
+  <br>
+    <table width="100%" class="tabf" summary="">
+     <div>
+     <tr>
+	  <td class="tit" colspan="2">Proceso</td>
+      <td class="dat"colspan="2"><span id="procesoEd">&nbsp;</span></td>
+	  <td class="tit" colspan="2">Area</td>
+      <td class="dat" colspan="2"><span id="areaEd">&nbsp;</span></td>      
+     </tr>
+	 <tr>      
+      <td class="tit"colspan="2">Objetivo Estrategico</td>
+      <td class="dat"colspan="6"><span id="objetivoEstrategicoEd">&nbsp;</span></td>
+     </tr>
+	 
+	 <tr>      
+      <td class="tit" colspan="2">Indicador Acuerdo</td>
+      <td class="dat"colspan="6"><span id="indicadorAcuerdoEd">&nbsp;</span></td>
+     </tr>
+	 
+	 <tr>
+       <td class="tit" rowspan="2"colspan="2" >Proyecto Inversi&oacute;n</td>
+       <td class="dat"colspan="2" rowspan="2"><span id="proyectoInversionEd">&nbsp;</span></td>
+	   <td class="tit"colspan="2">Meta Plan De Desarrollo</td>
+       <td class="dat"colspan="2"><span id="metaPlanDeDesarrolloEd">&nbsp;</span></td>       
+     </tr>
+	 <tr>
+      <td class="tit"colspan="2">Meta Proyecto</td>
+      <td class="dat"colspan="2"><span id="metaProyectoEd">&nbsp;</span></td>
+     </tr> 
+	 
+
+     <tr>
+      <td class="tit"colspan="2">C&oacute;digo Indicador</td>
+      <td class="dat"colspan="2"><span id="codigoIndicadorEd">&nbsp;</span></td>
+      <td class="tit"colspan="2">Nombre Indicador</td>
+      <td class="dat"colspan="2"><span id="nombreIndicadorEd">&nbsp;</span></td> 
+	  </tr>
+	 
+	 <tr>
+	  <td class="tit"colspan="2">Objetivo Indicador</td>
+      <td class="dat"colspan="6"><span id="objetivoIndicadorEd">&nbsp;</span></td>     
+     </tr>
+	 
+	<tr>
+       <td class="tit" rowspan="3"colspan="2">Formula</td>
+      <td class="dat"colspan="2"rowspan="3"><span id="formulaEd">&nbsp;</span></td>
+	  <td class="tit"colspan="2">Unidad Medida</td>
+      <td class="dat"colspan="2"><span id="unidadMedidaEd">&nbsp;</span></td>
+	       
+     </tr>
+	 <tr>
+      <td class="tit"colspan="2">Tipo Indicador</td>
+      <td class="dat"colspan="2"><span id="tipoIndicadorEd">&nbsp;</span></td>
+	  </tr>
+	  <tr>
+	  <td class="tit"colspan="2">Frecuencia Medici&oacute;n</td>
+      <td class="dat"colspan="2"><span id="frecuenciaMedicionEd">&nbsp;</span></td>	  
+     </tr>
+	<tr>
+	
+    <table summary=""  width="100%" class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2"  colspan="30"></th>
+     </tr>
+	 
+    </thead>
+	
+
+    
+   
+   <tfoot>
+   
+
+   </tfoot>
+  </table>   
+
+	</tr>
+	   
+   </tr>
+	<tr>
+		<td class="dat" colspan="8">
+			<table summary="" width="100%" border="1" cellpadding="0" cellspacing="0" id="tablaDatosVigencia">
+				<tbody>
+					<tr>
+						<td class="cf1">Meta total Programada</td>
+						<td class="cf1">Meta de esta vigencia</td>
+						<td class="cf1">Acumulado en vigencias anteriores</td>
+						<td class="cf1">Acumulado en esta vigencia</td>
+						<td class="cf1">Acumulado total</td>
+						<td class="cf1">% logro acumulado total</td>
+					</tr>
+					
+					<tr>
+						<td class="dat"><span  id="metaTotalProgramadaEd">&nbsp;</span></td>
+						<td class="dat"><span  id="metaEstaVigenciaEd">&nbsp;</span></td>
+						<td class="dat"><span  id="acumuladoVigenciasEd">&nbsp;</span></td>
+						<td class="dat"><span  id="acumuladoEstaVigenciaEd">&nbsp;</span></td>
+						<td class="dat"><span  id="logroTotalEd">&nbsp;</span></td>
+						<td class="dat"><span  id="logroTotalAcumuladoEd">&nbsp;</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>  
+    </div>
+	<table summary=""  width="100%" class="tabf sortable resizable">
+     <div>
+	 <tr> 
+		<td class="dat" colspan="4">
+			<table summary="" width="100%" border="1" cellpadding="0" cellspacing="0" id="tablaVariables">
+				<tbody>
+
+                </tbody>
+            </table>
+        </td>
+		<td colspan="4"><img id ="grafica"  src="IndicadoresEfectividad.po" alt="Grafico"/></td>
+	</tr>  
+	 
+	</div>
+	</table>
+	
+  <table summary=""  width="100%" class="tabf sortable resizable">
+    <thead>
+     <tr>
+        <th class="cf2"  colspan="30"></th>
+     </tr>
+	 
+    </thead>
+	
+   <tbody id="tablaTablero">
+   
+   
+   </tbody>   
+    
+   
+   <tfoot>
+   
+
+   </tfoot>
+  </table>
+  
+  
+
+  </div>
+  
+	
+</table>
+  </FORM>
+  
+ </DIV>
+  
+  
+
+  <script type="text/javascript">
+   	TableKit.Sortable.addSortType(new TableKit.Sortable.Type('status', {
+   			pattern : /^[New|Assigned|In Progress|Closed]$/,
+   			normal : function(v) {
+   				var val = 4;
+   				switch(v) {
+   					case 'New':
+      					val = 0;
+   					break;
+   					case 'Assigned':
+   						val = 1;
+   						break;
+   					case 'In Progress':
+   						val = 2;
+   						break;
+   					case 'Closed':
+   						val = 3;
+   						break;
+   				}
+   			return val;
+   			}
+   		}
+  	));
+    </script>
+	
+ </body>
+</html>

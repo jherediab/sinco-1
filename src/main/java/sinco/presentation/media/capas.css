@@ -1,0 +1,302 @@
+BODY {
+	font : 8pt Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #000000;
+	margin : 0px 0px 0px 0px;
+	padding : 0px 0px 0px 0px;
+	text-align: center;
+	background-color: #FFFFFF;
+	background-position: top left;
+	background-repeat: repeat-x;
+}
+A, A:ACTIVE, A:FOCUS, A:LINK, A:VISITED {
+	/*color : #3F7DE3;**/
+	color : #001AB1;
+}
+A:HOVER {
+	color: #378237;
+}
+INPUT {
+	font-size : 8pt;
+}
+
+H1{
+  font-size: 12pt;
+  color:#000000;
+  margin : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+  text-align: center;
+  background-color: #FFFFFF;
+	
+}
+
+.nombre{
+  font-size: 18pt;
+  background-color: yellow;
+  font : Verdana, Geneva, Arial, Helvetica, sans-serif;;
+  margin : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+  text-align: center;
+  background: #FFFFFF; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(#a1a1a1, #FFFFFF , #a1a1a1); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#a1a1a1, #FFFFFF, #a1a1a1); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#a1a1a1, #FFFFFF, #a1a1a1); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#a1a1a1, #FFFFFF , #a1a1a1); /* Standard syntax */ 
+}
+
+.usuario{
+	
+  font-size: 8pt;
+  font-weight: bold;
+  font : Arial;
+  margin : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+  text-align: center;
+}
+
+.nombre2{
+  font-size: 8pt;
+  font-weight: bold;
+  color:#B45F04;
+  font : Verdana, Geneva, Arial, Helvetica, sans-serif;
+  margin : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+  text-align: center;
+}
+
+.apellidos{
+  font-size: 7pt;
+  font-weight: bold;
+  color:#C66905;
+  font : Verdana, Geneva, Arial, Helvetica, sans-serif;
+  margin : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+  text-align: center;
+}
+
+.fecha{
+  font-size: 8pt;
+  color:#000000;
+  font : Verdana, Geneva, Arial, Helvetica, sans-serif;
+  margin : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+  text-align: center;
+}
+
+
+
+
+H2{
+	font-size: 10pt;
+}
+
+#borde{
+	width: 100%;
+	text-align: left;
+	margin: auto;
+}
+
+#contenedor{
+	text-align: left;
+	width: 90%;
+	margin: auto;
+	background-color : #FFFFFF;
+	border : 0px none;
+}
+
+.cabecera{
+  height : 30px;
+  width: 100%;
+   background: #FFFFFF; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(#a1a1a1, #FFFFFF , #a1a1a1); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#a1a1a1, #FFFFFF, #a1a1a1); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#a1a1a1, #FFFFFF, #a1a1a1); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#a1a1a1, #FFFFFF , #a1a1a1); /* Standard syntax */ 
+  margin : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+  text-align: center;
+}
+
+/* using an image to replace text in an h1. This trick courtesy Douglas Bowman, http://www.stopdesign.com/articles/css/replace-text/ */
+#cabecera h1 { 	
+	margin : 0px 0px 0px 0px;
+}
+#cabecera h1 span {
+	display:none;
+}
+
+#cuerpo{
+	width: 100%;	
+	padding: 3px 3px 3px 3px;
+	float:center;
+}
+
+
+#opciones{
+	width: 30%;
+	float: left;
+	height: 200px;
+	margin-top: 3px;
+	
+}
+
+#agenda{
+	width: 30%;
+	float: left;
+	height: 300px;
+	margin-top: 3px;
+	color:#FFFFFF;
+}
+
+#refuerzo{
+	width: 40%;
+	float: left;
+	height: 300px;
+	margin-top: 3px;
+}
+
+#imagen{
+	margin-top: 3px;
+}
+
+
+#fbuscar{
+	
+}
+
+#campotexto{
+	float: left;
+}
+#campotexto input{
+	width:100px;
+}
+#fbuscar form{
+	margin-bottom : 0px;
+	margin-top : 0px;
+}
+#botonbuscar {
+	padding-top : 3px;
+	padding-left: 106px;
+}
+#botonbuscar input{
+	border : 0px none;
+}
+.radio{
+	clear : both;
+}
+
+#lateral{
+	width: 200px;
+	float:left;
+	height: 500px;
+	margin-top: 3px;
+}
+
+#registro{
+	
+}
+
+#otras{
+	
+}
+
+.cuerpolateral{
+	background-color: #F0E68C;
+	padding: 5px 4px 13px 10px;
+	margin-bottom: 15px;
+}
+
+.titlat{
+	color:#ffffff;
+	font-size:8pt;
+	ext-transform : uppercase;
+	padding: 7px 3px 7px 8px;
+	margin: 20px 0px 0px 0px;
+	font-weight : normal;
+	letter-spacing : 2px;
+	background: #20550B url(images/titlat3.jpg) no-repeat bottom right;	
+}
+
+A.enlacenav, A.enlacenav:VISITED, A.enlacenav:ACTIVE, A.enlacenav:FOCUS, A.enlacenav:LINK{
+	color: #FFFFFF;
+}
+
+A.enlacenav:HOVER{
+	color: #FFFFAA;
+}
+
+#pie{
+	clear : both;
+	color : #cccccc;
+	text-align : center;
+	margin : 30px 10px 0px 10px;
+	padding-bottom:10px;
+}
+
+
+
+table.reference
+{
+   background-color:#ffffff;
+   border:1px solid #c3c3c3;
+   border-collapse:collapse;
+   width:100%;
+}
+
+table.reference th
+{
+  background: #FFFFFF; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(#a1a1a1, #FFFFFF , #a1a1a1); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#a1a1a1, #FFFFFF, #a1a1a1); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#a1a1a1, #FFFFFF, #a1a1a1); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#a1a1a1, #FFFFFF , #a1a1a1); /* Standard syntax */ 
+  border:1px solid #c3c3c3;
+  padding:3px;
+  vertical-align:top;
+  color:#2a3193;
+}
+
+table.reference td 
+{
+  border:1px solid #c3c3c3;
+  padding:3px;
+  vertical-align:top;
+}
+
+table.intro
+{
+  padding:5px;padding-left:0px;
+  font-size:110%;
+  color:#555555;
+  background-color:transparent;
+}
+
+table.summary
+{
+  border:1px solid #d4d4d4;
+  padding:5px;
+  font-size:100%;
+  color:#555555;
+  background-color:#fafad2;
+}
+
+ul				{	text-align: left;}
+ul li 			{	font-size: 18px; padding: 5px 0; }
+ul li a 			{	background: url(flecha_enlace.png) no-repeat 10px center; padding-left: 25px; }
+ul li a.desplegable	{	background: url(flecha_desplegable.png) no-repeat 10px center; }	
+ul li li		      {	font-size: 14px; padding-left: 15px;}
+ul li a.desplegable li a{	background: url(flecha_subenlace.png) no-repeat 10px center; }
+
+
+
+ul, li {
+       margin: 0;	
+       padding: 0;	
+       border: 0;	
+       outline: 0;	
+       font-size: 100%;
+       vertical-align: top;	
+       background: transparent;
+}
+
+ol, ul {	list-style: none;}
+a img  {	border:none } 
